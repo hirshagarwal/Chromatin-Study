@@ -218,8 +218,8 @@ Camera:
   m_GameObject: {fileID: 1435786248}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0.6102941, g: 0.6102941, b: 0.6102941, a: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
@@ -266,9 +266,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 1435786248}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f877792869b9cf3459700fbbffc1b8c4, type: 3}
+  m_Script: {fileID: 11500000, guid: 4c9ecbe8ca71b2b4f9f0324a13d03d90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  target: {fileID: 2030969603}
+  distance: 5
+  xSpeed: 40
+  ySpeed: 40
+  yMinLimit: -20
+  yMaxLimit: 80
+  distanceMin: 0.5
+  distanceMax: 15
 --- !u!1 &2030969601
 GameObject:
   m_ObjectHideFlags: 0
@@ -303,7 +311,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2030969601}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.33929348, y: -0.5462098, z: -1.242526}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

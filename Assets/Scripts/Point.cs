@@ -13,14 +13,23 @@ namespace Assets.Scripts
         private float y;
         private float z;
         private string name;
+        private int chromosome;
+        private int start;
+        private int end;
         private float color;
         private Color colorRGB = new Color(0,1,0);
+        private Vector3 position;
         public Point(float x, float y, float z, string name, float color)
         {
             this.x = x;
             this.y = y;
             this.z = z;
+            position = new Vector3(x, y, z);
             this.name = name;
+            string[] nameparts = name.Split('-');
+            chromosome = Int32.Parse(nameparts[0].Substring(3));
+            start = Int32.Parse(nameparts[1]);
+            end = Int32.Parse(nameparts[2]);
             this.color = color;
         }
 
@@ -31,53 +40,66 @@ namespace Assets.Scripts
             x = float.Parse(parameters[1]);
             y = float.Parse(parameters[2]);
             z = float.Parse(parameters[3]);
+            position = new Vector3(x, y, z);
+            string[] nameparts = name.Split('-');
+            chromosome = Int32.Parse(nameparts[0].Substring(3));
+            start = Int32.Parse(nameparts[1]);
+            end = Int32.Parse(nameparts[2]);
             color = float.Parse(parameters[4]);
         }
 
-        public void InitialiseRGB(int current, int total)
+        public void InitialiseRGBSequence(int current, int total)
         {
-            float step = total / 15f;
-            float h = current * step / 360f;
-            Hsv hsv = new Hsv(h, 1, 1);
-            Rgb rgb = hsv.To<Rgb>();
-            colorRGB = new Color((float)rgb.R/255f, (float)rgb.G/255f, (float)rgb.B/255f);
+            float step = current / (float) total;
+            colorRGB = new UnityEngine.Color(step, 1, (1-step));
             Debug.Log(colorRGB.ToString());
         }
 
-        public Vector3 Position()
+        public void InitialiseRGBValue(int current, int total)
         {
-            return new Vector3(x, y, z);
+            colorRGB = new Color(color, 1, (1 - color));
         }
 
+        public Vector3 Position
+        {
+            get { return position; }
+        }
+
+       
         public Color ColorRGB
         {
             get { return colorRGB; }
-        }
-
-        public float X
-        {
-            get;
-        }
-
-        public float Y
-        {
-            get;
-        }
-
-        public float Z
-        {
-            get;
-        }
-
-        public string Name
-        {
-            get;
+            set { colorRGB = value; }
         }
 
         public float Color
         {
-            get;
+            get { return color; }
         }
 
+        public int Start
+        {
+            get { return start; }
+        }
+
+        public int End
+        {
+            get { return end; }
+        }
+
+        public float X
+        {
+            get { return x; }
+        }
+
+        public float Y
+        {
+            get { return y; }
+        }
+
+        public String Name
+        {
+            get { return name; }
+        }
     }
 }

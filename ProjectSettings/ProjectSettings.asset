@@ -523,11 +523,11 @@ PlayerSettings:
   m_MobileRenderingPath: 1
   metroPackageName: visualisation
   metroPackageVersion: 
-  metroCertificatePath: 
+  metroCertificatePath: C:\Users\Alex\Documents\visualisation\Assets\WSATestCertificate.pfx
   metroCertificatePassword: 
-  metroCertificateSubject: 
-  metroCertificateIssuer: 
-  metroCertificateNotAfter: 0000000000000000
+  metroCertificateSubject: DefaultCompany
+  metroCertificateIssuer: DefaultCompany
+  metroCertificateNotAfter: 806033f0d982d401
   metroApplicationDescription: visualisation
   wsaImages: {}
   metroTileShortName: 
@@ -601,7 +601,7 @@ PlayerSettings:
       daydreamIconBackground: {fileID: 0}
   cloudServicesEnabled: {}
   facebookSdkVersion: 7.9.4
-  apiCompatibilityLevel: 2
+  apiCompatibilityLevel: 3
   cloudProjectId: 
   projectName: 
   organizationId: 
