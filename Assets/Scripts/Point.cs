@@ -36,6 +36,7 @@ namespace Assets.Scripts
         public Point(string line)
         {
             string[] parameters = line.Split('\t');
+            
             name = parameters[0];
             x = float.Parse(parameters[1]);
             y = float.Parse(parameters[2]);

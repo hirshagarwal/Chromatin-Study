@@ -6,21 +6,26 @@ using UnityEngine.UI;
 using Assets.Scripts;
 
 public class ObjectManager : MonoBehaviour {
-
+    public TextAsset textfile;
     List<Point> points;
     List<GameObject> spheres = new List<GameObject>();
     string guiText = "";
     Vector2 mousePosition = new Vector2(0, 0);
     List<Point> ReadInFile(string filename)
     {
-        System.IO.StreamReader file = new System.IO.StreamReader(filename);
+        //System.IO.StreamReader file = new System.IO.StreamReader(filename);
+        TextAsset file = Resources.Load(filename) as TextAsset;
         int counter = 0;
-        string line;
+       // string line;
         List<Point> points = new List<Point>();
-        while((line = file.ReadLine()) != null)
+        //while((line = file.ReadLine()) != null)
+        foreach(string line in file.text.Split('\n'))
         {
-            points.Add(new Point(line));
-            counter++;
+            if (line != "")
+            {
+                points.Add(new Point(line));
+                counter++;
+            }
         }
         for (int i = 0; i < counter; i++)
         {
@@ -65,7 +70,7 @@ public class ObjectManager : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        points = ReadInFile(@"C:\Users\Alex\Documents\visualisation\Assets\chr16_sen.cpoints");
+        points = ReadInFile("chr16_sen");
         List<float> colorsIn = new List<float>();
         foreach (Point point in points)
         {
@@ -100,7 +105,7 @@ public class ObjectManager : MonoBehaviour {
                 }
             }
             connectors.Add(new Connector(point, closest_point));
-            spheres.Add(BuildConnector(connectors[connectors.Count - 1]));
+            cylinders.Add(BuildConnector(connectors[connectors.Count - 1]));
         }
         Debug.Log(string.Format("Built {0} spheres", spheres.Count));
     }
