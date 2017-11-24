@@ -72,15 +72,18 @@ public class ObjectManager : MonoBehaviour {
     void Start () {
         points = ReadInFile("chr16_sen");
         List<float> colorsIn = new List<float>();
+        float maxColor = 0.0f;
         foreach (Point point in points)
         {
-            colorsIn.Add(point.Color); 
+            colorsIn.Add(point.Color);
+            if (point.Color > maxColor)
+                maxColor = point.Color;
         }
         List<Color> colorMap = BuildColorMap(colorsIn);
         int stepsize = colorMap.Count / points.Count;
         for (int i = 0; i < points.Count; i++)
         {
-            points[i].ColorRGB = colorMap[i * stepsize];
+            points[i].ColorRGB = colorMap[(int)(points[i].Color/maxColor)*colorMap.Count];
         }
         List<Connector> connectors = new List<Connector>();
         Debug.Log("Read in file successfully");
