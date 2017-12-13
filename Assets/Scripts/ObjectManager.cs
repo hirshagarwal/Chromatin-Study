@@ -6,6 +6,9 @@ using UnityEngine.UI;
 using Assets.Scripts;
 
 public class ObjectManager : MonoBehaviour {
+	public string filename;
+	public float cylinderwidth;
+	public float spherewidth;
     public TextAsset textfile;
     List<Point> points;
     List<GameObject> spheres = new List<GameObject>();
@@ -50,7 +53,7 @@ public class ObjectManager : MonoBehaviour {
         sphere.GetComponent<Collider>().enabled = false;
         sphere.GetComponent<MeshRenderer>().material.color = color;
         sphere.transform.position = position;
-        sphere.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
+		sphere.transform.localScale = new Vector3(spherewidth, spherewidth, spherewidth);
         return sphere;
     }
 
@@ -63,14 +66,14 @@ public class ObjectManager : MonoBehaviour {
         cylinder.transform.position = pos;
         cylinder.transform.up = connector.EndPoint - connector.StartPoint;
         Vector3 offset = connector.EndPoint - connector.StartPoint;
-        Vector3 scale = new Vector3(0.05f, offset.magnitude / 2f, 0.05f);
+        Vector3 scale = new Vector3(cylinderwidth, offset.magnitude / 2f, cylinderwidth);
         cylinder.transform.localScale = scale;
         return cylinder;
     }
 
     // Use this for initialization
     void Start () {
-        points = ReadInFile("chr16_sen");
+        points = ReadInFile(filename);
         List<float> colorsIn = new List<float>();
         float maxColor = 0.0f;
         foreach (Point point in points)
@@ -83,7 +86,8 @@ public class ObjectManager : MonoBehaviour {
         int stepsize = colorMap.Count / points.Count;
         for (int i = 0; i < points.Count; i++)
         {
-            points[i].ColorRGB = colorMap[(int)(points[i].Color/maxColor)*colorMap.Count];
+			int idx = (int)Math.Floor ((points [i].Color / maxColor) * (colorMap.Count-1));
+			points[i].ColorRGB = colorMap[idx];
         }
         List<Connector> connectors = new List<Connector>();
         Debug.Log("Read in file successfully");

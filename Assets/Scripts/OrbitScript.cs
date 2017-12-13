@@ -7,8 +7,8 @@ public class OrbitScript: MonoBehaviour
 
     public Transform target;
     public float distance = 5.0f;
-    public float xSpeed = 120.0f;
-    public float ySpeed = 120.0f;
+    public float xSpeed = 240.0f;
+    public float ySpeed = 480.0f;
 
     public float yMinLimit = -20f;
     public float yMaxLimit = 80f;

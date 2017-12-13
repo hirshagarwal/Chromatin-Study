@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.4465785, g: 0.49641252, b: 0.574817, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -272,8 +272,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 2030969603}
   distance: 5
-  xSpeed: 40
-  ySpeed: 40
+  xSpeed: 120
+  ySpeed: 480
   yMinLimit: -20
   yMaxLimit: 80
   distanceMin: 0.5
@@ -339,6 +339,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b184e78b6d0c78d4392dd681add8280b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  filename: chr16_sen_ac
+  cylinderwidth: 0.01
+  spherewidth: 0.05
   textfile: {fileID: 0}
 --- !u!4 &2030969603
 Transform:
