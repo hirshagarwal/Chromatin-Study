@@ -10,8 +10,12 @@ public class ObjectManager : MonoBehaviour {
 	public float cylinderwidth;
 	public float spherewidth;
     public TextAsset textfile;
+    string[] files = {"10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "X" };
+    string chrtype = "sen";
+    int current_file = 7;
     List<Point> points;
     List<GameObject> spheres = new List<GameObject>();
+    List<GameObject> cylinders = new List<GameObject>();
     string guiText = "";
     Vector2 mousePosition = new Vector2(0, 0);
     List<Point> ReadInFile(string filename)
@@ -72,8 +76,24 @@ public class ObjectManager : MonoBehaviour {
     }
 
     // Use this for initialization
-    void Start () {
-        points = ReadInFile(filename);
+    void Start ()
+    {
+        NextFile();
+    }
+
+    private void NextFile()
+    {
+        foreach (GameObject cyl in cylinders) {
+            Destroy(cyl);
+        }
+        cylinders.Clear();
+        foreach (GameObject sph in spheres)
+        {
+            Destroy(sph);
+        }
+        spheres.Clear();
+        var filen = "chr" + files[current_file] + "_" + chrtype + ".cpoints";
+        points = ReadInFile(filen);
         List<float> colorsIn = new List<float>();
         float maxColor = 0.0f;
         foreach (Point point in points)
@@ -86,17 +106,17 @@ public class ObjectManager : MonoBehaviour {
         int stepsize = colorMap.Count / points.Count;
         for (int i = 0; i < points.Count; i++)
         {
-			int idx = (int)Math.Floor ((points [i].Color / maxColor) * (colorMap.Count-1));
-			points[i].ColorRGB = colorMap[idx];
+            int idx = (int)Math.Floor((points[i].Color / maxColor) * (colorMap.Count - 1));
+            points[i].ColorRGB = colorMap[idx];
         }
         List<Connector> connectors = new List<Connector>();
         Debug.Log("Read in file successfully");
-        
-        List<GameObject> cylinders = new List<GameObject>();
+
+        cylinders = new List<GameObject>();
         foreach (Point point in points)
         {
             spheres.Add(BuildSphere(point.ColorRGB, point.Position));
-            
+
             int closest_value = Int32.MaxValue;
             Point closest_point = point;
             foreach (Point neighbouring_point in points)
@@ -137,6 +157,14 @@ public class ObjectManager : MonoBehaviour {
             }
             //spheres[closest_point].GetComponent<MeshRenderer>().material.color = Color.black;
             guiText = points[closest_point].Name;
+            if (chrtype == "pro")
+            {
+                guiText += "\nProliferating";
+            }
+            else
+            {
+                guiText += "\nSenescent";
+            }
             mousePosition = mousePos;
         }
         else
@@ -144,11 +172,34 @@ public class ObjectManager : MonoBehaviour {
             guiText = "";
             mousePosition = new Vector2(Screen.width + 10, Screen.height + 10);
         }
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            current_file--;
+            current_file = ((current_file %= files.Length) < 0) ? current_file + files.Length : current_file;
+            NextFile();
+        }
+        else if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            current_file = (current_file + 1) % files.Length;
+            NextFile();
+        }
+        else if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            if (chrtype == "sen")
+            {
+                chrtype = "pro";
+            }
+            else
+            {
+                chrtype = "sen";
+            }
+            NextFile();
+        }
     }
 
     private void OnGUI()
     {
-        GUI.Box(new Rect(mousePosition.x+15, Screen.height-mousePosition.y+15, 200, 22), guiText);
+        GUI.Box(new Rect(mousePosition.x+15, Screen.height-mousePosition.y+15, 200, 40), guiText);
     }
 
     List<Color> BuildColorMap(List<float> colorsIn)
@@ -177,13 +228,14 @@ public class ObjectManager : MonoBehaviour {
         }
 
         var colorSpace = new List<Color>();
-        for (float i = 0; i < (pointcount / 2); i++)
+        int halfcount = (int) Math.Floor(pointcount / 2);
+        for (float i = 0; i < (halfcount); i++)
         {
             colorSpace.Add(new Color(i / (pointcount / 2f), 1f, 1f - (i / (pointcount / 2f))));
         }
         int next = 0;
         var outSpace = new List<Color>();
-        for (int i = 0; i < (pointcount/2); i++)
+        for (int i = 0; i < halfcount; i++)
         {
             for (int k = next; k < next + buckets[i] * 10000; k++)
             {

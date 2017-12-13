@@ -13,7 +13,7 @@ namespace Assets.Scripts
         private float y;
         private float z;
         private string name;
-        private int chromosome;
+        private string chromosome;
         private int start;
         private int end;
         private float color;
@@ -27,7 +27,7 @@ namespace Assets.Scripts
             position = new Vector3(x, y, z);
             this.name = name;
             string[] nameparts = name.Split('-');
-            chromosome = Int32.Parse(nameparts[0].Substring(3));
+            chromosome = (nameparts[0].Substring(3));
             start = Int32.Parse(nameparts[1]);
             end = Int32.Parse(nameparts[2]);
             this.color = color;
@@ -43,7 +43,7 @@ namespace Assets.Scripts
             z = float.Parse(parameters[3]);
             position = new Vector3(x, y, z);
             string[] nameparts = name.Split('-');
-            chromosome = Int32.Parse(nameparts[0].Substring(3));
+            chromosome = (nameparts[0].Substring(3));
             start = Int32.Parse(nameparts[1]);
             end = Int32.Parse(nameparts[2]);
             color = float.Parse(parameters[4]);
