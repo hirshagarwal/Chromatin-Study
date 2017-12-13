@@ -67,7 +67,7 @@ public class ObjectManager : MonoBehaviour {
         cylinder.GetComponent<Collider>().enabled = false;
         cylinder.GetComponent<MeshRenderer>().material.color = connector.InterpolatedColor;
         Vector3 pos = Vector3.Lerp(connector.StartPoint, connector.EndPoint, 0.5f);
-		pos = pos + new Vector3 (0, -0.3f, -3);
+		pos = pos + new Vector3 (0, 0, 7);
         cylinder.transform.position = pos;
         cylinder.transform.up = connector.EndPoint - connector.StartPoint;
         Vector3 offset = connector.EndPoint - connector.StartPoint;
