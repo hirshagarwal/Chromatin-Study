@@ -12,7 +12,7 @@ public class ObjectManager : MonoBehaviour {
     public TextAsset textfile;
     string[] files = {"10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "X" };
     string chrtype = "sen";
-    int current_file = 7;
+    int current_file = 10;
     List<Point> points;
     List<GameObject> spheres = new List<GameObject>();
     List<GameObject> cylinders = new List<GameObject>();
@@ -67,6 +67,7 @@ public class ObjectManager : MonoBehaviour {
         cylinder.GetComponent<Collider>().enabled = false;
         cylinder.GetComponent<MeshRenderer>().material.color = connector.InterpolatedColor;
         Vector3 pos = Vector3.Lerp(connector.StartPoint, connector.EndPoint, 0.5f);
+		pos = pos + new Vector3 (0, -0.3f, -3);
         cylinder.transform.position = pos;
         cylinder.transform.up = connector.EndPoint - connector.StartPoint;
         Vector3 offset = connector.EndPoint - connector.StartPoint;
@@ -115,7 +116,7 @@ public class ObjectManager : MonoBehaviour {
         cylinders = new List<GameObject>();
         foreach (Point point in points)
         {
-            spheres.Add(BuildSphere(point.ColorRGB, point.Position));
+			//spheres.Add(BuildSphere(point.ColorRGB, point.Position + new Vector3(0,0,0)));
 
             int closest_value = Int32.MaxValue;
             Point closest_point = point;
@@ -196,6 +197,7 @@ public class ObjectManager : MonoBehaviour {
             NextFile();
         }
     }
+		
 
     private void OnGUI()
     {

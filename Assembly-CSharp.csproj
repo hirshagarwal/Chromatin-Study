@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{5614A6DD-EE22-0940-CDA3-31E891CAAE76}</ProjectGuid>
+    <ProjectGuid>{21119AFC-83AA-16C3-13D7-163FB2C6182C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -56,11 +56,37 @@
      <Compile Include="Assets\Scripts\ObjectManager.cs" />
      <Compile Include="Assets\Scripts\OrbitScript.cs" />
      <Compile Include="Assets\Scripts\Point.cs" />
+     <None Include="Assets\Resources\chr19_pro.cpoints.txt" />
+     <None Include="Assets\Resources\chr14_sen.cpoints.txt" />
+     <None Include="Assets\Resources\chr15_pro.cpoints.txt" />
+     <None Include="Assets\Resources\chr11_pro.cpoints.txt" />
+     <None Include="Assets\Resources\chr17_pro.cpoints.txt" />
+     <None Include="Assets\Resources\chr19_sen.cpoints.txt" />
      <None Include="Assets\Resources\chr16_sen_ac.txt" />
-     <None Include="Assets\Resources\chr10_sen.txt" />
-     <None Include="Assets\Resources\chr16_sen.txt" />
+     <None Include="Assets\Resources\chr20_pro.cpoints.txt" />
+     <None Include="Assets\Resources\chrX_sen.cpoints.txt" />
+     <None Include="Assets\Resources\chr16_sen.cpoints.txt" />
+     <None Include="Assets\Resources\chr13_sen.cpoints.txt" />
+     <None Include="Assets\Resources\chr18_sen.cpoints.txt" />
+     <None Include="Assets\Resources\chr10_pro.cpoints.txt" />
+     <None Include="Assets\Resources\chr22_pro.cpoints.txt" />
+     <None Include="Assets\Resources\chr12_sen.cpoints.txt" />
+     <None Include="Assets\Resources\chrX_pro.cpoints.txt" />
+     <None Include="Assets\Resources\chr13_pro.cpoints.txt" />
+     <None Include="Assets\Resources\chr21_sen.cpoints.txt" />
+     <None Include="Assets\Resources\chr16_pro.cpoints.txt" />
+     <None Include="Assets\Resources\chr11_sen.cpoints.txt" />
+     <None Include="Assets\Resources\chr17_sen.cpoints.txt" />
+     <None Include="Assets\Resources\chr21_pro.cpoints.txt" />
+     <None Include="Assets\Resources\chr20_sen.cpoints.txt" />
+     <None Include="Assets\Resources\chr18_pro.cpoints.txt" />
+     <None Include="Assets\Resources\chr14_pro.cpoints.txt" />
+     <None Include="Assets\Resources\chr15_sen.cpoints.txt" />
+     <None Include="Assets\Resources\chr22_sen.cpoints.txt" />
+     <None Include="Assets\Resources\chr10_sen.cpoints.txt" />
+     <None Include="Assets\Resources\chr12_pro.cpoints.txt" />
  <Reference Include="Facebook.Unity.Settings">
- <HintPath>/Users/alex/proj/Library/FacebookSDK/Facebook.Unity.Settings.dll</HintPath>
+ <HintPath>/Users/alex/visualisation/Library/FacebookSDK/Facebook.Unity.Settings.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
@@ -93,7 +119,7 @@
  <HintPath>/Applications/Unity/PlaybackEngines/VuforiaSupport/Managed/Runtime/Vuforia.UnityExtensions.dll</HintPath>
  </Reference>
  <Reference Include="ColorMine">
- <HintPath>/Users/alex/proj/Assets/packages/ColorMine.1.2.0/lib/net45/ColorMine.dll</HintPath>
+ <HintPath>/Users/alex/visualisation/Assets/packages/ColorMine.1.2.0/lib/net45/ColorMine.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.Analytics">
  <HintPath>/Users/alex/Library/Unity/cache/packages/packages.unity.com/com.unity.analytics@1.0.1/UnityEngine.Analytics.dll</HintPath>
