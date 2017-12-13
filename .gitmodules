@@ -1,0 +1,3 @@
+[submodule "Unity-Components"]
+	path = Unity-Components
+	url = https://github.com/doukasd/Unity-Components.git
