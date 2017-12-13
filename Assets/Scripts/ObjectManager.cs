@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Assets.Scripts;
 
+
 public class ObjectManager : MonoBehaviour {
 	public string filename;
 	public float cylinderwidth;
@@ -12,7 +13,7 @@ public class ObjectManager : MonoBehaviour {
     public TextAsset textfile;
     string[] files = {"10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "X" };
     string chrtype = "sen";
-    int current_file = 10;
+    public int current_file = 10;
     List<Point> points;
     List<GameObject> spheres = new List<GameObject>();
     List<GameObject> cylinders = new List<GameObject>();
@@ -63,7 +64,7 @@ public class ObjectManager : MonoBehaviour {
 
     GameObject BuildConnector(Connector connector)
     {
-        GameObject cylinder = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+		GameObject cylinder = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
         cylinder.GetComponent<Collider>().enabled = false;
         cylinder.GetComponent<MeshRenderer>().material.color = connector.InterpolatedColor;
         Vector3 pos = Vector3.Lerp(connector.StartPoint, connector.EndPoint, 0.5f);

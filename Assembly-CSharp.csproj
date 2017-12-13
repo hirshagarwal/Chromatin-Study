@@ -436,6 +436,7 @@
      <Compile Include="Assets\Scripts\ObjectManager.cs" />
      <Compile Include="Assets\Scripts\OrbitScript.cs" />
      <Compile Include="Assets\Scripts\Point.cs" />
+     <Compile Include="Assets\Scripts\Procedural\ProceduralCylinder.cs" />
      <None Include="Assets\Resources\chr19_pro.cpoints.txt" />
      <None Include="Assets\Resources\chr14_sen.cpoints.txt" />
      <None Include="Assets\Resources\chr15_pro.cpoints.txt" />
