@@ -7,7 +7,7 @@ using ColorMine.ColorSpaces;
 
 namespace Assets.Scripts
 {
-    class Point
+    class Point : IComparable<Point>
     {
         private float x;
         private float y;
@@ -59,6 +59,75 @@ namespace Assets.Scripts
         public void InitialiseRGBValue(int current, int total)
         {
             colorRGB = new Color(color, 1, (1 - color));
+        }
+
+        int IComparable<Point>.CompareTo(Point other)
+        {
+            if (this < other)
+            {
+                return -1;
+            }
+            if (this > other)
+            {
+                return 1;
+            }
+            if (this <= other)
+            {
+                return -1;
+            }
+            if (other <= this)
+            {
+                return 1;
+            }
+            return 0;
+        }
+
+        public static bool operator < (Point p1, Point p2)
+        {
+            return p1.End < p2.Start;
+        }
+
+        public static bool operator > (Point p1, Point p2)
+        {
+            return p1.Start > p2.End;
+        }
+
+        public static bool operator >= (Point p1, Point p2)
+        {
+            return p1.End > p2.End;
+        }
+
+        public static bool operator <= (Point p1, Point p2)
+        {
+            return p1.Start < p2.Start;
+        }
+
+        public static bool operator == (Point p1, Point p2)
+        {
+            return (p1.Start == p2.Start) && (p1.End == p2.End);
+        }
+
+        public static bool operator != (Point p1, Point p2)
+        {
+            return (p1.Start != p2.Start) || (p1.End != p2.End);
+        }
+
+        public override int GetHashCode()
+        {
+            int hash = 13;
+            hash = (hash * 7) + start.GetHashCode();
+            hash = (hash * 7) + end.GetHashCode();
+            return hash;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj.GetType() == GetType())
+            {
+                var otherPoint = obj as Point;
+                return (start == otherPoint.Start) && (end == otherPoint.End);
+            }
+            return false;
         }
 
         public Vector3 Position

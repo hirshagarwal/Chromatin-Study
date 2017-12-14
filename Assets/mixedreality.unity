@@ -369,7 +369,9 @@ MonoBehaviour:
   filename: chr16_sen.cpoints
   cylinderwidth: 0.01
   spherewidth: 0.05
+  fastdraw: 1
   textfile: {fileID: 0}
+  basematerial: {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
   current_file: 10
 --- !u!4 &2030969603
 Transform:

@@ -10,7 +10,9 @@ public class ObjectManager : MonoBehaviour {
 	public string filename;
 	public float cylinderwidth;
 	public float spherewidth;
+    public bool fastdraw = false;
     public TextAsset textfile;
+    public Material basematerial;
     string[] files = {"10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "X" };
     string chrtype = "sen";
     public int current_file = 10;
@@ -39,6 +41,7 @@ public class ObjectManager : MonoBehaviour {
         {
             points[i].InitialiseRGBValue(i, counter);
         }
+        points.Sort();
         return points;
     }
 
@@ -57,7 +60,7 @@ public class ObjectManager : MonoBehaviour {
         GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         sphere.GetComponent<Collider>().enabled = false;
         sphere.GetComponent<MeshRenderer>().material.color = color;
-        sphere.transform.position = position;
+        sphere.transform.position = position + new Vector3 (0,0,7);
 		sphere.transform.localScale = new Vector3(spherewidth, spherewidth, spherewidth);
         return sphere;
     }
@@ -75,6 +78,19 @@ public class ObjectManager : MonoBehaviour {
         Vector3 scale = new Vector3(cylinderwidth, offset.magnitude / 2f, cylinderwidth);
         cylinder.transform.localScale = scale;
         return cylinder;
+    }
+
+    LineRenderer BuildLR(Connector connector)
+    {
+        //LineRenderer lr = gameObject.AddComponent<LineRenderer>();
+        LineRenderer lr = new LineRenderer();
+       // lr.material = new Material(Shader.Find("Particles/Additive"));
+        lr.material.color = connector.InterpolatedColor;
+        lr.positionCount = 2;
+        lr.widthMultiplier = 0.2f;
+        lr.SetPosition(0, connector.StartPoint);
+        lr.SetPosition(1, connector.EndPoint);
+        return lr;
     }
 
     // Use this for initialization
@@ -112,12 +128,14 @@ public class ObjectManager : MonoBehaviour {
             points[i].ColorRGB = colorMap[idx];
         }
         List<Connector> connectors = new List<Connector>();
+        List<LineRenderer> lines = new List<LineRenderer>();
         Debug.Log("Read in file successfully");
 
         cylinders = new List<GameObject>();
         foreach (Point point in points)
         {
-			//spheres.Add(BuildSphere(point.ColorRGB, point.Position + new Vector3(0,0,0)));
+            if (!fastdraw)
+			    spheres.Add(BuildSphere(point.ColorRGB, point.Position + new Vector3(0,0,0)));
 
             int closest_value = Int32.MaxValue;
             Point closest_point = point;
@@ -134,7 +152,35 @@ public class ObjectManager : MonoBehaviour {
                 }
             }
             connectors.Add(new Connector(point, closest_point));
-            cylinders.Add(BuildConnector(connectors[connectors.Count - 1]));
+            if (!fastdraw)
+                cylinders.Add(BuildConnector(connectors[connectors.Count - 1]));
+            
+                
+        }
+        if (fastdraw)
+        {
+            LineRenderer lineRenderer = gameObject.AddComponent<LineRenderer>();
+            lineRenderer.material = basematerial;// new Material(Shader.Find("Particles/Additive"));
+            
+            lineRenderer.widthMultiplier = 0.01f;
+            lineRenderer.positionCount = points.Count;
+            var pointarray = new Vector3[points.Count];
+            var matarray = new Material[points.Count];
+            for (int i = 0; i < points.Count; i++)
+            {
+                pointarray[i] = points[i].Position + new Vector3(0, 0, 7);
+                //matarray[i] = new Material(Shader.Find("Standard"));
+            }
+            float alpha = 1.0f;
+            Gradient gradient = new Gradient();
+            gradient.SetKeys(
+                new GradientColorKey[] { new GradientColorKey(Color.yellow, 0.0f), new GradientColorKey(Color.red, 1.0f) },
+                new GradientAlphaKey[] { new GradientAlphaKey(alpha, 1.0f), new GradientAlphaKey(alpha, 1.0f) }
+                );
+            lineRenderer.colorGradient = gradient;
+            lineRenderer.SetPositions(pointarray);
+            
+            //lineRenderer.materials = matarray;
         }
         Debug.Log(string.Format("Built {0} spheres", spheres.Count));
     }
