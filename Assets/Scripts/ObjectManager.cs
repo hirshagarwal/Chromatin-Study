@@ -137,8 +137,8 @@ public class ObjectManager : MonoBehaviour {
         cylinders = new List<GameObject>();
         foreach (Point point in points)
         {
-            if (!fastdraw)
-			    spheres.Add(BuildSphere(point.ColorRGB, point.Position + new Vector3(0,0,0)));
+            //if (!fastdraw)
+			    //spheres.Add(BuildSphere(point.ColorRGB, point.Position + new Vector3(0,0,0)));
 
             int closest_value = Int32.MaxValue;
             Point closest_point = point;
