@@ -60,7 +60,9 @@ public class ObjectManager : MonoBehaviour {
         GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         sphere.GetComponent<Collider>().enabled = false;
         sphere.GetComponent<MeshRenderer>().material.color = color;
-        sphere.transform.position = position + new Vector3 (0,0,7);
+        if (fastdraw)
+            position = position + new Vector3(0, 0, 7);
+        sphere.transform.position = position;
 		sphere.transform.localScale = new Vector3(spherewidth, spherewidth, spherewidth);
         return sphere;
     }
@@ -71,7 +73,8 @@ public class ObjectManager : MonoBehaviour {
         cylinder.GetComponent<Collider>().enabled = false;
         cylinder.GetComponent<MeshRenderer>().material.color = connector.InterpolatedColor;
         Vector3 pos = Vector3.Lerp(connector.StartPoint, connector.EndPoint, 0.5f);
-		pos = pos + new Vector3 (0, 0, 7);
+        if (fastdraw)
+		    pos = pos + new Vector3 (0, 0, 7);
         cylinder.transform.position = pos;
         cylinder.transform.up = connector.EndPoint - connector.StartPoint;
         Vector3 offset = connector.EndPoint - connector.StartPoint;
