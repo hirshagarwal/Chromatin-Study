@@ -4,18 +4,21 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using Assets.Scripts;
+using HoloToolkit.Unity;
+using HoloToolkit.Unity.InputModule;
 
 
 public class ObjectManager : MonoBehaviour {
 	public string filename;
 	public float cylinderwidth;
 	public float spherewidth;
-    public bool fastdraw = false;
+    public bool fastdraw = true;
     public TextAsset textfile;
     public Material basematerial;
     string[] files = {"10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "X" };
     string chrtype = "sen";
-    public int current_file = 10;
+    public int current_file = 13;
+    public int scale = 3;
     List<Point> points;
     List<GameObject> spheres = new List<GameObject>();
     List<GameObject> cylinders = new List<GameObject>();
@@ -60,8 +63,8 @@ public class ObjectManager : MonoBehaviour {
         GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         sphere.GetComponent<Collider>().enabled = false;
         sphere.GetComponent<MeshRenderer>().material.color = color;
-        if (fastdraw)
-            position = position + new Vector3(0, 0, 7);
+        //if (fastdraw)
+          //  position = position + new Vector3(0, 0, 7);
         sphere.transform.position = position;
 		sphere.transform.localScale = new Vector3(spherewidth, spherewidth, spherewidth);
         return sphere;
@@ -73,8 +76,8 @@ public class ObjectManager : MonoBehaviour {
         cylinder.GetComponent<Collider>().enabled = false;
         cylinder.GetComponent<MeshRenderer>().material.color = connector.InterpolatedColor;
         Vector3 pos = Vector3.Lerp(connector.StartPoint, connector.EndPoint, 0.5f);
-        if (fastdraw)
-		    pos = pos + new Vector3 (0, 0, 7);
+        //if (fastdraw)
+		  //  pos = pos + new Vector3 (0, 0, 7);
         cylinder.transform.position = pos;
         cylinder.transform.up = connector.EndPoint - connector.StartPoint;
         Vector3 offset = connector.EndPoint - connector.StartPoint;
@@ -163,15 +166,16 @@ public class ObjectManager : MonoBehaviour {
         if (fastdraw)
         {
             LineRenderer lineRenderer = gameObject.AddComponent<LineRenderer>();
-            lineRenderer.material = basematerial;// new Material(Shader.Find("Particles/Additive"));
+            lineRenderer.material = new Material(Shader.Find("Particles/Alpha Blended Premultiply")); 
             
-            lineRenderer.widthMultiplier = 0.01f;
+
+            lineRenderer.widthMultiplier = 0.01f/scale;
             lineRenderer.positionCount = points.Count;
             var pointarray = new Vector3[points.Count];
             var matarray = new Material[points.Count];
             for (int i = 0; i < points.Count; i++)
             {
-                pointarray[i] = points[i].Position + new Vector3(0, 0, 7);
+                pointarray[i] = points[i].Position / scale; //+ new Vector3(0, 0, 7);
                 //matarray[i] = new Material(Shader.Find("Standard"));
             }
             float alpha = 1.0f;
@@ -247,7 +251,12 @@ public class ObjectManager : MonoBehaviour {
             NextFile();
         }
     }
-		
+
+    void OnSelect()
+    {
+       current_file = (current_file + 1) % files.Length;
+       NextFile();
+    }
 
     private void OnGUI()
     {
