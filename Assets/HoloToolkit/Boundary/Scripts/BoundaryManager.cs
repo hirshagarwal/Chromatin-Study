@@ -19,6 +19,7 @@ namespace HoloToolkit.Unity.Boundary
     {
         [Tooltip("Quad prefab to display as the floor.")]
         public GameObject FloorQuad;
+
         private GameObject floorQuadInstance;
 
 #if UNITY_WSA && UNITY_2017_2_OR_NEWER
@@ -29,6 +30,7 @@ namespace HoloToolkit.Unity.Boundary
 #endif
 
         private bool renderFloor = true;
+
         public bool RenderFloor
         {
             get
@@ -54,6 +56,7 @@ namespace HoloToolkit.Unity.Boundary
         }
 
         private bool renderBoundary = true;
+
         public bool RenderBoundary
         {
             get
@@ -144,7 +147,7 @@ namespace HoloToolkit.Unity.Boundary
         }
 
         /// <summary>
-        /// Pass in the game object's position to check if it's within 
+        /// Pass in the game object's position to check if it's within
         /// the specified boundary space.
         /// </summary>
         /// <param name="gameObjectPosition"></param>

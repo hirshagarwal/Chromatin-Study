@@ -1,12 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 
 public class StartButton : MonoBehaviour
 {
     private Button myselfButton;
 
-    void Start()
+    private void Start()
     {
         myselfButton = GetComponent<Button>();
         myselfButton.onClick.AddListener(

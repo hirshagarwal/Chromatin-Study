@@ -1,38 +1,35 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Assets.Scripts;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using Assets.Scripts;
-using HoloToolkit.Unity;
-using HoloToolkit.Unity.InputModule;
 
-
-public class ObjectManager : MonoBehaviour {
-	public string filename;
-	public float cylinderwidth;
-	public float spherewidth;
+public class ObjectManager : MonoBehaviour
+{
+    public string filename;
+    public float cylinderwidth;
+    public float spherewidth;
     public bool fastdraw = true;
     public TextAsset textfile;
     public Material basematerial;
-    string[] files = {"10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "X" };
-    string chrtype = "sen";
+    private string[] files = { "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "X" };
+    private string chrtype = "sen";
     public int current_file = 13;
     public int scale = 3;
-    List<Point> points;
-    List<GameObject> spheres = new List<GameObject>();
-    List<GameObject> cylinders = new List<GameObject>();
-    string guiText = "";
-    Vector2 mousePosition = new Vector2(0, 0);
-    List<Point> ReadInFile(string filename)
+    private List<Point> points;
+    private List<GameObject> spheres = new List<GameObject>();
+    private List<GameObject> cylinders = new List<GameObject>();
+    private string guiText = "";
+    private Vector2 mousePosition = new Vector2(0, 0);
+
+    private List<Point> ReadInFile(string filename)
     {
         //System.IO.StreamReader file = new System.IO.StreamReader(filename);
         TextAsset file = Resources.Load(filename) as TextAsset;
         int counter = 0;
-       // string line;
+        // string line;
         List<Point> points = new List<Point>();
         //while((line = file.ReadLine()) != null)
-        foreach(string line in file.text.Split('\n'))
+        foreach (string line in file.text.Split('\n'))
         {
             if (line != "")
             {
@@ -48,36 +45,36 @@ public class ObjectManager : MonoBehaviour {
         return points;
     }
 
-    GameObject BuildSphere()
+    private GameObject BuildSphere()
     {
         return BuildSphere(Color.blue, new Vector3(0, 0, 0));
     }
 
-    GameObject BuildSphere(Vector3 position)
+    private GameObject BuildSphere(Vector3 position)
     {
         return BuildSphere(Color.blue, position);
     }
 
-    GameObject BuildSphere(Color color, Vector3 position)
+    private GameObject BuildSphere(Color color, Vector3 position)
     {
         GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         sphere.GetComponent<Collider>().enabled = false;
         sphere.GetComponent<MeshRenderer>().material.color = color;
         //if (fastdraw)
-          //  position = position + new Vector3(0, 0, 7);
+        //  position = position + new Vector3(0, 0, 7);
         sphere.transform.position = position;
-		sphere.transform.localScale = new Vector3(spherewidth, spherewidth, spherewidth);
+        sphere.transform.localScale = new Vector3(spherewidth, spherewidth, spherewidth);
         return sphere;
     }
 
-    GameObject BuildConnector(Connector connector)
+    private GameObject BuildConnector(Connector connector)
     {
-		GameObject cylinder = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+        GameObject cylinder = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
         cylinder.GetComponent<Collider>().enabled = false;
         cylinder.GetComponent<MeshRenderer>().material.color = connector.InterpolatedColor;
         Vector3 pos = Vector3.Lerp(connector.StartPoint, connector.EndPoint, 0.5f);
         //if (fastdraw)
-		  //  pos = pos + new Vector3 (0, 0, 7);
+        //  pos = pos + new Vector3 (0, 0, 7);
         cylinder.transform.position = pos;
         cylinder.transform.up = connector.EndPoint - connector.StartPoint;
         Vector3 offset = connector.EndPoint - connector.StartPoint;
@@ -86,11 +83,11 @@ public class ObjectManager : MonoBehaviour {
         return cylinder;
     }
 
-    LineRenderer BuildLR(Connector connector)
+    private LineRenderer BuildLR(Connector connector)
     {
         //LineRenderer lr = gameObject.AddComponent<LineRenderer>();
         LineRenderer lr = new LineRenderer();
-       // lr.material = new Material(Shader.Find("Particles/Additive"));
+        // lr.material = new Material(Shader.Find("Particles/Additive"));
         lr.material.color = connector.InterpolatedColor;
         lr.positionCount = 2;
         lr.widthMultiplier = 0.2f;
@@ -100,14 +97,15 @@ public class ObjectManager : MonoBehaviour {
     }
 
     // Use this for initialization
-    void Start ()
+    private void Start()
     {
         NextFile();
     }
 
     private void NextFile()
     {
-        foreach (GameObject cyl in cylinders) {
+        foreach (GameObject cyl in cylinders)
+        {
             Destroy(cyl);
         }
         cylinders.Clear();
@@ -141,7 +139,7 @@ public class ObjectManager : MonoBehaviour {
         foreach (Point point in points)
         {
             //if (!fastdraw)
-			    //spheres.Add(BuildSphere(point.ColorRGB, point.Position + new Vector3(0,0,0)));
+            //spheres.Add(BuildSphere(point.ColorRGB, point.Position + new Vector3(0,0,0)));
 
             int closest_value = Int32.MaxValue;
             Point closest_point = point;
@@ -160,16 +158,13 @@ public class ObjectManager : MonoBehaviour {
             connectors.Add(new Connector(point, closest_point));
             if (!fastdraw)
                 cylinders.Add(BuildConnector(connectors[connectors.Count - 1]));
-            
-                
         }
         if (fastdraw)
         {
             LineRenderer lineRenderer = gameObject.AddComponent<LineRenderer>();
-            lineRenderer.material = new Material(Shader.Find("Particles/Alpha Blended Premultiply")); 
-            
+            lineRenderer.material = new Material(Shader.Find("Particles/Alpha Blended Premultiply"));
 
-            lineRenderer.widthMultiplier = 0.01f/scale;
+            lineRenderer.widthMultiplier = 0.01f / scale;
             lineRenderer.positionCount = points.Count;
             var pointarray = new Vector3[points.Count];
             var matarray = new Material[points.Count];
@@ -186,14 +181,15 @@ public class ObjectManager : MonoBehaviour {
                 );
             lineRenderer.colorGradient = gradient;
             lineRenderer.SetPositions(pointarray);
-            
+
             //lineRenderer.materials = matarray;
         }
         Debug.Log(string.Format("Built {0} spheres", spheres.Count));
     }
 
     // Update is called once per frame
-    void Update () {
+    private void Update()
+    {
         if (Input.GetMouseButton(1))
         {
             Camera c = Camera.main;
@@ -252,18 +248,18 @@ public class ObjectManager : MonoBehaviour {
         }
     }
 
-    void OnSelect()
+    private void OnSelect()
     {
-       current_file = (current_file + 1) % files.Length;
-       NextFile();
+        current_file = (current_file + 1) % files.Length;
+        NextFile();
     }
 
     private void OnGUI()
     {
-        GUI.Box(new Rect(mousePosition.x+15, Screen.height-mousePosition.y+15, 200, 40), guiText);
+        GUI.Box(new Rect(mousePosition.x + 15, Screen.height - mousePosition.y + 15, 200, 40), guiText);
     }
 
-    List<Color> BuildColorMap(List<float> colorsIn)
+    private List<Color> BuildColorMap(List<float> colorsIn)
     {
         colorsIn.Sort();
         float pointcount = colorsIn.Count;
@@ -289,7 +285,7 @@ public class ObjectManager : MonoBehaviour {
         }
 
         var colorSpace = new List<Color>();
-        int halfcount = (int) Math.Floor(pointcount / 2);
+        int halfcount = (int)Math.Floor(pointcount / 2);
         for (float i = 0; i < (halfcount); i++)
         {
             colorSpace.Add(new Color(i / (pointcount / 2f), 1f, 1f - (i / (pointcount / 2f))));

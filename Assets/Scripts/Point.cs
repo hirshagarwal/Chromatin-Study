@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
-using ColorMine.ColorSpaces;
 
 namespace Assets.Scripts
 {
-    class Point : IComparable<Point>
+    internal class Point : IComparable<Point>
     {
         private float x;
         private float y;
@@ -17,8 +13,9 @@ namespace Assets.Scripts
         private int start;
         private int end;
         private float color;
-        private Color colorRGB = new Color(0,1,0);
+        private Color colorRGB = new Color(0, 1, 0);
         private Vector3 position;
+
         public Point(float x, float y, float z, string name, float color)
         {
             this.x = x;
@@ -36,7 +33,7 @@ namespace Assets.Scripts
         public Point(string line)
         {
             string[] parameters = line.Split('\t');
-            
+
             name = parameters[0];
             x = float.Parse(parameters[1]);
             y = float.Parse(parameters[2]);
@@ -51,8 +48,8 @@ namespace Assets.Scripts
 
         public void InitialiseRGBSequence(int current, int total)
         {
-            float step = current / (float) total;
-            colorRGB = new UnityEngine.Color(step, 1, (1-step));
+            float step = current / (float)total;
+            colorRGB = new UnityEngine.Color(step, 1, (1 - step));
             Debug.Log(colorRGB.ToString());
         }
 
@@ -82,32 +79,32 @@ namespace Assets.Scripts
             return 0;
         }
 
-        public static bool operator < (Point p1, Point p2)
+        public static bool operator <(Point p1, Point p2)
         {
             return p1.End < p2.Start;
         }
 
-        public static bool operator > (Point p1, Point p2)
+        public static bool operator >(Point p1, Point p2)
         {
             return p1.Start > p2.End;
         }
 
-        public static bool operator >= (Point p1, Point p2)
+        public static bool operator >=(Point p1, Point p2)
         {
             return p1.End > p2.End;
         }
 
-        public static bool operator <= (Point p1, Point p2)
+        public static bool operator <=(Point p1, Point p2)
         {
             return p1.Start < p2.Start;
         }
 
-        public static bool operator == (Point p1, Point p2)
+        public static bool operator ==(Point p1, Point p2)
         {
             return (p1.Start == p2.Start) && (p1.End == p2.End);
         }
 
-        public static bool operator != (Point p1, Point p2)
+        public static bool operator !=(Point p1, Point p2)
         {
             return (p1.Start != p2.Start) || (p1.End != p2.End);
         }
@@ -135,7 +132,6 @@ namespace Assets.Scripts
             get { return position; }
         }
 
-       
         public Color ColorRGB
         {
             get { return colorRGB; }

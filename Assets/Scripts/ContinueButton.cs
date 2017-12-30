@@ -12,5 +12,4 @@ public class ContinueButton : MonoBehaviour
             () => GameObject.Find("StudyObject").GetComponent<StudyManager>().StartTrial()
       );
     }
-
 }

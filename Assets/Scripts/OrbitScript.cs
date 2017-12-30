@@ -1,10 +1,8 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 [AddComponentMenu("Camera-Control/Mouse Orbit with zoom")]
-public class OrbitScript: MonoBehaviour
+public class OrbitScript : MonoBehaviour
 {
-
     public Transform target;
     public float distance = 5.0f;
     public float xSpeed = 240.0f;
@@ -18,11 +16,11 @@ public class OrbitScript: MonoBehaviour
 
     private Rigidbody rigidbody;
 
-    float x = 0.0f;
-    float y = 0.0f;
+    private float x = 0.0f;
+    private float y = 0.0f;
 
     // Use this for initialization
-    void Start()
+    private void Start()
     {
         Vector3 angles = transform.eulerAngles;
         x = angles.y;
@@ -37,7 +35,7 @@ public class OrbitScript: MonoBehaviour
         }
     }
 
-    void LateUpdate()
+    private void LateUpdate()
     {
         if (target)
         {
@@ -55,7 +53,6 @@ public class OrbitScript: MonoBehaviour
 
             transform.rotation = rotation;
             transform.position = position;
-
         }
     }
 

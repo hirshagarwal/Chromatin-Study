@@ -12,5 +12,4 @@ public class FeedbackButton : MonoBehaviour
             () => GameObject.Find("StudyObject").GetComponent<StudyManager>().LoadNextTrial()
       );
     }
-
 }

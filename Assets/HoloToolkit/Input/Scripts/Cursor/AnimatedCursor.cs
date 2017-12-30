@@ -127,12 +127,15 @@ namespace HoloToolkit.Unity.InputModule
                 case AnimatorControllerParameterType.Bool:
                     CursorAnimator.SetBool(animationParameter.NameHash, animationParameter.DefaultBool);
                     break;
+
                 case AnimatorControllerParameterType.Float:
                     CursorAnimator.SetFloat(animationParameter.NameHash, animationParameter.DefaultFloat);
                     break;
+
                 case AnimatorControllerParameterType.Int:
                     CursorAnimator.SetInteger(animationParameter.NameHash, animationParameter.DefaultInt);
                     break;
+
                 case AnimatorControllerParameterType.Trigger:
                     CursorAnimator.SetTrigger(animationParameter.NameHash);
                     break;
