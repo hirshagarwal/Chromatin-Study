@@ -6,54 +6,54 @@ using UnityEngine.UI;
 
 public class StudyManager : MonoBehaviour
 {
-    public static string answer;
-
-    // subpanel of panel contining only the answers
-    public static GameObject answerButton;
-
-    public static bool answerGiven = false;
+    //public static GameObject answerButton;
+    //public static bool answerGiven = false;
+    //public static GameObject currentVisualization;
+    //private static int MAX_TRIALS = 13;
+    //private Color[] colors = { Color.red, Color.yellow };
+    //private GameObject currentSelectionMarker;
+    //private GameObject cursorPosition;
+    //private String dataString;
+    //private GameObject hoveredPoint;
+    //private Boolean initialized = false;
+    //private GameObject MenuDimensions;
+    //public static bool participantReadyToAnswer = false;
+    //public static bool startNewTrial = false;
     public static GameObject choicePanelClusters;
 
-    // subpanel of panel contining only the answers
     public static GameObject choicePanelDistance;
-
-    public static GameObject currentVisualization;
-    public static TimeSpan duration;
     public static GameObject feedbackPanel;
-    public static Text infoMessage;
     public static GameObject infoPanel;
-
-    // UI panel element showing answer text and answer choices
     public static GameObject panelCanvas;
-
-    public static bool participantReadyToAnswer = false;
-    public static bool startNewTrial = false;
     public static GameObject viewImageTarget;
-    public Trial currentTrial;
-    public DateTime dateStart;
-    public string FILE_SEPARATOR = "\\";
-    public char LINE_BREAK = '\r';
-    public bool running = false;
-    public TaskManager taskManager;
+    public static TimeSpan duration;
+    public static Text infoMessage;
+
+    public int clickCount;
     public int totalTrials = 208;
     public int trialNumber = 0;
-    private String designtext = Design.text;
-    private Text feedbackText;
+    public bool running = false;
+    public bool shiftDown = false;
+    public char LINE_BREAK = '\r';
+    public string FILE_SEPARATOR = "\\";
+    public string cursorTracking = "TIME, C_X, C_Y, C_Z";
+    public string cuttingplaneTracking = "TIME, P_X, P_Y, P_, P_A, P_B, P _C";
+    public string mainTracking = "TIME, VIS_X, VIS_Y, VIS_Z,  VIS_A, VIS_B, VIS_C,  CAM_A, CAM_B, CAM_C";
+    public Trial currentTrial;
+    public DateTime dateStart;
+
     private GameObject panel;
-
-    // READ ME: USAGE
-    // ATTACH THIS SCRIPT TO AN OBJECT IN THE SCENE
-    // PROVIDE THE CURRENT PARTICIPANT ID : int Participant;
-    // PROVIDE THE TOTAL NUMBER OF TRIALS THAT THE PARTICIPANTS WILL PERFORM:  int totalTrials;
     private GameObject participantPanel;
-
-    //  I/O file answers
+    private List<GameObject> activePoints = new List<GameObject>();
+    private List<GameObject> selectedPoints = new List<GameObject>();
+    private String designtext = Design.text;
     private string results = Design.CSV_HEADER;
-
     private string saveFileName = "results.csv";
     private List<string> trials = new List<string>();
+    private int frameCount;
+    private Text feedbackText;
 
-    public void LoadNextTrial()
+    public void FinishTrial()
     {
         feedbackPanel.SetActive(false);
         panelCanvas.SetActive(false);
@@ -65,48 +65,36 @@ public class StudyManager : MonoBehaviour
         }
         else
         {
-            ShowFinishedPanel();
+            panelCanvas.SetActive(true);
+            infoPanel.SetActive(true);
+            infoMessage.text =
+    @"Congratulations!
+
+You have completed this condition. <br><br>
+Please, call the instructor.";
         }
     }
 
     public void RecordResults(object rawAnswer)
     {
-        // Records data and starts next trial.
-
-        //print("RAW ANSWER = " + rawAnswer);
-
-        // set user answer
-        String answer = "null";
-        float error = -1;
+        string correct = "null";
         if (currentTrial.Task == Tasks.PointDistance)
         {
             print(">>> DISTANCE ANWSWER: " + rawAnswer);
             if (rawAnswer.Equals("AnswerButton_Red"))
-                answer = "1";
+                correct = ((PointDistanceTrial)currentTrial.TrialDetails).Correct(true).ToString();
             if (rawAnswer.Equals("AnswerButton_Blue"))
-                answer = "2";
-
-            if (Distance.answers[currentDataSet] == answer)
-                error = 0; // no error
-            else
-                error = 1; // error
+                correct = ((PointDistanceTrial)currentTrial.TrialDetails).Correct(false).ToString();
         }
 
         string formatAnswer =
-            currentTrial.SubjectID + ", " +
-            currentTrial.TrialNumber + ", " +
-            Design.format + ", " +
-            currentTrial.Task + ", " +
-            currentTrial.Training.ToString() + "," +
-            currentTrial.Data + ", " +
-            answer + ", " +
-            error + ", " +
+            currentTrial.ToCSV() + ", " +
+            correct + ", " +
             duration.TotalMilliseconds
         ;
 
         print(">>>> RESULT LINE= " + formatAnswer);
 
-        //this writes to the answer file
         WriteToFile(formatAnswer);
 
         // remove answer screen and load next trial
@@ -114,32 +102,18 @@ public class StudyManager : MonoBehaviour
         choicePanelClusters.SetActive(false);
         infoPanel.SetActive(false);
 
-        //        LoadNextTrial();
-
         feedbackPanel.SetActive(true);
         panelCanvas.SetActive(true);
-        //if (currentTask == "selection" || currentTask == "cuttingplane")
-        //{
-        //    feedbackText.text = "Good! Click 'Continue' for next trial.";
-        //}
-        //else
-        {
-            if (error == 0)
-            {
-                feedbackText.text = "Correct! :)";
-            }
-            else
-                feedbackText.text = "That was wrong :(";
-        }
+        if (correct == true.ToString())
+            feedbackText.text = "Correct! :)";
+        else
+            feedbackText.text = "That was wrong :(";
     }
 
     public void RecordTimeAndCollectUserAnswer()
     {
         feedbackPanel.SetActive(false);
-        // record and stop time
         duration = DateTime.Now - dateStart;
-
-        // disable running
         running = false;
 
         // show answer screen and wait for user answer.
@@ -149,33 +123,17 @@ public class StudyManager : MonoBehaviour
             panelCanvas.SetActive(true);
             choicePanelDistance.SetActive(true);
         }
-        //else
-        //if (currentTask == "cluster")
-        //{
-        //    panelCanvas.SetActive(true);
-        //    choicePanelClusters.SetActive(true);
-        //}
-        //else
-        //if (currentTask == "cuttingplane")
-        //{
-        //    RecordResults(parameters); // distance is float number
-        //}
-        //else
-        //if (currentTask == "selection")
-        //{
-        //    RecordResults(parameters); // error is number of wrong clicks
-        //}
     }
 
     public void StartStudy()
     {
         currentTrial.SubjectID = GameObject.Find("Dropdown").GetComponent<Dropdown>().value;
-        saveFileName = "results_" + currentTrial.SubjectID + "_" + Design.format.ToString() + ".csv";
+        saveFileName = "results_" + currentTrial.SubjectID + "_" + currentTrial.Format.ToString() + ".csv";
 
         LoadParticipantBlocks(designtext, currentTrial.SubjectID);
 
         participantPanel.SetActive(false);
-        LoadNextTrial();
+        FinishTrial();
     }
 
     public void StartTrial()
@@ -184,9 +142,16 @@ public class StudyManager : MonoBehaviour
         infoPanel.SetActive(false);
         choicePanelDistance.SetActive(false);
         choicePanelClusters.SetActive(false);
+        for (int i = 0; i < activePoints.Count; i++)
+        {
+            Destroy(activePoints[i]);
+        }
 
-        // 1) load data
-        taskManager.Restart(currentTrial.Task, currentTrial.TrialNumber);
+        selectedPoints.Clear();
+        activePoints.Clear();
+
+        // restart this script and load data.
+        StartTask();
 
         GUI.FocusControl(null);
 
@@ -210,7 +175,7 @@ public class StudyManager : MonoBehaviour
             if (line.Length == 0)
                 continue;
             if (int.Parse(line[0]) == participant
-                && line[2] == Design.format.ToString()
+                && line[2] == currentTrial.Format.ToString()
             )
                 trials.Add(blocks[i]);
         }
@@ -262,17 +227,6 @@ public class StudyManager : MonoBehaviour
             StartTrial();
             currentTrial = nextTrial;
         }
-    }
-
-    private void ShowFinishedPanel()
-    {
-        panelCanvas.SetActive(true);
-        infoPanel.SetActive(true);
-        infoMessage.text =
-@"Congratulations!
-
-You have completed this condition. <br><br>
-Please, call the instructor.";
     }
 
     private void ShowNewTaskPanel(Tasks task)
@@ -350,6 +304,64 @@ Please, call the instructor.";
         {
             dd.options.Add(new Dropdown.OptionData() { text = i + "" });
         }
+    }
+
+    // Use this for initialization
+    private void StartTask()
+    {
+        if (currentTrial.Format == Formats.HoloLens)
+        {
+            throw new System.Exception("HoloLens handler not implemented!");
+        }
+        else if (currentTrial.Format == Formats.Projection)
+        {
+            throw new System.Exception("Projection handler not implemented!");
+        }
+        else if (currentTrial.Format == Formats.Heatmap)
+        {
+            throw new System.Exception("Heatmap handler not implemented!");
+        }
+
+        //LoadData();
+
+        mainTracking = "TIME, VIS_X, VIS_Y, VIS_Z,  VIS_A, VIS_B, VIS_C,  CAM_A, CAM_B, CAM_C";
+        cursorTracking = "TIME, C_X, C_Y, C_Z";
+        cuttingplaneTracking = "TIME, P_X, P_Y, P_, P_A, P_B, P _C";
+
+        clickCount = 0;
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            RecordTimeAndCollectUserAnswer();
+        }
+
+        // Track interaction
+        if (frameCount == Design.TRACKING_FRAME_RATE)
+        {
+            frameCount = 0;
+            Vector3 eulerAngles = GameObject.Find("ViewImageTarget").transform.rotation.eulerAngles;
+            Vector3 pos = GameObject.Find("ViewImageTarget").transform.position;
+            Vector3 campos = GameObject.Find("HoloLensCamera").transform.position;
+
+            TimeSpan duration = DateTime.Now - dateStart;
+            mainTracking +=
+                Design.LINE_BREAK +
+                    duration.TotalMilliseconds.ToString()
+                    + ", " + pos.x
+                    + ", " + pos.y
+                    + ", " + pos.z
+                    + ", " + eulerAngles.x
+                    + ", " + eulerAngles.y
+                    + ", " + eulerAngles.z
+                    + ", " + campos.x
+                    + ", " + campos.y
+                    + ", " + campos.z
+                    ;
+        }
+        frameCount++;
     }
 
     private void WriteToFile(string answer)

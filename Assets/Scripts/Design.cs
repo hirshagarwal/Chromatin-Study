@@ -60,7 +60,5 @@ The next 10 trials will be recorded. Try to be as fast and precise as possible.
     public static char LINE_BREAK = '#';
     public static int TRACKING_FRAME_RATE = 5;
 
-    public static Formats format = Formats.HoloLens;
-
     public static String text = "";
 }

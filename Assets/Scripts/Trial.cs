@@ -10,7 +10,7 @@ namespace Assets.Scripts
         private Tasks task;
         private int trialNumber;
         private Boolean training;
-        private int data;
+        private IGenericTrial trialDetails;
 
         public Trial(String s)
         {
@@ -18,7 +18,6 @@ namespace Assets.Scripts
             subjectID = Int32.Parse(trialConditions[0]);
             row = Int32.Parse(trialConditions[1]);
             trialNumber = Int32.Parse(trialConditions[4]);
-            data = Int32.Parse(trialConditions[6]);
 
             if (Formats.HoloLens.ToString() == trialConditions[2])
             {
@@ -40,6 +39,14 @@ namespace Assets.Scripts
             if (Tasks.PointDistance.ToString() == trialConditions[3])
             {
                 task = Tasks.PointDistance;
+                trialDetails = new PointDistanceTrial(
+                    Int32.Parse(trialConditions[6]),
+                    trialConditions[7],
+                    trialConditions[8],
+                    trialConditions[9],
+                    trialConditions[10],
+                    Boolean.Parse(trialConditions[11])
+                    );
             }
             else
             {
@@ -58,6 +65,16 @@ namespace Assets.Scripts
             {
                 throw new Exception("Unhandled training type: " + trialConditions[5]);
             }
+        }
+
+        public string ToCSV()
+        {
+            return subjectID + ", " +
+            trialNumber + ", " +
+            format + ", " +
+            task + ", " +
+            training.ToString() + "," +
+            trialDetails.ToCSV();
         }
 
         public int Row
@@ -100,14 +117,6 @@ namespace Assets.Scripts
             }
         }
 
-        public int Data
-        {
-            get
-            {
-                return data;
-            }
-        }
-
         public int SubjectID
         {
             get
@@ -118,6 +127,14 @@ namespace Assets.Scripts
             set
             {
                 subjectID = value;
+            }
+        }
+
+        public IGenericTrial TrialDetails
+        {
+            get
+            {
+                return trialDetails;
             }
         }
     }
