@@ -1,7 +1,0 @@
-<linker>
-<assembly fullname="Assembly-CSharp">
-<type fullname="CameraManager" preserve="all"/>
-<type fullname="ObjectManager" preserve="all"/>
-<type fullname="OrbitScript" preserve="all"/>
-</assembly>
-</linker>
