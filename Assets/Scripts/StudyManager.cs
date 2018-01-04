@@ -30,19 +30,19 @@ public class StudyManager : MonoBehaviour
     public static char LINE_BREAK = '\r';
     public static GameObject panelCanvas;
     public static GameObject viewImageTarget;
-    public ObjectManager objectManager;
-    public int clickCount;
     public Trial currentTrial;
-    public string cursorTracking = "TIME, C_X, C_Y, C_Z";
-    public string cuttingplaneTracking = "TIME, P_X, P_Y, P_, P_A, P_B, P _C";
     public DateTime dateStart;
-    public string mainTracking = "TIME, VIS_X, VIS_Y, VIS_Z,  VIS_A, VIS_B, VIS_C,  CAM_A, CAM_B, CAM_C";
     public int numberOfParticipants;
-    public bool running = false;
-    public bool shiftDown = false;
+    public ObjectManager objectManager;
     public Formats studyFormat;
     public int totalTrials = 208;
-    public int trialNumber = 0;
+    internal int clickCount;
+    internal string cursorTracking = "TIME, C_X, C_Y, C_Z";
+    internal string cuttingplaneTracking = "TIME, P_X, P_Y, P_, P_A, P_B, P _C";
+    internal string mainTracking = "TIME, VIS_X, VIS_Y, VIS_Z,  VIS_A, VIS_B, VIS_C,  CAM_A, CAM_B, CAM_C";
+    internal bool running = false;
+    internal bool shiftDown = false;
+    internal int trialNumber = 0;
     private List<GameObject> activePoints = new List<GameObject>();
     private Participant currentParticipant;
     private Text feedbackText;
@@ -317,29 +317,29 @@ Please, call the instructor.";
         }
 
         // Track interaction
-        if (frameCount == Design.TRACKING_FRAME_RATE)
-        {
-            frameCount = 0;
-            Vector3 eulerAngles = GameObject.Find("ViewImageTarget").transform.rotation.eulerAngles;
-            Vector3 pos = GameObject.Find("ViewImageTarget").transform.position;
-            Vector3 campos = GameObject.Find("HoloLensCamera").transform.position;
+        //if (frameCount == Design.TRACKING_FRAME_RATE)
+        //{
+        //    frameCount = 0;
+        //    Vector3 eulerAngles = GameObject.Find("ViewImageTarget").transform.rotation.eulerAngles;
+        //    Vector3 pos = GameObject.Find("ViewImageTarget").transform.position;
+        //    Vector3 campos = GameObject.Find("HoloLensCamera").transform.position;
 
-            TimeSpan duration = DateTime.Now - dateStart;
-            mainTracking +=
-                Design.LINE_BREAK +
-                    duration.TotalMilliseconds.ToString()
-                    + ", " + pos.x
-                    + ", " + pos.y
-                    + ", " + pos.z
-                    + ", " + eulerAngles.x
-                    + ", " + eulerAngles.y
-                    + ", " + eulerAngles.z
-                    + ", " + campos.x
-                    + ", " + campos.y
-                    + ", " + campos.z
-                    ;
-        }
-        frameCount++;
+        //    TimeSpan duration = DateTime.Now - dateStart;
+        //    mainTracking +=
+        //        Design.LINE_BREAK +
+        //            duration.TotalMilliseconds.ToString()
+        //            + ", " + pos.x
+        //            + ", " + pos.y
+        //            + ", " + pos.z
+        //            + ", " + eulerAngles.x
+        //            + ", " + eulerAngles.y
+        //            + ", " + eulerAngles.z
+        //            + ", " + campos.x
+        //            + ", " + campos.y
+        //            + ", " + campos.z
+        //            ;
+        //}
+        //frameCount++;
     }
 
     private void WriteToFile(string answer)

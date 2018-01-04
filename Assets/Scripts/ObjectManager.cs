@@ -5,15 +5,15 @@ using UnityEngine;
 
 public class ObjectManager : MonoBehaviour
 {
-    public string filename;
-    public float cylinderwidth;
-    public float spherewidth;
-    public bool fastdraw = true;
-    public TextAsset textfile;
-    public Material basematerial;
+    public string fileName;
+    public float cylinderWidth;
+    public float sphereWidth;
+    public bool fastDraw = true;
+    public TextAsset textFile;
+    public Material baseMaterial;
     private string[] files = { "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "X" };
     private string chrtype = "sen";
-    public int current_file = 13;
+    public int currentFile = 13;
     public int scale = 3;
     private List<Point> points;
     private List<GameObject> spheres = new List<GameObject>();
@@ -63,7 +63,7 @@ public class ObjectManager : MonoBehaviour
         //if (fastdraw)
         //  position = position + new Vector3(0, 0, 7);
         sphere.transform.position = position;
-        sphere.transform.localScale = new Vector3(spherewidth, spherewidth, spherewidth);
+        sphere.transform.localScale = new Vector3(sphereWidth, sphereWidth, sphereWidth);
         return sphere;
     }
 
@@ -78,7 +78,7 @@ public class ObjectManager : MonoBehaviour
         cylinder.transform.position = pos;
         cylinder.transform.up = connector.EndPoint - connector.StartPoint;
         Vector3 offset = connector.EndPoint - connector.StartPoint;
-        Vector3 scale = new Vector3(cylinderwidth, offset.magnitude / 2f, cylinderwidth);
+        Vector3 scale = new Vector3(cylinderWidth, offset.magnitude / 2f, cylinderWidth);
         cylinder.transform.localScale = scale;
         return cylinder;
     }
@@ -130,7 +130,7 @@ public class ObjectManager : MonoBehaviour
         }
         spheres.Clear();
         if (filen == "")
-            filen = "chr" + files[current_file] + "_" + chrtype + ".cpoints";
+            filen = "chr" + files[currentFile] + "_" + chrtype + ".cpoints";
         points = ReadInFile(filen);
         if (!grayscale)
         {
@@ -175,10 +175,10 @@ public class ObjectManager : MonoBehaviour
                 }
             }
             connectors.Add(new Connector(point, closest_point));
-            if (!fastdraw)
+            if (!fastDraw)
                 cylinders.Add(BuildConnector(connectors[connectors.Count - 1]));
         }
-        if (fastdraw)
+        if (fastDraw)
         {
             LineRenderer lineRenderer = gameObject.AddComponent<LineRenderer>();
             lineRenderer.material = new Material(Shader.Find("Particles/Alpha Blended Premultiply"));
@@ -211,62 +211,62 @@ public class ObjectManager : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        if (Input.GetMouseButton(1))
-        {
-            Camera c = Camera.main;
-            Vector3 mousePos = new Vector3();
-            mousePos = Input.mousePosition;
-            float closest_dist = Mathf.Infinity;
-            int closest_point = 0;
-            for (int i = 0; i < points.Count; i++)
-            {
-                float d = Vector3.Distance(mousePos, c.WorldToScreenPoint(spheres[i].transform.position));
-                if (d <= closest_dist)
-                {
-                    closest_dist = d;
-                    closest_point = i;
-                }
-            }
-            //spheres[closest_point].GetComponent<MeshRenderer>().material.color = Color.black;
-            guiText = points[closest_point].Name;
-            if (chrtype == "pro")
-            {
-                guiText += "\nProliferating";
-            }
-            else
-            {
-                guiText += "\nSenescent";
-            }
-            mousePosition = mousePos;
-        }
-        else
-        {
-            guiText = "";
-            mousePosition = new Vector2(Screen.width + 10, Screen.height + 10);
-        }
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            current_file--;
-            current_file = ((current_file %= files.Length) < 0) ? current_file + files.Length : current_file;
-            NextFile();
-        }
-        else if (Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            current_file = (current_file + 1) % files.Length;
-            NextFile();
-        }
-        else if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
-        {
-            if (chrtype == "sen")
-            {
-                chrtype = "pro";
-            }
-            else
-            {
-                chrtype = "sen";
-            }
-            NextFile();
-        }
+        //if (false)//Input.GetMouseButton(1))
+        //{
+        //    Camera c = Camera.main;
+        //    Vector3 mousePos = new Vector3();
+        //    mousePos = Input.mousePosition;
+        //    float closest_dist = Mathf.Infinity;
+        //    int closest_point = 0;
+        //    for (int i = 0; i < points.Count; i++)
+        //    {
+        //        float d = Vector3.Distance(mousePos, c.WorldToScreenPoint(spheres[i].transform.position));
+        //        if (d <= closest_dist)
+        //        {
+        //            closest_dist = d;
+        //            closest_point = i;
+        //        }
+        //    }
+        //    //spheres[closest_point].GetComponent<MeshRenderer>().material.color = Color.black;
+        //    guiText = points[closest_point].Name;
+        //    if (chrtype == "pro")
+        //    {
+        //        guiText += "\nProliferating";
+        //    }
+        //    else
+        //    {
+        //        guiText += "\nSenescent";
+        //    }
+        //    mousePosition = mousePos;
+        //}
+        //else
+        //{
+        //    guiText = "";
+        //    mousePosition = new Vector2(Screen.width + 10, Screen.height + 10);
+        //}
+        //if (Input.GetKeyDown(KeyCode.LeftArrow))
+        //{
+        //    current_file--;
+        //    current_file = ((current_file %= files.Length) < 0) ? current_file + files.Length : current_file;
+        //    NextFile();
+        //}
+        //else if (Input.GetKeyDown(KeyCode.RightArrow))
+        //{
+        //    current_file = (current_file + 1) % files.Length;
+        //    NextFile();
+        //}
+        //else if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
+        //{
+        //    if (chrtype == "sen")
+        //    {
+        //        chrtype = "pro";
+        //    }
+        //    else
+        //    {
+        //        chrtype = "sen";
+        //    }
+        //    NextFile();
+        //}
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Destroy(gameObject.GetComponent<LineRenderer>());
@@ -275,7 +275,7 @@ public class ObjectManager : MonoBehaviour
 
     private void OnSelect()
     {
-        current_file = (current_file + 1) % files.Length;
+        currentFile = (currentFile + 1) % files.Length;
         NextFile();
     }
 
