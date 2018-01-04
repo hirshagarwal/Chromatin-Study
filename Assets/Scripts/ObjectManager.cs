@@ -99,10 +99,25 @@ public class ObjectManager : MonoBehaviour
     // Use this for initialization
     private void Start()
     {
-        NextFile();
+        //NextFile();
     }
 
-    private void NextFile()
+    internal void SetupPointDistanceTrial(PointDistanceTrial pdt, string chrfn)
+    {
+        NextFile(chrfn, true);
+        foreach (Point point in points)
+        {
+            if (point.Name == pdt.BlueA || point.Name == pdt.BlueB)
+            {
+                BuildSphere(Color.blue, point.Position);
+            } else if (point.Name == pdt.RedA || point.Name == pdt.RedB)
+            {
+                BuildSphere(Color.red, point.Position);
+            }
+        }
+    }
+
+    private void NextFile(string filen = "", Boolean grayscale = false)
     {
         foreach (GameObject cyl in cylinders)
         {
@@ -114,22 +129,26 @@ public class ObjectManager : MonoBehaviour
             Destroy(sph);
         }
         spheres.Clear();
-        var filen = "chr" + files[current_file] + "_" + chrtype + ".cpoints";
+        if (filen == "")
+            filen = "chr" + files[current_file] + "_" + chrtype + ".cpoints";
         points = ReadInFile(filen);
-        List<float> colorsIn = new List<float>();
-        float maxColor = 0.0f;
-        foreach (Point point in points)
+        if (!grayscale)
         {
-            colorsIn.Add(point.Color);
-            if (point.Color > maxColor)
-                maxColor = point.Color;
-        }
-        List<Color> colorMap = BuildColorMap(colorsIn);
-        int stepsize = colorMap.Count / points.Count;
-        for (int i = 0; i < points.Count; i++)
-        {
-            int idx = (int)Math.Floor((points[i].Color / maxColor) * (colorMap.Count - 1));
-            points[i].ColorRGB = colorMap[idx];
+            List<float> colorsIn = new List<float>();
+            float maxColor = 0.0f;
+            foreach (Point point in points)
+            {
+                colorsIn.Add(point.Color);
+                if (point.Color > maxColor)
+                    maxColor = point.Color;
+            }
+            List<Color> colorMap = BuildColorMap(colorsIn);
+            int stepsize = colorMap.Count / points.Count;
+            for (int i = 0; i < points.Count; i++)
+            {
+                int idx = (int)Math.Floor((points[i].Color / maxColor) * (colorMap.Count - 1));
+                points[i].ColorRGB = colorMap[idx];
+            }
         }
         List<Connector> connectors = new List<Connector>();
         List<LineRenderer> lines = new List<LineRenderer>();
@@ -171,15 +190,17 @@ public class ObjectManager : MonoBehaviour
             for (int i = 0; i < points.Count; i++)
             {
                 pointarray[i] = points[i].Position / scale; //+ new Vector3(0, 0, 7);
-                //matarray[i] = new Material(Shader.Find("Standard"));
             }
-            float alpha = 1.0f;
-            Gradient gradient = new Gradient();
-            gradient.SetKeys(
-                new GradientColorKey[] { new GradientColorKey(Color.yellow, 0.0f), new GradientColorKey(Color.red, 1.0f) },
-                new GradientAlphaKey[] { new GradientAlphaKey(alpha, 1.0f), new GradientAlphaKey(alpha, 1.0f) }
-                );
-            lineRenderer.colorGradient = gradient;
+            if (!grayscale)
+            {
+                float alpha = 1.0f;
+                Gradient gradient = new Gradient();
+                gradient.SetKeys(
+                    new GradientColorKey[] { new GradientColorKey(Color.yellow, 0.0f), new GradientColorKey(Color.red, 1.0f) },
+                    new GradientAlphaKey[] { new GradientAlphaKey(alpha, 1.0f), new GradientAlphaKey(alpha, 1.0f) }
+                    );
+                lineRenderer.colorGradient = gradient;
+            }
             lineRenderer.SetPositions(pointarray);
 
             //lineRenderer.materials = matarray;
@@ -245,6 +266,10 @@ public class ObjectManager : MonoBehaviour
                 chrtype = "sen";
             }
             NextFile();
+        }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Destroy(gameObject.GetComponent<LineRenderer>());
         }
     }
 

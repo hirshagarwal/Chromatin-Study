@@ -4,37 +4,18 @@ namespace Assets.Scripts
 {
     public class Trial
     {
-        private int subjectID;
         private int row;
-        private Formats format;
         private Tasks task;
         private int trialNumber;
         private Boolean training;
+        private string chromosomeFilename;
         private IGenericTrial trialDetails;
 
         public Trial(String s)
         {
             String[] trialConditions = s.Split(',');
-            subjectID = Int32.Parse(trialConditions[0]);
             row = Int32.Parse(trialConditions[1]);
             trialNumber = Int32.Parse(trialConditions[4]);
-
-            if (Formats.HoloLens.ToString() == trialConditions[2])
-            {
-                format = Formats.HoloLens;
-            }
-            else if (Formats.Projection.ToString() == trialConditions[2])
-            {
-                format = Formats.Projection;
-            }
-            else if (Formats.Heatmap.ToString() == trialConditions[2])
-            {
-                format = Formats.Heatmap;
-            }
-            else
-            {
-                throw new Exception("Unhandled task format: " + trialConditions[2]);
-            }
 
             if (Tasks.PointDistance.ToString() == trialConditions[3])
             {
@@ -47,6 +28,7 @@ namespace Assets.Scripts
                     trialConditions[10],
                     Boolean.Parse(trialConditions[11])
                     );
+                chromosomeFilename = trialConditions[12];
             }
             else
             {
@@ -65,13 +47,13 @@ namespace Assets.Scripts
             {
                 throw new Exception("Unhandled training type: " + trialConditions[5]);
             }
+
+            
         }
 
         public string ToCSV()
         {
-            return subjectID + ", " +
-            trialNumber + ", " +
-            format + ", " +
+            return trialNumber + ", " +
             task + ", " +
             training.ToString() + "," +
             trialDetails.ToCSV();
@@ -82,14 +64,6 @@ namespace Assets.Scripts
             get
             {
                 return row;
-            }
-        }
-
-        public Formats Format
-        {
-            get
-            {
-                return format;
             }
         }
 
@@ -117,24 +91,19 @@ namespace Assets.Scripts
             }
         }
 
-        public int SubjectID
-        {
-            get
-            {
-                return subjectID;
-            }
-
-            set
-            {
-                subjectID = value;
-            }
-        }
-
         public IGenericTrial TrialDetails
         {
             get
             {
                 return trialDetails;
+            }
+        }
+
+        public string ChromosomeFilename
+        {
+            get
+            {
+                return chromosomeFilename;
             }
         }
     }

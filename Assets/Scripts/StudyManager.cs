@@ -22,44 +22,43 @@ public class StudyManager : MonoBehaviour
     public static GameObject choicePanelClusters;
 
     public static GameObject choicePanelDistance;
+    public static TimeSpan duration;
     public static GameObject feedbackPanel;
+    public static string FILE_SEPARATOR = "\\";
+    public static Text infoMessage;
     public static GameObject infoPanel;
+    public static char LINE_BREAK = '\r';
     public static GameObject panelCanvas;
     public static GameObject viewImageTarget;
-    public static TimeSpan duration;
-    public static Text infoMessage;
-
+    public ObjectManager objectManager;
     public int clickCount;
-    public int totalTrials = 208;
-    public int trialNumber = 0;
-    public bool running = false;
-    public bool shiftDown = false;
-    public char LINE_BREAK = '\r';
-    public string FILE_SEPARATOR = "\\";
+    public Trial currentTrial;
     public string cursorTracking = "TIME, C_X, C_Y, C_Z";
     public string cuttingplaneTracking = "TIME, P_X, P_Y, P_, P_A, P_B, P _C";
-    public string mainTracking = "TIME, VIS_X, VIS_Y, VIS_Z,  VIS_A, VIS_B, VIS_C,  CAM_A, CAM_B, CAM_C";
-    public Trial currentTrial;
     public DateTime dateStart;
-
+    public string mainTracking = "TIME, VIS_X, VIS_Y, VIS_Z,  VIS_A, VIS_B, VIS_C,  CAM_A, CAM_B, CAM_C";
+    public int numberOfParticipants;
+    public bool running = false;
+    public bool shiftDown = false;
+    public Formats studyFormat;
+    public int totalTrials = 208;
+    public int trialNumber = 0;
+    private List<GameObject> activePoints = new List<GameObject>();
+    private Participant currentParticipant;
+    private Text feedbackText;
+    private int frameCount;
     private GameObject panel;
     private GameObject participantPanel;
-    private List<GameObject> activePoints = new List<GameObject>();
-    private List<GameObject> selectedPoints = new List<GameObject>();
-    private String designtext = Design.text;
     private string results = Design.CSV_HEADER;
     private string saveFileName = "results.csv";
-    private List<string> trials = new List<string>();
-    private int frameCount;
-    private Text feedbackText;
-
+    private List<GameObject> selectedPoints = new List<GameObject>();
     public void FinishTrial()
     {
         feedbackPanel.SetActive(false);
         panelCanvas.SetActive(false);
 
         trialNumber++;
-        if (trialNumber < trials.Count)
+        if (trialNumber < currentParticipant.TotalTrials)
         {
             LoadTrial(trialNumber);
         }
@@ -89,6 +88,7 @@ Please, call the instructor.";
 
         string formatAnswer =
             currentTrial.ToCSV() + ", " +
+            studyFormat.ToString() + ", " +
             correct + ", " +
             duration.TotalMilliseconds
         ;
@@ -127,10 +127,10 @@ Please, call the instructor.";
 
     public void StartStudy()
     {
-        currentTrial.SubjectID = GameObject.Find("Dropdown").GetComponent<Dropdown>().value;
-        saveFileName = "results_" + currentTrial.SubjectID + "_" + currentTrial.Format.ToString() + ".csv";
+        int subjectID = GameObject.Find("Dropdown").GetComponent<Dropdown>().value;
+        saveFileName = "results_" + subjectID + "_" + studyFormat.ToString() + ".csv";
 
-        LoadParticipantBlocks(designtext, currentTrial.SubjectID);
+        currentParticipant = new Participant(subjectID, studyFormat);
 
         participantPanel.SetActive(false);
         FinishTrial();
@@ -161,31 +161,10 @@ Please, call the instructor.";
         dateStart = DateTime.Now;
     }
 
-    //loads the "participant" ID conditions from the condition file
-    // and stores them in theTrials list
-    private void LoadParticipantBlocks(string text, int participant)
-    {
-        string[] blocks = text.Split(LINE_BREAK);
-        string[] line;
-        int participantCount = int.Parse(blocks[blocks.Length - 1].Split(',')[0]);
-
-        for (int i = 1; i < blocks.Length; i++)
-        {
-            line = blocks[i].Split(',');
-            if (line.Length == 0)
-                continue;
-            if (int.Parse(line[0]) == participant
-                && line[2] == currentTrial.Format.ToString()
-            )
-                trials.Add(blocks[i]);
-        }
-    }
-
     // loads the current trial
     private void LoadTrial(int trial)
     {
-        Trial nextTrial = new Trial(trials[trial]);
-
+        Trial nextTrial = currentParticipant.NextTrial();
         panelCanvas.SetActive(false);
         infoPanel.SetActive(false);
         choicePanelDistance.SetActive(false);
@@ -193,7 +172,7 @@ Please, call the instructor.";
         GUI.FocusControl(null);
 
         if (trial == 0)
-        {
+        {//First time introduction
             currentTrial = nextTrial;
             if (currentTrial.Training)
             {
@@ -229,6 +208,17 @@ Please, call the instructor.";
         }
     }
 
+    private void PopulateParticipantSelectionDialog(int participantCount)
+    {
+        Dropdown dd = GameObject.Find("Dropdown").GetComponent<Dropdown>();
+        dd.options.Clear();
+        GameObject prefab = GameObject.Find("DropdownLabel");
+        for (int i = 0; i < participantCount + 1; i++)
+        {
+            dd.options.Add(new Dropdown.OptionData() { text = i + "" });
+        }
+    }
+
     private void ShowNewTaskPanel(Tasks task)
     {
         panelCanvas.SetActive(true);
@@ -247,7 +237,7 @@ Please, call the instructor.";
         infoMessage.text = Design.TRAINING_END;
     }
 
-    // Use this for initialization
+    //Step 1
     private void Start()
     {
         if (Application.platform == RuntimePlatform.OSXEditor
@@ -289,40 +279,28 @@ Please, call the instructor.";
 
         infoPanel.SetActive(false);
         feedbackPanel.SetActive(false);
-
-        // load design file
-        designtext = Design.text;
-        // populate input dropdown
-
-        String[] csv = designtext.Split(LINE_BREAK);
-
-        int participantCount = int.Parse(csv[csv.Length - 1].Split(',')[0]);
-        Dropdown dd = GameObject.Find("Dropdown").GetComponent<Dropdown>();
-        dd.options.Clear();
-        GameObject prefab = GameObject.Find("DropdownLabel");
-        for (int i = 0; i < participantCount + 1; i++)
-        {
-            dd.options.Add(new Dropdown.OptionData() { text = i + "" });
-        }
+        PopulateParticipantSelectionDialog(numberOfParticipants);
     }
-
     // Use this for initialization
     private void StartTask()
     {
-        if (currentTrial.Format == Formats.HoloLens)
-        {
-            throw new System.Exception("HoloLens handler not implemented!");
-        }
-        else if (currentTrial.Format == Formats.Projection)
-        {
-            throw new System.Exception("Projection handler not implemented!");
-        }
-        else if (currentTrial.Format == Formats.Heatmap)
-        {
-            throw new System.Exception("Heatmap handler not implemented!");
-        }
+        //if (studyFormat == Formats.HoloLens)
+        //{
+        //    throw new System.Exception("HoloLens handler not implemented!");
+        //}
+        //else if (studyFormat == Formats.Projection)
+        //{
+        //    throw new System.Exception("Projection handler not implemented!");
+        //}
+        //else if (studyFormat == Formats.Heatmap)
+        //{
+        //    throw new System.Exception("Heatmap handler not implemented!");
+        //}
 
-        //LoadData();
+        if (currentTrial.Task == Tasks.PointDistance)
+        {
+            objectManager.SetupPointDistanceTrial(currentTrial.TrialDetails as PointDistanceTrial, currentTrial.ChromosomeFilename);
+        }
 
         mainTracking = "TIME, VIS_X, VIS_Y, VIS_Z,  VIS_A, VIS_B, VIS_C,  CAM_A, CAM_B, CAM_C";
         cursorTracking = "TIME, C_X, C_Y, C_Z";
