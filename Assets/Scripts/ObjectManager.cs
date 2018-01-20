@@ -109,11 +109,11 @@ public class ObjectManager : MonoBehaviour
         {
             if (point.Name == pdt.BlueA || point.Name == pdt.BlueB)
             {
-                BuildSphere(Color.blue, point.Position);
+                spheres.Add(BuildSphere(Color.blue, point.Position));
             }
             else if (point.Name == pdt.RedA || point.Name == pdt.RedB)
             {
-                BuildSphere(Color.red, point.Position);
+                spheres.Add(BuildSphere(Color.red, point.Position));
             }
         }
     }
@@ -271,6 +271,10 @@ public class ObjectManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Destroy(gameObject.GetComponent<LineRenderer>());
+            foreach (var sph in spheres)
+            {
+                Destroy(sph);
+            }
         }
     }
 

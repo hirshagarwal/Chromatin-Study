@@ -9,7 +9,7 @@ public class FeedbackButton : MonoBehaviour
     {
         myselfButton = GetComponent<Button>();
         myselfButton.onClick.AddListener(
-            () => GameObject.Find("StudyObject").GetComponent<StudyManager>().FinishTrial()
+            () => GameObject.Find("ObjectManager").GetComponent<StudyManager>().FinishTrial()
       );
     }
 }

@@ -9,7 +9,7 @@ public class ContinueButton : MonoBehaviour
     {
         myselfButton = GetComponent<Button>();
         myselfButton.onClick.AddListener(
-            () => GameObject.Find("StudyObject").GetComponent<StudyManager>().StartTrial()
+            () => GameObject.Find("ObjectManager").GetComponent<StudyManager>().StartTrial()
       );
     }
 }

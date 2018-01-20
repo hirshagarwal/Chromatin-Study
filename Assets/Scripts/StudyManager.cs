@@ -75,15 +75,15 @@ Please, call the instructor.";
         trialNumber++;
     }
 
-    public void RecordResults(object rawAnswer)
+    public void RecordResults(string rawAnswer)
     {
         string correct = "null";
         if (currentTrial.Task == Tasks.PointDistance)
         {
             print(">>> DISTANCE ANWSWER: " + rawAnswer);
-            if (rawAnswer.Equals("AnswerButton_Red"))
+            if (rawAnswer.Contains("AnswerButton_Red"))
                 correct = ((PointDistanceTrial)currentTrial.TrialDetails).Correct(true).ToString();
-            if (rawAnswer.Equals("AnswerButton_Blue"))
+            if (rawAnswer.Contains("AnswerButton_Blue"))
                 correct = ((PointDistanceTrial)currentTrial.TrialDetails).Correct(false).ToString();
         }
 
@@ -100,9 +100,8 @@ Please, call the instructor.";
 
         // remove answer screen and load next trial
         choicePanelClusters.SetActive(false);
-        choicePanelClusters.SetActive(false);
+        choicePanelDistance.SetActive(false);
         infoPanel.SetActive(false);
-
         feedbackPanel.SetActive(true);
         panelCanvas.SetActive(true);
         if (correct == true.ToString())
@@ -258,7 +257,9 @@ Please, call the instructor.";
         GameObject.Find("FeedbackContinueButton").AddComponent<FeedbackButton>();
         GameObject.Find("StartButton").AddComponent<StartButton>();
         GameObject.Find("AnswerButton_Red").AddComponent<GenericButton>();
+        GameObject.Find("AnswerButton_Red").GetComponent<GenericButton>().value = "red";
         GameObject.Find("AnswerButton_Blue").AddComponent<GenericButton>();
+        GameObject.Find("AnswerButton_Blue").GetComponent<GenericButton>().value = "blue";
         GameObject.Find("AnswerButton_3").AddComponent<GenericButton>();
         GameObject.Find("AnswerButton_4").AddComponent<GenericButton>();
         GameObject.Find("AnswerButton_5").AddComponent<GenericButton>();
