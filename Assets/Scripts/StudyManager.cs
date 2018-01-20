@@ -52,12 +52,12 @@ public class StudyManager : MonoBehaviour
     private string results = Design.CSV_HEADER;
     private string saveFileName = "results.csv";
     private List<GameObject> selectedPoints = new List<GameObject>();
+
     public void FinishTrial()
     {
         feedbackPanel.SetActive(false);
         panelCanvas.SetActive(false);
 
-        trialNumber++;
         if (trialNumber < currentParticipant.TotalTrials)
         {
             LoadTrial(trialNumber);
@@ -72,6 +72,7 @@ public class StudyManager : MonoBehaviour
 You have completed this condition. <br><br>
 Please, call the instructor.";
         }
+        trialNumber++;
     }
 
     public void RecordResults(object rawAnswer)
@@ -125,7 +126,8 @@ Please, call the instructor.";
         }
     }
 
-    public void StartStudy()
+    
+    public void ParseSubjectIDAndInitialiseStudy()
     {
         int subjectID = GameObject.Find("Dropdown").GetComponent<Dropdown>().value;
         saveFileName = "results_" + subjectID + "_" + studyFormat.ToString() + ".csv";
@@ -281,6 +283,7 @@ Please, call the instructor.";
         feedbackPanel.SetActive(false);
         PopulateParticipantSelectionDialog(numberOfParticipants);
     }
+
     // Use this for initialization
     private void StartTask()
     {
@@ -299,7 +302,7 @@ Please, call the instructor.";
 
         if (currentTrial.Task == Tasks.PointDistance)
         {
-            objectManager.SetupPointDistanceTrial(currentTrial.TrialDetails as PointDistanceTrial, currentTrial.ChromosomeFilename);
+            objectManager.SetupPointDistanceTrial(currentTrial.TrialDetails as PointDistanceTrial, ((PointDistanceTrial)currentTrial.TrialDetails).Chromosome.ToString());
         }
 
         mainTracking = "TIME, VIS_X, VIS_Y, VIS_Z,  VIS_A, VIS_B, VIS_C,  CAM_A, CAM_B, CAM_C";

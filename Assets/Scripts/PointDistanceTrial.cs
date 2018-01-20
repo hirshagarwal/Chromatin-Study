@@ -4,14 +4,14 @@ namespace Assets.Scripts
 {
     internal class PointDistanceTrial : IGenericTrial
     {
-        private int chromosome;
+        private string chromosome;
         private string redA;
         private string redB;
         private string blueA;
         private string blueB;
         private Boolean redIsShorter;
 
-        public PointDistanceTrial(int chromosome, string redA, string redB, string blueA, string blueB, bool redIsShorter)
+        public PointDistanceTrial(string chromosome, string redA, string redB, string blueA, string blueB, bool redIsShorter)
         {
             this.chromosome = chromosome;
             this.redA = redA;
@@ -21,7 +21,7 @@ namespace Assets.Scripts
             this.redIsShorter = redIsShorter;
         }
 
-        public int Chromosome
+        public string Chromosome
         {
             get
             {

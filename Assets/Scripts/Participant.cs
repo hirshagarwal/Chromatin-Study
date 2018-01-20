@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.Scripts
 {
-    class Participant
+    internal class Participant
     {
         private int participantID;
         private List<string> trials = new List<string>();
@@ -19,7 +15,7 @@ namespace Assets.Scripts
             this.participantID = participantID;
             string[] blocks = file.text.Split(StudyManager.LINE_BREAK);
             string[] line;
-            int participantCount = int.Parse(blocks[blocks.Length - 1].Split(',')[0]);
+//            int participantCount = int.Parse(blocks[blocks.Length - 1].Split(',')[0]);
 
             for (int i = 1; i < blocks.Length; i++)
             {

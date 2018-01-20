@@ -8,11 +8,12 @@ namespace Assets.Scripts
         private Tasks task;
         private int trialNumber;
         private Boolean training;
-        private string chromosomeFilename;
         private IGenericTrial trialDetails;
 
         public Trial(String s)
         {
+            //0             1   	  2         	3    	 4     	     5        6          7    8    9     10    11
+            //SUBJECTNUMBER,ROWNUMBER,TECHNIQUENAME,TASKNAME,TRIALNUMBER,TRAINING,CHROMOSOME,REDA,REDB,BLUEA,BLUEB,REDISSHORTER
             String[] trialConditions = s.Split(',');
             row = Int32.Parse(trialConditions[1]);
             trialNumber = Int32.Parse(trialConditions[4]);
@@ -21,14 +22,13 @@ namespace Assets.Scripts
             {
                 task = Tasks.PointDistance;
                 trialDetails = new PointDistanceTrial(
-                    Int32.Parse(trialConditions[6]),
+                    trialConditions[6],
                     trialConditions[7],
                     trialConditions[8],
                     trialConditions[9],
                     trialConditions[10],
                     Boolean.Parse(trialConditions[11])
                     );
-                chromosomeFilename = trialConditions[12];
             }
             else
             {
@@ -47,8 +47,6 @@ namespace Assets.Scripts
             {
                 throw new Exception("Unhandled training type: " + trialConditions[5]);
             }
-
-            
         }
 
         public string ToCSV()
@@ -96,14 +94,6 @@ namespace Assets.Scripts
             get
             {
                 return trialDetails;
-            }
-        }
-
-        public string ChromosomeFilename
-        {
-            get
-            {
-                return chromosomeFilename;
             }
         }
     }

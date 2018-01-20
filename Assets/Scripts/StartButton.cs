@@ -9,7 +9,7 @@ public class StartButton : MonoBehaviour
     {
         myselfButton = GetComponent<Button>();
         myselfButton.onClick.AddListener(
-            () => GameObject.Find("StudyObject").GetComponent<StudyManager>().StartStudy()
+            () => GameObject.Find("ObjectManager").GetComponent<StudyManager>().ParseSubjectIDAndInitialiseStudy()
       );
     }
 }

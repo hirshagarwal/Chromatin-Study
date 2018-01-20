@@ -1,0 +1,2 @@
+first line is assumed blank
+1,0,HoloLens,PointDistance,0,T,chr16_sen,chr16-66600000-66700000,chr16-51100000-51200000,chr16-0-100000,chr16-67700000-67800000,true

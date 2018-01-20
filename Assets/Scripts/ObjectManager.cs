@@ -24,7 +24,7 @@ public class ObjectManager : MonoBehaviour
     private List<Point> ReadInFile(string filename)
     {
         //System.IO.StreamReader file = new System.IO.StreamReader(filename);
-        TextAsset file = Resources.Load(filename) as TextAsset;
+        TextAsset file = Resources.Load(filename + ".cpoints") as TextAsset;
         int counter = 0;
         // string line;
         List<Point> points = new List<Point>();
@@ -62,7 +62,7 @@ public class ObjectManager : MonoBehaviour
         sphere.GetComponent<MeshRenderer>().material.color = color;
         //if (fastdraw)
         //  position = position + new Vector3(0, 0, 7);
-        sphere.transform.position = position;
+        sphere.transform.position = position / scale;
         sphere.transform.localScale = new Vector3(sphereWidth, sphereWidth, sphereWidth);
         return sphere;
     }
@@ -110,7 +110,8 @@ public class ObjectManager : MonoBehaviour
             if (point.Name == pdt.BlueA || point.Name == pdt.BlueB)
             {
                 BuildSphere(Color.blue, point.Position);
-            } else if (point.Name == pdt.RedA || point.Name == pdt.RedB)
+            }
+            else if (point.Name == pdt.RedA || point.Name == pdt.RedB)
             {
                 BuildSphere(Color.red, point.Position);
             }
