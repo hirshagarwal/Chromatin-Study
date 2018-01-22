@@ -30,6 +30,18 @@ namespace Assets.Scripts
                     Boolean.Parse(trialConditions[11])
                     );
             }
+            else if (Tasks.SegmentDistance.ToString() == trialConditions[3])
+            {
+                task = Tasks.SegmentDistance;
+                trialDetails = new SegmentDistanceTrial(
+                    trialConditions[6],
+                    trialConditions[7],
+                    trialConditions[8],
+                    trialConditions[9],
+                    trialConditions[10],
+                    Boolean.Parse(trialConditions[11])
+                    );
+            }
             else
             {
                 throw new Exception("Unhandled task: " + trialConditions[3]);

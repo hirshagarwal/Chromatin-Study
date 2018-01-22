@@ -20,6 +20,8 @@ public class ObjectManager : MonoBehaviour
     private List<GameObject> cylinders = new List<GameObject>();
     private string guiText = "";
     private Vector2 mousePosition = new Vector2(0, 0);
+    private GameObject redObject;
+    private GameObject blueObject;
 
     private List<Point> ReadInFile(string filename)
     {
@@ -116,6 +118,82 @@ public class ObjectManager : MonoBehaviour
                 spheres.Add(BuildSphere(Color.red, point.Position));
             }
         }
+    }
+
+    internal void SetupSegmentDistanceTrial(SegmentDistanceTrial sdt, string chrfn)
+    {
+        NextFile(chrfn, true);
+         redObject = GenerateLineSegment(sdt, true);
+         blueObject = GenerateLineSegment(sdt, false);
+    }
+
+    private GameObject GenerateLineSegment(SegmentDistanceTrial sdt, bool red)
+    {
+        GameObject gO = new GameObject();
+        LineRenderer renderedLine = gO.AddComponent<LineRenderer>();
+        bool insideLine = false;
+        bool foundStart = false;
+        bool foundEnd = false;
+        List<Vector3> pointsInLine = new List<Vector3>();
+        string start = null;
+        string end = null;
+        if (red)
+        {
+            start = sdt.RedA;
+            end = sdt.RedB;
+        }
+        else
+        {
+            start = sdt.BlueA;
+            end = sdt.BlueB;
+        }
+        foreach (Point point in points)
+        {
+            if (!insideLine)
+            {
+                if (point.Name == start)
+                {
+                    insideLine = true;
+                    foundStart = true;
+                    pointsInLine.Add(point.Position / scale);
+                }
+            }
+            else
+            {
+                if (point.Name == end)
+                {
+                    foundEnd = true;
+                    insideLine = false;
+                    pointsInLine.Add(point.Position / scale);
+                    break;
+                }
+                else
+                {
+                    pointsInLine.Add(point.Position / scale);
+                }
+            }
+        }
+        if (!foundStart)
+        {
+            throw new Exception("Could not find " + start);
+        }
+        if (!foundEnd)
+        {
+            throw new Exception("Could not find " + end);
+        }
+        Vector3[] pointArray = pointsInLine.ToArray();
+        renderedLine.material = new Material(Shader.Find("Particles/Alpha Blended Premultiply"));
+        renderedLine.widthMultiplier = 0.01f / scale;
+        renderedLine.positionCount = pointArray.Length;
+        float alpha = 1.0f;
+        Gradient gradient = new Gradient();
+        gradient.SetKeys(
+            new GradientColorKey[] { new GradientColorKey(red ? Color.red : Color.blue, 1.0f), new GradientColorKey(red ? Color.red : Color.blue, 1.0f) },
+            new GradientAlphaKey[] { new GradientAlphaKey(alpha, 1.0f), new GradientAlphaKey(alpha, 1.0f) }
+            );
+        renderedLine.colorGradient = gradient;
+        renderedLine.SetPositions(pointArray);
+        return gO;
     }
 
     private void NextFile(string filen = "", Boolean grayscale = false)
@@ -271,6 +349,8 @@ public class ObjectManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Destroy(gameObject.GetComponent<LineRenderer>());
+            Destroy(redObject);
+            Destroy(blueObject);
             foreach (var sph in spheres)
             {
                 Destroy(sph);

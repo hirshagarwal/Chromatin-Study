@@ -7,7 +7,7 @@ public enum Formats
 
 public enum Tasks
 {
-    PointDistance
+    PointDistance, SegmentDistance
 }
 
 public class Design
@@ -18,6 +18,15 @@ public class Design
 You will see a scatterplot with some points colored red.
 Your task is to select all these red points. A selected point turns green.
 Once you are done, the program will automatically start the next trial.
+
+Call the instructor before continuing.";
+
+    public static string TASK_DESCRIPTION_SEGMENT =
+@"NEW TASK: Segment
+
+You will see a scatterplot with two colored segments; a red segment and a blue segment.
+Your task is to decide which of the segments is longer; the red or the blue.
+Once you know the answer, press the trigger button and a menu will pop up.
 
 Call the instructor before continuing.";
 

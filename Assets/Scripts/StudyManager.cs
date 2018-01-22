@@ -69,8 +69,9 @@ public class StudyManager : MonoBehaviour
             infoMessage.text =
     @"Congratulations!
 
-You have completed this condition. <br><br>
+You have completed this condition.
 Please, call the instructor.";
+            GameObject.Find("ContinueButton").SetActive(false);
         }
         trialNumber++;
     }
@@ -85,6 +86,18 @@ Please, call the instructor.";
                 correct = ((PointDistanceTrial)currentTrial.TrialDetails).Correct(true).ToString();
             if (rawAnswer.Contains("AnswerButton_Blue"))
                 correct = ((PointDistanceTrial)currentTrial.TrialDetails).Correct(false).ToString();
+        }
+        else if (currentTrial.Task == Tasks.SegmentDistance)
+        {
+            print(">>> DISTANCE ANWSWER: " + rawAnswer);
+            if (rawAnswer.Contains("AnswerButton_Red"))
+                correct = ((SegmentDistanceTrial)currentTrial.TrialDetails).Correct(true).ToString();
+            if (rawAnswer.Contains("AnswerButton_Blue"))
+                correct = ((SegmentDistanceTrial)currentTrial.TrialDetails).Correct(false).ToString();
+        }
+        else
+        {
+            throw new Exception("Result test for " + currentTrial.Task.ToString() + " not implemented");
         }
 
         string formatAnswer =
@@ -123,9 +136,17 @@ Please, call the instructor.";
             panelCanvas.SetActive(true);
             choicePanelDistance.SetActive(true);
         }
+        else if (currentTrial.Task == Tasks.SegmentDistance)
+        {
+            panelCanvas.SetActive(true);
+            choicePanelDistance.SetActive(true);
+        }
+        else
+        {
+            throw new Exception("Recording for " + currentTrial.Task.ToString() + " not implemented");
+        }
     }
 
-    
     public void ParseSubjectIDAndInitialiseStudy()
     {
         int subjectID = GameObject.Find("Dropdown").GetComponent<Dropdown>().value;
@@ -178,10 +199,12 @@ Please, call the instructor.";
             if (currentTrial.Training)
             {
                 ShowNewTaskPanel(currentTrial.Task);
+                return;
             }
             else
             {
                 ShowRecordingPanel();
+                return;
             }
         }
 
@@ -204,8 +227,8 @@ Please, call the instructor.";
         else
         {
             // start normal trial
-            StartTrial();
             currentTrial = nextTrial;
+            StartTrial();
         }
     }
 
@@ -228,6 +251,14 @@ Please, call the instructor.";
         if (task == Tasks.PointDistance)
         {
             infoMessage.text = Design.TASK_DESCRIPTION_DISTANCE;
+        }
+        else if (task == Tasks.SegmentDistance)
+        {
+            infoMessage.text = Design.TASK_DESCRIPTION_SEGMENT;
+        }
+        else
+        {
+            throw new Exception("Message for " + task + " not implemented");
         }
     }
 
@@ -304,6 +335,14 @@ Please, call the instructor.";
         if (currentTrial.Task == Tasks.PointDistance)
         {
             objectManager.SetupPointDistanceTrial(currentTrial.TrialDetails as PointDistanceTrial, ((PointDistanceTrial)currentTrial.TrialDetails).Chromosome.ToString());
+        }
+        else if (currentTrial.Task == Tasks.SegmentDistance)
+        {
+            objectManager.SetupSegmentDistanceTrial(currentTrial.TrialDetails as SegmentDistanceTrial, ((SegmentDistanceTrial)currentTrial.TrialDetails).Chromosome.ToString());
+        }
+        else
+        {
+            throw new Exception("Configuration for " + currentTrial.Task.ToString() + " not implemented");
         }
 
         mainTracking = "TIME, VIS_X, VIS_Y, VIS_Z,  VIS_A, VIS_B, VIS_C,  CAM_A, CAM_B, CAM_C";
