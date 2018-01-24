@@ -122,9 +122,9 @@ public class ObjectManager : MonoBehaviour
 
     internal void SetupSegmentDistanceTrial(SegmentDistanceTrial sdt, string chrfn)
     {
-        NextFile(chrfn, true);
-         redObject = GenerateLineSegment(sdt, true);
-         blueObject = GenerateLineSegment(sdt, false);
+        NextFile(chrfn, true, true);
+        redObject = GenerateLineSegment(sdt, true);
+        blueObject = GenerateLineSegment(sdt, false);
     }
 
     private GameObject GenerateLineSegment(SegmentDistanceTrial sdt, bool red)
@@ -155,7 +155,7 @@ public class ObjectManager : MonoBehaviour
                 {
                     insideLine = true;
                     foundStart = true;
-                    pointsInLine.Add(point.Position / scale);
+                    pointsInLine.Add((point.Position / scale) + new Vector3(0, 0, 2));
                 }
             }
             else
@@ -164,12 +164,12 @@ public class ObjectManager : MonoBehaviour
                 {
                     foundEnd = true;
                     insideLine = false;
-                    pointsInLine.Add(point.Position / scale);
+                    pointsInLine.Add((point.Position / scale) + new Vector3(0, 0, 2));
                     break;
                 }
                 else
                 {
-                    pointsInLine.Add(point.Position / scale);
+                    pointsInLine.Add((point.Position / scale) + new Vector3(0, 0, 2));
                 }
             }
         }
@@ -196,7 +196,7 @@ public class ObjectManager : MonoBehaviour
         return gO;
     }
 
-    private void NextFile(string filen = "", Boolean grayscale = false)
+    private void NextFile(string filen = "", Boolean grayscale = false, Boolean projection = false)
     {
         foreach (GameObject cyl in cylinders)
         {
@@ -268,7 +268,7 @@ public class ObjectManager : MonoBehaviour
             var matarray = new Material[points.Count];
             for (int i = 0; i < points.Count; i++)
             {
-                pointarray[i] = points[i].Position / scale; //+ new Vector3(0, 0, 7);
+                pointarray[i] = (points[i].Position / scale) + (projection ? new Vector3(0, 0, 2) : new Vector3(0,0,0));
             }
             if (!grayscale)
             {

@@ -3,6 +3,7 @@
 [AddComponentMenu("Camera-Control/Mouse Orbit with zoom")]
 public class OrbitScript : MonoBehaviour
 {
+    public bool menu = true;
     public Transform target;
     public float distance = 5.0f;
     public float xSpeed = 240.0f;
@@ -11,8 +12,8 @@ public class OrbitScript : MonoBehaviour
     public float yMinLimit = -20f;
     public float yMaxLimit = 80f;
 
-    public float distanceMin = .5f;
-    public float distanceMax = 15f;
+    public float distanceMin = 0f;
+    public float distanceMax = 1f;
 
     private Rigidbody rigidbody;
 
@@ -37,22 +38,29 @@ public class OrbitScript : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (target)
+        if (!menu && target)
         {
             if (Input.GetMouseButton(0))
             {
-                x += Input.GetAxis("Mouse X") * xSpeed * distance * 0.02f;
-                y -= Input.GetAxis("Mouse Y") * ySpeed * 0.02f;
+                var mx = Input.mousePosition.x;//Input.GetAxis("Mouse X");
+                var my = Input.mousePosition.y;//Input.GetAxis("Mouse Y");
+                x += mx * xSpeed * distance * 0.02f;
+                y -= my * ySpeed * 0.02f;
+
+                Quaternion rotation = Quaternion.Euler(y, x, 0);
+
+                distance = Mathf.Clamp(distance - Input.GetAxis("Mouse ScrollWheel") * 5, distanceMin, distanceMax);
+
+                Vector3 negDistance = new Vector3(0.0f, 0.0f, -distance);
+                Vector3 position = rotation * negDistance + target.position;
+
+                transform.rotation = rotation;
+                transform.position = position;
             }
-            Quaternion rotation = Quaternion.Euler(y, x, 0);
-
-            distance = Mathf.Clamp(distance - Input.GetAxis("Mouse ScrollWheel") * 5, distanceMin, distanceMax);
-
-            Vector3 negDistance = new Vector3(0.0f, 0.0f, -distance);
-            Vector3 position = rotation * negDistance + target.position;
-
-            transform.rotation = rotation;
-            transform.position = position;
+        } else
+        {
+            transform.rotation = Quaternion.Euler(0, 0, 0);
+            transform.position = new Vector3(0, 0, 1);
         }
     }
 

@@ -35,6 +35,7 @@ public class StudyManager : MonoBehaviour
     public int numberOfParticipants;
     public ObjectManager objectManager;
     public Formats studyFormat;
+    public OrbitScript orbitScript;
     public int totalTrials = 208;
     internal int clickCount;
     internal string cursorTracking = "TIME, C_X, C_Y, C_Z";
@@ -72,6 +73,14 @@ public class StudyManager : MonoBehaviour
 You have completed this condition.
 Please, call the instructor.";
             GameObject.Find("ContinueButton").SetActive(false);
+            using (System.IO.StreamWriter sw = new System.IO.StreamWriter(saveFileName, true))
+            {
+                foreach (string line in results.Split(System.Environment.NewLine.ToCharArray()))
+                {
+                    sw.WriteLine(line);
+                }
+                sw.Close();
+            }
         }
         trialNumber++;
     }
@@ -344,7 +353,7 @@ Please, call the instructor.";
         {
             throw new Exception("Configuration for " + currentTrial.Task.ToString() + " not implemented");
         }
-
+        orbitScript.menu = false;
         mainTracking = "TIME, VIS_X, VIS_Y, VIS_Z,  VIS_A, VIS_B, VIS_C,  CAM_A, CAM_B, CAM_C";
         cursorTracking = "TIME, C_X, C_Y, C_Z";
         cuttingplaneTracking = "TIME, P_X, P_Y, P_, P_A, P_B, P _C";
@@ -356,6 +365,7 @@ Please, call the instructor.";
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            orbitScript.menu = true;
             RecordTimeAndCollectUserAnswer();
         }
 
