@@ -5,46 +5,33 @@ using UnityEngine;
 
 public class ObjectManager : MonoBehaviour
 {
-    public string fileName;
-    public float cylinderWidth;
-    public float sphereWidth;
-    public bool fastDraw = true;
-    public TextAsset textFile;
+    public Formats studyFormat;
     public Material baseMaterial;
-    private string[] files = { "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "X" };
-    private string chrtype = "sen";
-    public int currentFile = 13;
-    public int scale = 3;
-    private List<Point> points;
-    private List<GameObject> spheres = new List<GameObject>();
-    private List<GameObject> cylinders = new List<GameObject>();
+    public TextAsset textFile;
+    internal Curve mainCurve;
+    internal Curve redCurve;
+    internal Curve blueCurve;
+    private GameObject blueObject;
     private string guiText = "";
     private Vector2 mousePosition = new Vector2(0, 0);
     private GameObject redObject;
-    private GameObject blueObject;
+    private List<GameObject> spheres = new List<GameObject>();
 
-    private List<Point> ReadInFile(string filename)
+    internal void SetupCurveComparisonTrial(CurveComparisonTrial curveComparisonTrial)
+    { 
+        mainCurve = new Curve(curveComparisonTrial.ReferenceChromosome, true, true, 0);
+        redCurve = new Curve(curveComparisonTrial.RedChromosome, true, true, 1);
+        blueCurve = new Curve(curveComparisonTrial.BlueChromosome, true, true, 2);
+    }
+
+    internal GameObject BuildSphere(Color color, Vector3 position)
     {
-        //System.IO.StreamReader file = new System.IO.StreamReader(filename);
-        TextAsset file = Resources.Load(filename + ".cpoints") as TextAsset;
-        int counter = 0;
-        // string line;
-        List<Point> points = new List<Point>();
-        //while((line = file.ReadLine()) != null)
-        foreach (string line in file.text.Split('\n'))
-        {
-            if (line != "")
-            {
-                points.Add(new Point(line));
-                counter++;
-            }
-        }
-        for (int i = 0; i < counter; i++)
-        {
-            points[i].InitialiseRGBValue(i, counter);
-        }
-        points.Sort();
-        return points;
+        GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        sphere.GetComponent<Collider>().enabled = false;
+        sphere.GetComponent<MeshRenderer>().material.color = color;
+        sphere.transform.position = (position / mainCurve.Scale) + new Vector3(0,0,2);
+        sphere.transform.localScale = new Vector3(mainCurve.SphereWidth, mainCurve.SphereWidth, mainCurve.SphereWidth);
+        return sphere;
     }
 
     private GameObject BuildSphere()
@@ -57,57 +44,10 @@ public class ObjectManager : MonoBehaviour
         return BuildSphere(Color.blue, position);
     }
 
-    private GameObject BuildSphere(Color color, Vector3 position)
-    {
-        GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-        sphere.GetComponent<Collider>().enabled = false;
-        sphere.GetComponent<MeshRenderer>().material.color = color;
-        //if (fastdraw)
-        //  position = position + new Vector3(0, 0, 7);
-        sphere.transform.position = position / scale;
-        sphere.transform.localScale = new Vector3(sphereWidth, sphereWidth, sphereWidth);
-        return sphere;
-    }
-
-    private GameObject BuildConnector(Connector connector)
-    {
-        GameObject cylinder = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-        cylinder.GetComponent<Collider>().enabled = false;
-        cylinder.GetComponent<MeshRenderer>().material.color = connector.InterpolatedColor;
-        Vector3 pos = Vector3.Lerp(connector.StartPoint, connector.EndPoint, 0.5f);
-        //if (fastdraw)
-        //  pos = pos + new Vector3 (0, 0, 7);
-        cylinder.transform.position = pos;
-        cylinder.transform.up = connector.EndPoint - connector.StartPoint;
-        Vector3 offset = connector.EndPoint - connector.StartPoint;
-        Vector3 scale = new Vector3(cylinderWidth, offset.magnitude / 2f, cylinderWidth);
-        cylinder.transform.localScale = scale;
-        return cylinder;
-    }
-
-    private LineRenderer BuildLR(Connector connector)
-    {
-        //LineRenderer lr = gameObject.AddComponent<LineRenderer>();
-        LineRenderer lr = new LineRenderer();
-        // lr.material = new Material(Shader.Find("Particles/Additive"));
-        lr.material.color = connector.InterpolatedColor;
-        lr.positionCount = 2;
-        lr.widthMultiplier = 0.2f;
-        lr.SetPosition(0, connector.StartPoint);
-        lr.SetPosition(1, connector.EndPoint);
-        return lr;
-    }
-
-    // Use this for initialization
-    private void Start()
-    {
-        //NextFile();
-    }
-
     internal void SetupPointDistanceTrial(PointDistanceTrial pdt, string chrfn)
     {
-        NextFile(chrfn, true);
-        foreach (Point point in points)
+        mainCurve = new Curve(chrfn, true);
+        foreach (Point point in mainCurve.Points)
         {
             if (point.Name == pdt.BlueA || point.Name == pdt.BlueB)
             {
@@ -122,294 +62,41 @@ public class ObjectManager : MonoBehaviour
 
     internal void SetupSegmentDistanceTrial(SegmentDistanceTrial sdt, string chrfn)
     {
-        NextFile(chrfn, true, true);
-        redObject = GenerateLineSegment(sdt, true);
-        blueObject = GenerateLineSegment(sdt, false);
+        mainCurve = new Curve(chrfn, true, true);
+        redObject = mainCurve.GenerateLineSegment(sdt, true);
+        blueObject = mainCurve.GenerateLineSegment(sdt, false);
     }
 
-    private GameObject GenerateLineSegment(SegmentDistanceTrial sdt, bool red)
+    private LineRenderer BuildLR(Connector connector)
     {
-        GameObject gO = new GameObject();
-        LineRenderer renderedLine = gO.AddComponent<LineRenderer>();
-        bool insideLine = false;
-        bool foundStart = false;
-        bool foundEnd = false;
-        List<Vector3> pointsInLine = new List<Vector3>();
-        string start = null;
-        string end = null;
-        if (red)
-        {
-            start = sdt.RedA;
-            end = sdt.RedB;
-        }
-        else
-        {
-            start = sdt.BlueA;
-            end = sdt.BlueB;
-        }
-        foreach (Point point in points)
-        {
-            if (!insideLine)
-            {
-                if (point.Name == start)
-                {
-                    insideLine = true;
-                    foundStart = true;
-                    pointsInLine.Add((point.Position / scale) + new Vector3(0, 0, 2));
-                }
-            }
-            else
-            {
-                if (point.Name == end)
-                {
-                    foundEnd = true;
-                    insideLine = false;
-                    pointsInLine.Add((point.Position / scale) + new Vector3(0, 0, 2));
-                    break;
-                }
-                else
-                {
-                    pointsInLine.Add((point.Position / scale) + new Vector3(0, 0, 2));
-                }
-            }
-        }
-        if (!foundStart)
-        {
-            throw new Exception("Could not find " + start);
-        }
-        if (!foundEnd)
-        {
-            throw new Exception("Could not find " + end);
-        }
-        Vector3[] pointArray = pointsInLine.ToArray();
-        renderedLine.material = new Material(Shader.Find("Particles/Alpha Blended Premultiply"));
-        renderedLine.widthMultiplier = 0.01f / scale;
-        renderedLine.positionCount = pointArray.Length;
-        float alpha = 1.0f;
-        Gradient gradient = new Gradient();
-        gradient.SetKeys(
-            new GradientColorKey[] { new GradientColorKey(red ? Color.red : Color.blue, 1.0f), new GradientColorKey(red ? Color.red : Color.blue, 1.0f) },
-            new GradientAlphaKey[] { new GradientAlphaKey(alpha, 1.0f), new GradientAlphaKey(alpha, 1.0f) }
-            );
-        renderedLine.colorGradient = gradient;
-        renderedLine.SetPositions(pointArray);
-        return gO;
+        LineRenderer lr = new LineRenderer();
+        lr.material.color = connector.InterpolatedColor;
+        lr.positionCount = 2;
+        lr.widthMultiplier = 0.2f;
+        lr.SetPosition(0, connector.StartPoint);
+        lr.SetPosition(1, connector.EndPoint);
+        return lr;
     }
-
-    private void NextFile(string filen = "", Boolean grayscale = false, Boolean projection = false)
-    {
-        foreach (GameObject cyl in cylinders)
-        {
-            Destroy(cyl);
-        }
-        cylinders.Clear();
-        foreach (GameObject sph in spheres)
-        {
-            Destroy(sph);
-        }
-        spheres.Clear();
-        if (filen == "")
-            filen = "chr" + files[currentFile] + "_" + chrtype + ".cpoints";
-        points = ReadInFile(filen);
-        if (!grayscale)
-        {
-            List<float> colorsIn = new List<float>();
-            float maxColor = 0.0f;
-            foreach (Point point in points)
-            {
-                colorsIn.Add(point.Color);
-                if (point.Color > maxColor)
-                    maxColor = point.Color;
-            }
-            List<Color> colorMap = BuildColorMap(colorsIn);
-            int stepsize = colorMap.Count / points.Count;
-            for (int i = 0; i < points.Count; i++)
-            {
-                int idx = (int)Math.Floor((points[i].Color / maxColor) * (colorMap.Count - 1));
-                points[i].ColorRGB = colorMap[idx];
-            }
-        }
-        List<Connector> connectors = new List<Connector>();
-        List<LineRenderer> lines = new List<LineRenderer>();
-        Debug.Log("Read in file successfully");
-
-        cylinders = new List<GameObject>();
-        foreach (Point point in points)
-        {
-            //if (!fastdraw)
-            //spheres.Add(BuildSphere(point.ColorRGB, point.Position + new Vector3(0,0,0)));
-
-            int closest_value = Int32.MaxValue;
-            Point closest_point = point;
-            foreach (Point neighbouring_point in points)
-            {
-                if (point != neighbouring_point)
-                {
-                    int v = neighbouring_point.Start - point.End;
-                    if (v > 0 && v < closest_value)
-                    {
-                        closest_value = v;
-                        closest_point = neighbouring_point;
-                    }
-                }
-            }
-            connectors.Add(new Connector(point, closest_point));
-            if (!fastDraw)
-                cylinders.Add(BuildConnector(connectors[connectors.Count - 1]));
-        }
-        if (fastDraw)
-        {
-            LineRenderer lineRenderer = gameObject.AddComponent<LineRenderer>();
-            lineRenderer.material = new Material(Shader.Find("Particles/Alpha Blended Premultiply"));
-
-            lineRenderer.widthMultiplier = 0.01f / scale;
-            lineRenderer.positionCount = points.Count;
-            var pointarray = new Vector3[points.Count];
-            var matarray = new Material[points.Count];
-            for (int i = 0; i < points.Count; i++)
-            {
-                pointarray[i] = (points[i].Position / scale) + (projection ? new Vector3(0, 0, 2) : new Vector3(0,0,0));
-            }
-            if (!grayscale)
-            {
-                float alpha = 1.0f;
-                Gradient gradient = new Gradient();
-                gradient.SetKeys(
-                    new GradientColorKey[] { new GradientColorKey(Color.yellow, 0.0f), new GradientColorKey(Color.red, 1.0f) },
-                    new GradientAlphaKey[] { new GradientAlphaKey(alpha, 1.0f), new GradientAlphaKey(alpha, 1.0f) }
-                    );
-                lineRenderer.colorGradient = gradient;
-            }
-            lineRenderer.SetPositions(pointarray);
-
-            //lineRenderer.materials = matarray;
-        }
-        Debug.Log(string.Format("Built {0} spheres", spheres.Count));
-    }
-
-    // Update is called once per frame
-    private void Update()
-    {
-        //if (false)//Input.GetMouseButton(1))
-        //{
-        //    Camera c = Camera.main;
-        //    Vector3 mousePos = new Vector3();
-        //    mousePos = Input.mousePosition;
-        //    float closest_dist = Mathf.Infinity;
-        //    int closest_point = 0;
-        //    for (int i = 0; i < points.Count; i++)
-        //    {
-        //        float d = Vector3.Distance(mousePos, c.WorldToScreenPoint(spheres[i].transform.position));
-        //        if (d <= closest_dist)
-        //        {
-        //            closest_dist = d;
-        //            closest_point = i;
-        //        }
-        //    }
-        //    //spheres[closest_point].GetComponent<MeshRenderer>().material.color = Color.black;
-        //    guiText = points[closest_point].Name;
-        //    if (chrtype == "pro")
-        //    {
-        //        guiText += "\nProliferating";
-        //    }
-        //    else
-        //    {
-        //        guiText += "\nSenescent";
-        //    }
-        //    mousePosition = mousePos;
-        //}
-        //else
-        //{
-        //    guiText = "";
-        //    mousePosition = new Vector2(Screen.width + 10, Screen.height + 10);
-        //}
-        //if (Input.GetKeyDown(KeyCode.LeftArrow))
-        //{
-        //    current_file--;
-        //    current_file = ((current_file %= files.Length) < 0) ? current_file + files.Length : current_file;
-        //    NextFile();
-        //}
-        //else if (Input.GetKeyDown(KeyCode.RightArrow))
-        //{
-        //    current_file = (current_file + 1) % files.Length;
-        //    NextFile();
-        //}
-        //else if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
-        //{
-        //    if (chrtype == "sen")
-        //    {
-        //        chrtype = "pro";
-        //    }
-        //    else
-        //    {
-        //        chrtype = "sen";
-        //    }
-        //    NextFile();
-        //}
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Destroy(gameObject.GetComponent<LineRenderer>());
-            Destroy(redObject);
-            Destroy(blueObject);
-            foreach (var sph in spheres)
-            {
-                Destroy(sph);
-            }
-        }
-    }
-
-    private void OnSelect()
-    {
-        currentFile = (currentFile + 1) % files.Length;
-        NextFile();
-    }
-
     private void OnGUI()
     {
         GUI.Box(new Rect(mousePosition.x + 15, Screen.height - mousePosition.y + 15, 200, 40), guiText);
     }
 
-    private List<Color> BuildColorMap(List<float> colorsIn)
+    // Update is called once per frame
+    private void Update()
     {
-        colorsIn.Sort();
-        float pointcount = colorsIn.Count;
-        int tbucket = 0;
-        float first = 0f;
-        List<float> buckets = new List<float>();
-        for (int i = 0; i < pointcount; i++)
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            float value = colorsIn[i];
-            if (tbucket == 0)
+            Destroy(gameObject.GetComponent<LineRenderer>());
+            Destroy(redObject);
+            Destroy(blueObject);
+            mainCurve.DestroyEverything();
+            redCurve.DestroyEverything();
+            blueCurve.DestroyEverything();
+            foreach (var sph in spheres)
             {
-                first = value;
-            }
-            if (tbucket == 1)
-            {
-                buckets.Add(value - first);
-                tbucket = 0;
-            }
-            else
-            {
-                tbucket++;
+                Destroy(sph);
             }
         }
-
-        var colorSpace = new List<Color>();
-        int halfcount = (int)Math.Floor(pointcount / 2);
-        for (float i = 0; i < (halfcount); i++)
-        {
-            colorSpace.Add(new Color(i / (pointcount / 2f), 1f, 1f - (i / (pointcount / 2f))));
-        }
-        int next = 0;
-        var outSpace = new List<Color>();
-        for (int i = 0; i < halfcount; i++)
-        {
-            for (int k = next; k < next + buckets[i] * 10000; k++)
-            {
-                outSpace.Add(colorSpace[i]);
-            }
-            next += (int)(buckets[i] * 10000);
-        }
-        return outSpace;
     }
 }

@@ -7,11 +7,21 @@ public enum Formats
 
 public enum Tasks
 {
-    PointDistance, SegmentDistance
+    PointDistance, SegmentDistance, CurveComparison
 }
 
 public class Design
 {
+    public static string TASK_DESCRIPTION_CURVE =
+@" 
+    NEW TASK: Curve Distance Comparison
+
+You will see three chromosomes: a white; red; and blue one. 
+Your task is to identify which of the red and blue chromosomes is most similar to the white one.
+Once you are done, press the trigger button and a menu will pop up.
+
+Call the instructor before continuing.";
+
     public static string TASK_DESCRIPTION_SELECTION =
 @"NEW TASK: Selection
 

@@ -42,6 +42,15 @@ namespace Assets.Scripts
                     Boolean.Parse(trialConditions[11])
                     );
             }
+            else if (Tasks.CurveComparison.ToString() == trialConditions[3])
+            {
+                task = Tasks.CurveComparison;
+                trialDetails = new CurveComparisonTrial(
+                    trialConditions[6],
+                    trialConditions[7],
+                    trialConditions[8],
+                    Boolean.Parse(trialConditions[9]));
+            }
             else
             {
                 throw new Exception("Unhandled task: " + trialConditions[3]);

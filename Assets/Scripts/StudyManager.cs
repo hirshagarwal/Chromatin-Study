@@ -20,7 +20,8 @@ public class StudyManager : MonoBehaviour
     //public static bool participantReadyToAnswer = false;
     //public static bool startNewTrial = false;
     public static GameObject choicePanelClusters;
-
+    public static GameObject choicePanelSegment;
+    public static GameObject choicePanelCurve;
     public static GameObject choicePanelDistance;
     public static TimeSpan duration;
     public static GameObject feedbackPanel;
@@ -104,6 +105,14 @@ Please, call the instructor.";
             if (rawAnswer.Contains("AnswerButton_Blue"))
                 correct = ((SegmentDistanceTrial)currentTrial.TrialDetails).Correct(false).ToString();
         }
+        else if (currentTrial.Task == Tasks.CurveComparison)
+        {
+            print(">>> CURVE ANSWER: " + rawAnswer);
+            if (rawAnswer.Contains("AnswerButton_Red"))
+                correct = ((CurveComparisonTrial)currentTrial.TrialDetails).Correct(true).ToString();
+            if (rawAnswer.Contains("AnswerButton_Blue"))
+                correct = ((CurveComparisonTrial)currentTrial.TrialDetails).Correct(false).ToString();
+        }
         else
         {
             throw new Exception("Result test for " + currentTrial.Task.ToString() + " not implemented");
@@ -123,6 +132,8 @@ Please, call the instructor.";
         // remove answer screen and load next trial
         choicePanelClusters.SetActive(false);
         choicePanelDistance.SetActive(false);
+        choicePanelSegment.SetActive(false);
+        choicePanelCurve.SetActive(false);
         infoPanel.SetActive(false);
         feedbackPanel.SetActive(true);
         panelCanvas.SetActive(true);
@@ -148,7 +159,12 @@ Please, call the instructor.";
         else if (currentTrial.Task == Tasks.SegmentDistance)
         {
             panelCanvas.SetActive(true);
-            choicePanelDistance.SetActive(true);
+            choicePanelSegment.SetActive(true);
+        }
+        else if (currentTrial.Task == Tasks.CurveComparison)
+        {
+            panelCanvas.SetActive(true);
+            choicePanelCurve.SetActive(true);
         }
         else
         {
@@ -265,6 +281,10 @@ Please, call the instructor.";
         {
             infoMessage.text = Design.TASK_DESCRIPTION_SEGMENT;
         }
+        else if (task == Tasks.CurveComparison)
+        {
+            infoMessage.text = Design.TASK_DESCRIPTION_CURVE;
+        }
         else
         {
             throw new Exception("Message for " + task + " not implemented");
@@ -296,10 +316,18 @@ Please, call the instructor.";
         GameObject.Find("ContinueButton").AddComponent<ContinueButton>();
         GameObject.Find("FeedbackContinueButton").AddComponent<FeedbackButton>();
         GameObject.Find("StartButton").AddComponent<StartButton>();
-        GameObject.Find("AnswerButton_Red").AddComponent<GenericButton>();
-        GameObject.Find("AnswerButton_Red").GetComponent<GenericButton>().value = "red";
-        GameObject.Find("AnswerButton_Blue").AddComponent<GenericButton>();
-        GameObject.Find("AnswerButton_Blue").GetComponent<GenericButton>().value = "blue";
+        GameObject.Find("AnswerButton_RedDistance").AddComponent<GenericButton>();
+        GameObject.Find("AnswerButton_RedDistance").GetComponent<GenericButton>().value = "red";
+        GameObject.Find("AnswerButton_BlueDistance").AddComponent<GenericButton>();
+        GameObject.Find("AnswerButton_BlueDistance").GetComponent<GenericButton>().value = "blue";
+        GameObject.Find("AnswerButton_RedSegment").AddComponent<GenericButton>();
+        GameObject.Find("AnswerButton_RedSegment").GetComponent<GenericButton>().value = "red";
+        GameObject.Find("AnswerButton_BlueSegment").AddComponent<GenericButton>();
+        GameObject.Find("AnswerButton_BlueSegment").GetComponent<GenericButton>().value = "blue";
+        GameObject.Find("AnswerButton_RedCurve").AddComponent<GenericButton>();
+        GameObject.Find("AnswerButton_RedCurve").GetComponent<GenericButton>().value = "red";
+        GameObject.Find("AnswerButton_BlueCurve").AddComponent<GenericButton>();
+        GameObject.Find("AnswerButton_BlueCurve").GetComponent<GenericButton>().value = "blue";
         GameObject.Find("AnswerButton_3").AddComponent<GenericButton>();
         GameObject.Find("AnswerButton_4").AddComponent<GenericButton>();
         GameObject.Find("AnswerButton_5").AddComponent<GenericButton>();
@@ -319,6 +347,12 @@ Please, call the instructor.";
 
         choicePanelClusters = GameObject.Find("ChoicePanelClusters");
         choicePanelClusters.SetActive(false);
+
+        choicePanelSegment = GameObject.Find("ChoicePanelSegment");
+        choicePanelSegment.SetActive(false);
+
+        choicePanelCurve = GameObject.Find("ChoicePanelCurve");
+        choicePanelCurve.SetActive(false);
 
         infoPanel.SetActive(false);
         feedbackPanel.SetActive(false);
@@ -349,11 +383,16 @@ Please, call the instructor.";
         {
             objectManager.SetupSegmentDistanceTrial(currentTrial.TrialDetails as SegmentDistanceTrial, ((SegmentDistanceTrial)currentTrial.TrialDetails).Chromosome.ToString());
         }
+        else if (currentTrial.Task == Tasks.CurveComparison)
+        {
+            objectManager.SetupCurveComparisonTrial(currentTrial.TrialDetails as CurveComparisonTrial);
+        }
         else
         {
             throw new Exception("Configuration for " + currentTrial.Task.ToString() + " not implemented");
         }
-        orbitScript.menu = false;
+        if (Formats.Projection == studyFormat)
+            orbitScript.menu = false;
         mainTracking = "TIME, VIS_X, VIS_Y, VIS_Z,  VIS_A, VIS_B, VIS_C,  CAM_A, CAM_B, CAM_C";
         cursorTracking = "TIME, C_X, C_Y, C_Z";
         cuttingplaneTracking = "TIME, P_X, P_Y, P_, P_A, P_B, P _C";
@@ -365,7 +404,8 @@ Please, call the instructor.";
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            orbitScript.menu = true;
+            if (Formats.Projection == studyFormat)
+                orbitScript.menu = true;
             RecordTimeAndCollectUserAnswer();
         }
 

@@ -68,7 +68,7 @@ namespace Assets.Scripts
 
         public String ToCSV()
         {
-            return chromosome.ToString() + ", " +
+            return chromosome + ", " +
                 redA + ", " +
                 redB + ", " +
                 blueA + ", " +

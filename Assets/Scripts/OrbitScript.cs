@@ -5,6 +5,7 @@ public class OrbitScript : MonoBehaviour
 {
     public bool menu = true;
     public Transform target;
+    public Vector3 shift = new Vector3(0, 0, 0);
     public float distance = 5.0f;
     public float xSpeed = 240.0f;
     public float ySpeed = 480.0f;
@@ -52,7 +53,7 @@ public class OrbitScript : MonoBehaviour
                 distance = Mathf.Clamp(distance - Input.GetAxis("Mouse ScrollWheel") * 5, distanceMin, distanceMax);
 
                 Vector3 negDistance = new Vector3(0.0f, 0.0f, -distance);
-                Vector3 position = rotation * negDistance + target.position;
+                Vector3 position = rotation * negDistance + (target.position + shift);
 
                 transform.rotation = rotation;
                 transform.position = position;
@@ -61,7 +62,39 @@ public class OrbitScript : MonoBehaviour
         {
             transform.rotation = Quaternion.Euler(0, 0, 0);
             transform.position = new Vector3(0, 0, 1);
+            shift = new Vector3(0, 0, 0);
         }
+
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            if (shift == new Vector3(0,0,0))
+            {
+                shift = new Vector3(-1.5f, 0, 0);
+                transform.position = transform.position + shift;
+            }
+            else if (shift == new Vector3(1.5f,0,0))
+            {
+                transform.position = transform.position - shift;
+                shift = new Vector3(0, 0, 0);
+            }
+
+
+        }
+        else if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            if (shift == new Vector3(0,0,0))
+            {
+                shift = new Vector3(1.5f, 0, 0);
+                transform.position = transform.position + shift;
+            }
+            else if (shift == new Vector3(-1.5f, 0, 0))
+            {
+                transform.position = transform.position - shift;
+                shift = new Vector3(0, 0, 0);
+            }
+        }
+
+
     }
 
     public static float ClampAngle(float angle, float min, float max)
