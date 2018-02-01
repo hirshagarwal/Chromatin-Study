@@ -12,6 +12,8 @@ public class ObjectManager : MonoBehaviour
     internal Curve redCurve;
     internal Curve blueCurve;
     private GameObject blueObject;
+    private bool showUnderstanding = false;
+    private string understandingString = "";
     private string guiText = "";
     private Vector2 mousePosition = new Vector2(0, 0);
     private GameObject redObject;
@@ -60,6 +62,13 @@ public class ObjectManager : MonoBehaviour
         }
     }
 
+    internal void SetupAttributeUnderstandingTrial(AttributeUnderstandingTrial adt)
+    {
+        mainCurve = new Curve(adt.Chromosome, false, true);
+        understandingString = adt.Question;
+        showUnderstanding = true;
+    }
+
     internal void SetupSegmentDistanceTrial(SegmentDistanceTrial sdt, string chrfn)
     {
         mainCurve = new Curve(chrfn, true, true);
@@ -79,6 +88,8 @@ public class ObjectManager : MonoBehaviour
     }
     private void OnGUI()
     {
+        if (showUnderstanding)
+            GUI.Box(new Rect(0, 0, 400, 40), understandingString);
         GUI.Box(new Rect(mousePosition.x + 15, Screen.height - mousePosition.y + 15, 200, 40), guiText);
     }
 
@@ -91,12 +102,20 @@ public class ObjectManager : MonoBehaviour
             Destroy(redObject);
             Destroy(blueObject);
             mainCurve.DestroyEverything();
-            redCurve.DestroyEverything();
-            blueCurve.DestroyEverything();
+            try
+            {
+                redCurve.DestroyEverything();
+                blueCurve.DestroyEverything();
+            } catch
+            {
+                
+            }
             foreach (var sph in spheres)
             {
                 Destroy(sph);
             }
+            showUnderstanding = false;
         }
     }
+
 }

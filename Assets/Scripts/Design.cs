@@ -7,11 +7,21 @@ public enum Formats
 
 public enum Tasks
 {
-    PointDistance, SegmentDistance, CurveComparison
+    PointDistance, SegmentDistance, CurveComparison, AttributeUnderstanding
 }
 
 public class Design
 {
+    public static string TASK_DESCRIPTION_ATTRIBUTE =
+
+@"NEW TASK: Attribute Understanding
+
+You will see a chromosome colored in some way. You will be provided with a description of an area of the chromosome.
+Your task is to identify the area described, and then to identify which color it is mostly comprised of.
+Once you are done, press the trigger button and a menu will pop up.
+
+Call the instructor before continuing.";
+
     public static string TASK_DESCRIPTION_CURVE =
 @" 
     NEW TASK: Curve Distance Comparison

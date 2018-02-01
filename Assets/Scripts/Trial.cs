@@ -51,6 +51,16 @@ namespace Assets.Scripts
                     trialConditions[8],
                     Boolean.Parse(trialConditions[9]));
             }
+            else if (Tasks.AttributeUnderstanding.ToString() == trialConditions[3])
+            {
+                task = Tasks.AttributeUnderstanding;
+                trialDetails = new AttributeUnderstandingTrial(
+                    trialConditions[6],
+                    trialConditions[7],
+                    trialConditions[8],
+                    trialConditions[9],
+                    Boolean.Parse(trialConditions[10]));
+            }
             else
             {
                 throw new Exception("Unhandled task: " + trialConditions[3]);

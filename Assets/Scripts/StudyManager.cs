@@ -23,6 +23,7 @@ public class StudyManager : MonoBehaviour
     public static GameObject choicePanelSegment;
     public static GameObject choicePanelCurve;
     public static GameObject choicePanelDistance;
+    public static GameObject choicePanelUnderstanding;
     public static TimeSpan duration;
     public static GameObject feedbackPanel;
     public static string FILE_SEPARATOR = "\\";
@@ -113,6 +114,14 @@ Please, call the instructor.";
             if (rawAnswer.Contains("AnswerButton_Blue"))
                 correct = ((CurveComparisonTrial)currentTrial.TrialDetails).Correct(false).ToString();
         }
+        else if (currentTrial.Task == Tasks.AttributeUnderstanding)
+        {
+            print(">>> UNDERSTANDING ANSWER: " + rawAnswer);
+            if (rawAnswer.Contains("AnswerButton_Red"))
+                correct = ((AttributeUnderstandingTrial)currentTrial.TrialDetails).Correct(true).ToString();
+            if (rawAnswer.Contains("AnswerButton_Blue"))
+                correct = ((AttributeUnderstandingTrial)currentTrial.TrialDetails).Correct(false).ToString();
+        }
         else
         {
             throw new Exception("Result test for " + currentTrial.Task.ToString() + " not implemented");
@@ -134,6 +143,7 @@ Please, call the instructor.";
         choicePanelDistance.SetActive(false);
         choicePanelSegment.SetActive(false);
         choicePanelCurve.SetActive(false);
+        choicePanelUnderstanding.SetActive(false);
         infoPanel.SetActive(false);
         feedbackPanel.SetActive(true);
         panelCanvas.SetActive(true);
@@ -166,8 +176,13 @@ Please, call the instructor.";
             panelCanvas.SetActive(true);
             choicePanelCurve.SetActive(true);
         }
-        else
+        else if (currentTrial.Task == Tasks.AttributeUnderstanding)
         {
+            panelCanvas.SetActive(true);
+            choicePanelUnderstanding.SetActive(true);
+        }
+        else
+        { 
             throw new Exception("Recording for " + currentTrial.Task.ToString() + " not implemented");
         }
     }
@@ -285,6 +300,10 @@ Please, call the instructor.";
         {
             infoMessage.text = Design.TASK_DESCRIPTION_CURVE;
         }
+        else if (task == Tasks.AttributeUnderstanding)
+        {
+            infoMessage.text = Design.TASK_DESCRIPTION_ATTRIBUTE;
+        }
         else
         {
             throw new Exception("Message for " + task + " not implemented");
@@ -328,6 +347,10 @@ Please, call the instructor.";
         GameObject.Find("AnswerButton_RedCurve").GetComponent<GenericButton>().value = "red";
         GameObject.Find("AnswerButton_BlueCurve").AddComponent<GenericButton>();
         GameObject.Find("AnswerButton_BlueCurve").GetComponent<GenericButton>().value = "blue";
+        GameObject.Find("AnswerButton_RedUnderstanding").AddComponent<GenericButton>();
+        GameObject.Find("AnswerButton_RedUnderstanding").GetComponent<GenericButton>().value = "red";
+        GameObject.Find("AnswerButton_BlueUnderstanding").AddComponent<GenericButton>();
+        GameObject.Find("AnswerButton_BlueUnderstanding").GetComponent<GenericButton>().value = "blue";
         GameObject.Find("AnswerButton_3").AddComponent<GenericButton>();
         GameObject.Find("AnswerButton_4").AddComponent<GenericButton>();
         GameObject.Find("AnswerButton_5").AddComponent<GenericButton>();
@@ -353,6 +376,9 @@ Please, call the instructor.";
 
         choicePanelCurve = GameObject.Find("ChoicePanelCurve");
         choicePanelCurve.SetActive(false);
+
+        choicePanelUnderstanding = GameObject.Find("ChoicePanelUnderstanding");
+        choicePanelUnderstanding.SetActive(false);
 
         infoPanel.SetActive(false);
         feedbackPanel.SetActive(false);
@@ -386,6 +412,10 @@ Please, call the instructor.";
         else if (currentTrial.Task == Tasks.CurveComparison)
         {
             objectManager.SetupCurveComparisonTrial(currentTrial.TrialDetails as CurveComparisonTrial);
+        }
+        else if (currentTrial.Task == Tasks.AttributeUnderstanding)
+        {
+            objectManager.SetupAttributeUnderstandingTrial(currentTrial.TrialDetails as AttributeUnderstandingTrial);
         }
         else
         {
