@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Assets.Scripts
 {
-    internal class CurveComparisonTrial : IGenericTrial
+    public class CurveComparisonTrial : IGenericTrial
     {
         private string referenceChromosome;
         private string blueChromosome;

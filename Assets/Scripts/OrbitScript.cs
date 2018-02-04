@@ -58,7 +58,8 @@ public class OrbitScript : MonoBehaviour
                 transform.rotation = rotation;
                 transform.position = position;
             }
-        } else
+        }
+        else
         {
             transform.rotation = Quaternion.Euler(0, 0, 0);
             transform.position = new Vector3(0, 0, 1);
@@ -67,22 +68,20 @@ public class OrbitScript : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            if (shift == new Vector3(0,0,0))
+            if (shift == new Vector3(0, 0, 0))
             {
                 shift = new Vector3(-1.5f, 0, 0);
                 transform.position = transform.position + shift;
             }
-            else if (shift == new Vector3(1.5f,0,0))
+            else if (shift == new Vector3(1.5f, 0, 0))
             {
                 transform.position = transform.position - shift;
                 shift = new Vector3(0, 0, 0);
             }
-
-
         }
         else if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            if (shift == new Vector3(0,0,0))
+            if (shift == new Vector3(0, 0, 0))
             {
                 shift = new Vector3(1.5f, 0, 0);
                 transform.position = transform.position + shift;
@@ -93,8 +92,6 @@ public class OrbitScript : MonoBehaviour
                 shift = new Vector3(0, 0, 0);
             }
         }
-
-
     }
 
     public static float ClampAngle(float angle, float min, float max)

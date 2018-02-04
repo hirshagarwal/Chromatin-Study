@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Assets.Scripts;
-using UnityEngine;
 
 namespace Assets.Scripts
 {
-
-    class Square
+    internal class Square
     {
         private Range a;
         private Range b;
@@ -42,5 +36,4 @@ namespace Assets.Scripts
             }
         }
     }
-
 }

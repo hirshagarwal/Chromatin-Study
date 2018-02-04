@@ -2,7 +2,7 @@
 
 namespace Assets.Scripts
 {
-    internal class PointDistanceTrial : IGenericTrial
+    public class PointDistanceTrial : IGenericTrial
     {
         private string chromosome;
         private string redA;

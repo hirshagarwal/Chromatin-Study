@@ -6,19 +6,6 @@ using UnityEngine.UI;
 
 public class StudyManager : MonoBehaviour
 {
-    //public static GameObject answerButton;
-    //public static bool answerGiven = false;
-    //public static GameObject currentVisualization;
-    //private static int MAX_TRIALS = 13;
-    //private Color[] colors = { Color.red, Color.yellow };
-    //private GameObject currentSelectionMarker;
-    //private GameObject cursorPosition;
-    //private String dataString;
-    //private GameObject hoveredPoint;
-    //private Boolean initialized = false;
-    //private GameObject MenuDimensions;
-    //public static bool participantReadyToAnswer = false;
-    //public static bool startNewTrial = false;
     public static GameObject choicePanelClusters;
     public static GameObject choicePanelSegment;
     public static GameObject choicePanelCurve;
@@ -35,7 +22,9 @@ public class StudyManager : MonoBehaviour
     public Trial currentTrial;
     public DateTime dateStart;
     public int numberOfParticipants;
-    public ObjectManager objectManager;
+    public IObjectManager objectManager;
+    public ObjectManager2D objectManager2D;
+    public ObjectManager3D objectManager3D;
     public Formats studyFormat;
     public OrbitScript orbitScript;
     public int totalTrials = 208;
@@ -182,7 +171,7 @@ Please, call the instructor.";
             choicePanelUnderstanding.SetActive(true);
         }
         else
-        { 
+        {
             throw new Exception("Recording for " + currentTrial.Task.ToString() + " not implemented");
         }
     }
@@ -320,6 +309,16 @@ Please, call the instructor.";
     //Step 1
     private void Start()
     {
+        if (objectManager2D != null)
+        {
+            objectManager = objectManager2D;
+        } else if (objectManager3D != null)
+        {
+            objectManager = objectManager3D;
+        } else
+        {
+            throw new Exception("Neither object manager has been initialised!");
+        }
         if (Application.platform == RuntimePlatform.OSXEditor
         || Application.platform == RuntimePlatform.OSXPlayer)
         {
@@ -388,19 +387,6 @@ Please, call the instructor.";
     // Use this for initialization
     private void StartTask()
     {
-        //if (studyFormat == Formats.HoloLens)
-        //{
-        //    throw new System.Exception("HoloLens handler not implemented!");
-        //}
-        //else if (studyFormat == Formats.Projection)
-        //{
-        //    throw new System.Exception("Projection handler not implemented!");
-        //}
-        //else if (studyFormat == Formats.Heatmap)
-        //{
-        //    throw new System.Exception("Heatmap handler not implemented!");
-        //}
-
         if (currentTrial.Task == Tasks.PointDistance)
         {
             objectManager.SetupPointDistanceTrial(currentTrial.TrialDetails as PointDistanceTrial, ((PointDistanceTrial)currentTrial.TrialDetails).Chromosome.ToString());
@@ -438,31 +424,6 @@ Please, call the instructor.";
                 orbitScript.menu = true;
             RecordTimeAndCollectUserAnswer();
         }
-
-        // Track interaction
-        //if (frameCount == Design.TRACKING_FRAME_RATE)
-        //{
-        //    frameCount = 0;
-        //    Vector3 eulerAngles = GameObject.Find("ViewImageTarget").transform.rotation.eulerAngles;
-        //    Vector3 pos = GameObject.Find("ViewImageTarget").transform.position;
-        //    Vector3 campos = GameObject.Find("HoloLensCamera").transform.position;
-
-        //    TimeSpan duration = DateTime.Now - dateStart;
-        //    mainTracking +=
-        //        Design.LINE_BREAK +
-        //            duration.TotalMilliseconds.ToString()
-        //            + ", " + pos.x
-        //            + ", " + pos.y
-        //            + ", " + pos.z
-        //            + ", " + eulerAngles.x
-        //            + ", " + eulerAngles.y
-        //            + ", " + eulerAngles.z
-        //            + ", " + campos.x
-        //            + ", " + campos.y
-        //            + ", " + campos.z
-        //            ;
-        //}
-        //frameCount++;
     }
 
     private void WriteToFile(string answer)

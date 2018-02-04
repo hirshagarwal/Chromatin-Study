@@ -15,7 +15,7 @@ namespace Assets.Scripts
             this.participantID = participantID;
             string[] blocks = file.text.Split(StudyManager.LINE_BREAK);
             string[] line;
-//            int participantCount = int.Parse(blocks[blocks.Length - 1].Split(',')[0]);
+            //            int participantCount = int.Parse(blocks[blocks.Length - 1].Split(',')[0]);
 
             for (int i = 1; i < blocks.Length; i++)
             {

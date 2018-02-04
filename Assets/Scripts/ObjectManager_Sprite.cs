@@ -1,16 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class ObjectManager_Sprite : MonoBehaviour {
-
-	// Create a Sprite at start-up.
+public class ObjectManager_Sprite : MonoBehaviour
+{
+    // Create a Sprite at start-up.
     // Assign a texture to the sprite when the button is pressed.
     public Texture2D tex;
+
     private Sprite mySprite;
     private SpriteRenderer sr;
 
-    void Awake()
+    private void Awake()
     {
         sr = gameObject.AddComponent<SpriteRenderer>() as SpriteRenderer;
         sr.color = new Color(0.9f, 0.9f, 0.9f, 1.0f);
@@ -18,13 +17,13 @@ public class ObjectManager_Sprite : MonoBehaviour {
         transform.position = new Vector3(1.5f, 1.5f, 0.0f);
     }
 
-    void Start()
+    private void Start()
     {
         tex = new Texture2D(100, 100);
         mySprite = Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100.0f);
     }
 
-    void OnGUI()
+    private void OnGUI()
     {
         if (GUI.Button(new Rect(10, 10, 100, 30), "Add sprite"))
         {
@@ -32,4 +31,3 @@ public class ObjectManager_Sprite : MonoBehaviour {
         }
     }
 }
-

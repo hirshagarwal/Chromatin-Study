@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Assets.Scripts
 {
-    internal class Curve : MonoBehaviour
+    public class Curve : MonoBehaviour
     {
         public GameObject go;
         public static int currentFile = 13;
@@ -310,7 +310,5 @@ namespace Assets.Scripts
             cylinder.transform.localScale = scale;
             return cylinder;
         }
-
-        
     }
 }

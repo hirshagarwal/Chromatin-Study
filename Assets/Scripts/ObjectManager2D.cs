@@ -1,12 +1,22 @@
-﻿using System;
-using Assets.Scripts;
-using System.Collections;
+﻿using Assets.Scripts;
+using System;
 using System.Collections.Generic;
-using UnityEngine;
 using System.Linq;
+using UnityEngine;
 
-public class ObjectManager2D : MonoBehaviour {
-    public Material mat;
+public class ObjectManager2D : MonoBehaviour, IObjectManager
+{
+    private Formats studyFormat;
+    private Material baseMaterial;
+    private TextAsset textFile;
+    private Curve mainCurve;
+    private Curve redCurve;
+    private Curve blueCurve;
+    private GameObject blueObject;
+    private GameObject redObject;
+    private bool showUnderstanding = false;
+    private string understandingString = "";
+
     public float threshold = 0.7f;
     private Texture2D tex;
     private Sprite mySprite;
@@ -14,22 +24,102 @@ public class ObjectManager2D : MonoBehaviour {
     private float scale = 1.0f;
     private float scaleMin = 0.1f;
     private float scaleMax = 10.0f;
-    string guiText = "";
-    string[] files = { "1", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "X" };
-    string chrtype = "sen";
-    int current_file = 7;
-    List<Range> sortedRanges;
-    Vector2 mousePosition = new Vector2(0, 0);
-    Dictionary<Range, Dictionary<Range, float>> interactions;
-    Texture2D ReadInFile(string filename)
+    private string guiText = "";
+    private string[] files = { "1", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "X" };
+    private string chrtype = "sen";
+    private int current_file = 7;
+    private List<Range> sortedRanges;
+    private Vector2 mousePosition = new Vector2(0, 0);
+    private Dictionary<Range, Dictionary<Range, float>> interactions;
+
+    public Formats StudyFormat
+    {
+        get
+        {
+            return studyFormat;
+        }
+    }
+
+    public Material BaseMaterial
+    {
+        get
+        {
+            return baseMaterial;
+        }
+    }
+
+    public TextAsset TextFile
+    {
+        get
+        {
+            return textFile;
+        }
+    }
+
+    public Curve MainCurve
+    {
+        get
+        {
+            return mainCurve;
+        }
+    }
+
+    public Curve RedCurve
+    {
+        get
+        {
+            return redCurve;
+        }
+    }
+
+    public Curve BlueCurve
+    {
+        get
+        {
+            return blueCurve;
+        }
+    }
+
+    public GameObject BlueObject
+    {
+        get
+        {
+            return blueObject;
+        }
+    }
+
+    public GameObject RedObject
+    {
+        get
+        {
+            return redObject;
+        }
+    }
+
+    public bool ShowUnderstanding
+    {
+        get
+        {
+            return showUnderstanding;
+        }
+    }
+
+    public string UnderstandingString
+    {
+        get
+        {
+            return understandingString;
+        }
+    }
+
+    private Texture2D ReadInFile(string filename)
     {
         Debug.Log("About to load in the file");
-        
+
         TextAsset file = Resources.Load(filename) as TextAsset;
         Debug.Log("Loaded in the file");
         int counter = 0;
-    
-   
+
         List<Range> ranges = new List<Range>();
         interactions = new Dictionary<Range, Dictionary<Range, float>>();
         List<float> colorsIn = new List<float>();
@@ -69,7 +159,7 @@ public class ObjectManager2D : MonoBehaviour {
                 Color color = new Color(1, 0, 0, 0);
                 if (col > 0)
                 {
-                    color = new Color(1, 0, 0, threshold * (1-threshold * (col/maxCol)));
+                    color = new Color(1, 0, 0, threshold * (1 - threshold * (col / maxCol)));
                 }
                 tex.SetPixel(x, y, color);
                 y--;
@@ -110,14 +200,14 @@ public class ObjectManager2D : MonoBehaviour {
         }
     }
 
-    void Awake()
+    private void Awake()
     {
         sr = gameObject.AddComponent<SpriteRenderer>() as SpriteRenderer;
     }
 
-    void Start()
+    private void Start()
     {
-        LoadNextFile();
+        //LoadNextFile();
     }
 
     private void LoadNextFile()
@@ -130,7 +220,7 @@ public class ObjectManager2D : MonoBehaviour {
         sr.material.mainTexture = tex;
     }
 
-    void Update()
+    private void Update()
     {
         if (Input.GetMouseButton(1))
         {
@@ -143,9 +233,9 @@ public class ObjectManager2D : MonoBehaviour {
             {
                 float xRange = mousePos.x - worldBottomLeft.x;
                 float yRange = worldTopRight.y - mousePos.y;//mousePos.y - worldBottomLeft.y;
-                float unit = (worldTopRight.x - worldBottomLeft.x)/sortedRanges.Count;
-                int xIndex = (int) Math.Round(xRange / unit);
-                int yIndex = (int) Math.Round(yRange / unit);
+                float unit = (worldTopRight.x - worldBottomLeft.x) / sortedRanges.Count;
+                int xIndex = (int)Math.Round(xRange / unit);
+                int yIndex = (int)Math.Round(yRange / unit);
                 Range xPosition = sortedRanges[xIndex];
                 Range yPosition = sortedRanges[yIndex];
                 string strength = "0";
@@ -155,7 +245,8 @@ public class ObjectManager2D : MonoBehaviour {
                 if (chrtype == "sen")
                 {
                     guiText += "\nSenescent";
-                }else
+                }
+                else
                 {
                     guiText += "\nProliferating";
                 }
@@ -179,16 +270,19 @@ public class ObjectManager2D : MonoBehaviour {
             current_file--;
             current_file = ((current_file %= files.Count()) < 0) ? current_file + files.Count() : current_file;
             LoadNextFile();
-        } else if (Input.GetKeyDown(KeyCode.RightArrow))
+        }
+        else if (Input.GetKeyDown(KeyCode.RightArrow))
         {
             current_file = (current_file + 1) % files.Count();
             LoadNextFile();
-        } else if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
+        }
+        else if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
         {
             if (chrtype == "sen")
             {
                 chrtype = "pro";
-            } else
+            }
+            else
             {
                 chrtype = "sen";
             }
@@ -206,5 +300,24 @@ public class ObjectManager2D : MonoBehaviour {
     {
         GUI.Box(new Rect(mousePosition.x + 15, Screen.height - mousePosition.y + 15, 200, 70), guiText);
     }
-}
 
+    public void SetupCurveComparisonTrial(CurveComparisonTrial curveComparisonTrial)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void SetupPointDistanceTrial(PointDistanceTrial pdt, string chrfn)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void SetupAttributeUnderstandingTrial(AttributeUnderstandingTrial adt)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void SetupSegmentDistanceTrial(SegmentDistanceTrial sdt, string chrfn)
+    {
+        throw new NotImplementedException();
+    }
+}

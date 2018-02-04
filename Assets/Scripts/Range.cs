@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Assets.Scripts
 {
-    class Range : IComparable<Range>
+    internal class Range : IComparable<Range>
     {
         private int start;
         private int end;
+
         public Range(int start, int end)
         {
             this.start = start;
@@ -36,32 +34,32 @@ namespace Assets.Scripts
             return 0;
         }
 
-        public static bool operator > (Range r1, Range r2)
+        public static bool operator >(Range r1, Range r2)
         {
             return r1.Start > r2.End;
         }
 
-        public static bool operator < (Range r1, Range r2)
+        public static bool operator <(Range r1, Range r2)
         {
             return r1.End < r2.Start;
         }
 
-        public static bool operator >= (Range r1, Range r2)
+        public static bool operator >=(Range r1, Range r2)
         {
             return r1.End > r2.End;
         }
 
-        public static bool operator <= (Range r1, Range r2)
+        public static bool operator <=(Range r1, Range r2)
         {
             return r1.Start < r2.Start;
         }
 
-        public static bool operator == (Range r1, Range r2)
+        public static bool operator ==(Range r1, Range r2)
         {
             return (r1.Start == r2.Start) && (r1.End == r2.End);
         }
 
-        public static bool operator != (Range r1, Range r2)
+        public static bool operator !=(Range r1, Range r2)
         {
             return (r1.Start != r2.Start) && (r1.End != r2.End);
         }
