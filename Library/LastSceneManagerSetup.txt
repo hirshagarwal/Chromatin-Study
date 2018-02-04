@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/threedimensional.unity
+- path: Assets/heatmap.unity
   isLoaded: 1
   isActive: 1
