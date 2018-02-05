@@ -198,7 +198,8 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
                 }
                 else if (attributeUnderstanding)
                 {
-                    color = new Color(itrcx / buckets, itrcy / buckets, 1 - (itrcx / buckets), threshold * (1 - threshold * (col / maxCol)));
+                    if (col > 0)
+                        color = new Color((float)itrcx / buckets, (float)itrcy / buckets, 1 - ((float)itrcx / buckets), threshold * (1 - threshold * (col / maxCol)));
                 }
                 else if (col > 0)
                 {
