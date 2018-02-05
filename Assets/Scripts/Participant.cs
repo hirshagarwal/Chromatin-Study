@@ -11,6 +11,7 @@ namespace Assets.Scripts
 
         public Participant(int participantID, Formats trialFormat)
         {
+            Debug.Log("Trial format is " + trialFormat.ToString());
             TextAsset file = Resources.Load(participantID.ToString()) as TextAsset;
             this.participantID = participantID;
             string[] blocks = file.text.Split(StudyManager.LINE_BREAK);

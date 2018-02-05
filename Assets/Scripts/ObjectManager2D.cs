@@ -18,9 +18,15 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
     private string understandingString = "";
 
     public float threshold = 0.7f;
-    private Texture2D tex;
-    private Sprite mySprite;
-    private SpriteRenderer sr;
+    private Texture2D mainTexture;
+    private Texture2D redTexture;
+    private Texture2D blueTexture;
+    private Sprite mainSprite;
+    private SpriteRenderer mainSpriteRenderer;
+    private Sprite redSprite;
+    private SpriteRenderer redSpriteRenderer;
+    private Sprite blueSprite;
+    private SpriteRenderer blueSpriteRenderer;
     private float scale = 1.0f;
     private float scaleMin = 0.1f;
     private float scaleMax = 10.0f;
@@ -202,7 +208,11 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
 
     private void Awake()
     {
-        sr = gameObject.AddComponent<SpriteRenderer>() as SpriteRenderer;
+        mainSpriteRenderer = gameObject.AddComponent<SpriteRenderer>() as SpriteRenderer;
+        redSpriteRenderer = (new GameObject()).AddComponent<SpriteRenderer>() as SpriteRenderer;
+        redSpriteRenderer.gameObject.transform.position = new Vector2(-3, 0);
+        blueSpriteRenderer = (new GameObject()).AddComponent<SpriteRenderer>() as SpriteRenderer;
+        blueSpriteRenderer.gameObject.transform.position = new Vector2(3, 0);
     }
 
     private void Start()
@@ -210,14 +220,20 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
         //LoadNextFile();
     }
 
-    private void LoadNextFile()
+    private Texture2D LoadNextFile(string filename = "")
     {
         Debug.Log("Starting...");
-        var filename = files[current_file] + "_formatted.bed." + chrtype;
-        tex = ReadInFile(filename);
-        mySprite = Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width, tex.height), new Vector2(0.5f, 0.5f), 100.0f);
-        sr.sprite = mySprite;
-        sr.material.mainTexture = tex;
+        if ("" == filename)
+            filename = files[current_file] + "_formatted.bed." + chrtype;
+        return ReadInFile(filename);
+    }
+
+    private SpriteRenderer DisplayTexture(Texture2D tex, Sprite sprite, SpriteRenderer spriteRenderer, int scale)
+    {
+        sprite = Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width/scale, tex.height/scale), new Vector2(0.5f, 0.5f), 100.0f);
+        spriteRenderer.sprite = sprite;
+        spriteRenderer.material.mainTexture = tex;
+        return spriteRenderer;
     }
 
     private void Update()
@@ -227,8 +243,8 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
             Camera c = Camera.main;
             Vector3 mousePos = new Vector3();
             mousePos = Input.mousePosition;
-            Vector3 worldBottomLeft = Camera.main.WorldToScreenPoint(new Vector3(-sr.sprite.bounds.extents.x, -sr.sprite.bounds.extents.y, 0f));
-            Vector3 worldTopRight = Camera.main.WorldToScreenPoint(new Vector3(sr.sprite.bounds.extents.x, sr.sprite.bounds.extents.y, 0f));
+            Vector3 worldBottomLeft = Camera.main.WorldToScreenPoint(new Vector3(-mainSpriteRenderer.sprite.bounds.extents.x, -mainSpriteRenderer.sprite.bounds.extents.y, 0f));
+            Vector3 worldTopRight = Camera.main.WorldToScreenPoint(new Vector3(mainSpriteRenderer.sprite.bounds.extents.x, mainSpriteRenderer.sprite.bounds.extents.y, 0f));
             if (mousePos.x <= worldTopRight.x && mousePos.x >= worldBottomLeft.x && mousePos.y <= worldTopRight.y && mousePos.y >= worldBottomLeft.y)
             {
                 float xRange = mousePos.x - worldBottomLeft.x;
@@ -303,7 +319,13 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
 
     public void SetupCurveComparisonTrial(CurveComparisonTrial curveComparisonTrial)
     {
-        throw new NotImplementedException();
+        mainTexture = LoadNextFile(curveComparisonTrial.ReferenceChromosome);
+        redTexture = LoadNextFile(curveComparisonTrial.RedChromosome);
+        blueTexture = LoadNextFile(curveComparisonTrial.BlueChromosome);
+
+        mainSpriteRenderer = DisplayTexture(mainTexture, mainSprite, mainSpriteRenderer, 3);
+        redSpriteRenderer = DisplayTexture(redTexture, redSprite, redSpriteRenderer, 3);
+        blueSpriteRenderer = DisplayTexture(blueTexture, blueSprite, blueSpriteRenderer, 3);
     }
 
     public void SetupPointDistanceTrial(PointDistanceTrial pdt, string chrfn)
