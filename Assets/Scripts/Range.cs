@@ -13,6 +13,13 @@ namespace Assets.Scripts
             this.end = end;
         }
 
+        public Range(string r)
+        {
+            string[] parts = r.Split('-');
+            this.start = Int32.Parse(parts[1]);
+            this.end = Int32.Parse(parts[2]);
+        }
+
         public int CompareTo(Range other)
         {
             if (this < other)
@@ -56,11 +63,15 @@ namespace Assets.Scripts
 
         public static bool operator ==(Range r1, Range r2)
         {
+            if (ReferenceEquals(r2, null)) return false;
+            if (ReferenceEquals(r1, null)) return false;
             return (r1.Start == r2.Start) && (r1.End == r2.End);
         }
 
         public static bool operator !=(Range r1, Range r2)
         {
+            if (ReferenceEquals(r2, null)) return false;
+            if (ReferenceEquals(r1, null)) return false;
             return (r1.Start != r2.Start) && (r1.End != r2.End);
         }
 

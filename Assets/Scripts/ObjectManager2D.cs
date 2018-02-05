@@ -118,7 +118,7 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
         }
     }
 
-    private Texture2D ReadInFile(string filename)
+    private Texture2D ReadInFile(string filename, float red = 1.0f, float green = 0.0f, float blue = 0.0f, Range redA = null, Range redB = null, Range blueA = null, Range blueB = null, bool isRange = false, bool attributeUnderstanding = false)
     {
         Debug.Log("About to load in the file");
 
@@ -162,10 +162,47 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
                 float col = 0f;
                 if (interactions.ContainsKey(uniqueRanges[itrcx]) && interactions[uniqueRanges[itrcx]].ContainsKey(uniqueRanges[itrcy]))
                     col += interactions[uniqueRanges[itrcx]][uniqueRanges[itrcy]];
-                Color color = new Color(1, 0, 0, 0);
-                if (col > 0)
+                Color color = new Color(red, green, blue, 0);
+                if (redA != null)
                 {
-                    color = new Color(1, 0, 0, threshold * (1 - threshold * (col / maxCol)));
+                    if (isRange)
+                    {
+                        if (uniqueRanges[itrcx] >= redA && uniqueRanges[itrcx] <= redB)
+                        {
+                            color = new Color(1, 0, 0);
+                        }
+                        else if (uniqueRanges[itrcx] >= blueA && uniqueRanges[itrcx] <= blueB)
+                        {
+                            color = new Color(0, 0, 1);
+                        }
+                        else if (col > 0)
+                        {
+                            color = new Color(red, green, blue, threshold * (1 - threshold * (col / maxCol)));
+                        }
+                    }
+                    else
+                    {
+                        if (uniqueRanges[itrcx] == redA || uniqueRanges[itrcx] == redB)
+                        {
+                            color = new Color(1, 0, 0);
+                        }
+                        else if (uniqueRanges[itrcx] == blueA || uniqueRanges[itrcx] == blueB)
+                        {
+                            color = new Color(0, 0, 1);
+                        }
+                        else if (col > 0)
+                        {
+                            color = new Color(red, green, blue, threshold * (1 - threshold * (col / maxCol)));
+                        }
+                    }
+                }
+                else if (attributeUnderstanding)
+                {
+                    color = new Color(itrcx / buckets, itrcy / buckets, 1 - (itrcx / buckets), threshold * (1 - threshold * (col / maxCol)));
+                }
+                else if (col > 0)
+                {
+                    color = new Color(red, green, blue, threshold * (1 - threshold * (col / maxCol)));
                 }
                 tex.SetPixel(x, y, color);
                 y--;
@@ -220,17 +257,17 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
         //LoadNextFile();
     }
 
-    private Texture2D LoadNextFile(string filename = "")
+    private Texture2D LoadNextFile(string filename = "", float red = 1.0f, float green = 0.0f, float blue = 0.0f, Range redA = null, Range redB = null, Range blueA = null, Range blueB = null, bool isRange = false, bool attributeUnderstanding = false)
     {
         Debug.Log("Starting...");
         if ("" == filename)
             filename = files[current_file] + "_formatted.bed." + chrtype;
-        return ReadInFile(filename);
+        return ReadInFile(filename, red, green, blue, redA, redB, blueA, blueB, isRange, attributeUnderstanding);
     }
 
     private SpriteRenderer DisplayTexture(Texture2D tex, Sprite sprite, SpriteRenderer spriteRenderer, int scale)
     {
-        sprite = Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width/scale, tex.height/scale), new Vector2(0.5f, 0.5f), 100.0f);
+        sprite = Sprite.Create(tex, new Rect(0.0f, 0.0f, tex.width / scale, tex.height / scale), new Vector2(0.5f, 0.5f), 100.0f);
         spriteRenderer.sprite = sprite;
         spriteRenderer.material.mainTexture = tex;
         return spriteRenderer;
@@ -314,14 +351,16 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
 
     private void OnGUI()
     {
+        if (showUnderstanding)
+            GUI.Box(new Rect(0, 0, 400, 40), understandingString);
         GUI.Box(new Rect(mousePosition.x + 15, Screen.height - mousePosition.y + 15, 200, 70), guiText);
     }
 
     public void SetupCurveComparisonTrial(CurveComparisonTrial curveComparisonTrial)
     {
-        mainTexture = LoadNextFile(curveComparisonTrial.ReferenceChromosome);
-        redTexture = LoadNextFile(curveComparisonTrial.RedChromosome);
-        blueTexture = LoadNextFile(curveComparisonTrial.BlueChromosome);
+        mainTexture = LoadNextFile(curveComparisonTrial.ReferenceChromosome, 0.0f, 0.0f, 0.0f);
+        redTexture = LoadNextFile(curveComparisonTrial.RedChromosome, 1.0f, 0.0f, 0.0f);
+        blueTexture = LoadNextFile(curveComparisonTrial.BlueChromosome, 0.0f, 0.0f, 1.0f);
 
         mainSpriteRenderer = DisplayTexture(mainTexture, mainSprite, mainSpriteRenderer, 3);
         redSpriteRenderer = DisplayTexture(redTexture, redSprite, redSpriteRenderer, 3);
@@ -330,16 +369,31 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
 
     public void SetupPointDistanceTrial(PointDistanceTrial pdt, string chrfn)
     {
-        throw new NotImplementedException();
+        Range redA = new Range(pdt.RedA);
+        Range redB = new Range(pdt.RedB);
+        Range blueA = new Range(pdt.BlueA);
+        Range blueB = new Range(pdt.BlueB);
+        mainTexture = LoadNextFile(pdt.Chromosome, 0.0f, 0.0f, 0.0f, redA, redB, blueA, blueB);
+        mainSpriteRenderer = DisplayTexture(mainTexture, mainSprite, mainSpriteRenderer, 1);
     }
 
     public void SetupAttributeUnderstandingTrial(AttributeUnderstandingTrial adt)
     {
-        throw new NotImplementedException();
+        //mainCurve = new Curve(adt.Chromosome, false, true);
+        mainTexture = LoadNextFile(adt.Chromosome, attributeUnderstanding:true);
+        mainSpriteRenderer = DisplayTexture(mainTexture, mainSprite, mainSpriteRenderer, 1);
+        understandingString = adt.Question;
+        showUnderstanding = true;
     }
+   
 
     public void SetupSegmentDistanceTrial(SegmentDistanceTrial sdt, string chrfn)
     {
-        throw new NotImplementedException();
+        Range redA = new Range(sdt.RedA);
+        Range redB = new Range(sdt.RedB);
+        Range blueA = new Range(sdt.BlueA);
+        Range blueB = new Range(sdt.BlueB);
+        mainTexture = LoadNextFile(sdt.Chromosome, 0.0f, 0.0f, 0.0f, redA, redB, blueA, blueB, true);
+        mainSpriteRenderer = DisplayTexture(mainTexture, mainSprite, mainSpriteRenderer, 1);
     }
 }
