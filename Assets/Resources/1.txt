@@ -1,4 +1,4 @@
-first line is assumed blank
+first line is left blank
 1,0,HoloLens,AttributeUnderstanding,0,T,chr16_sen,chr16-0-100000,chr16-200000-300000,Find the color of the region which is largest,true
 1,0,HoloLens,AttributeUnderstanding,0,R,chr16_sen,chr16-0-100000,chr16-200000-300000,Find the color of the region which is largest,true
 1,0,HoloLens,CurveComparison,0,T,chr16_sen,chr16_pro,chr17_sen,true
@@ -15,11 +15,11 @@ first line is assumed blank
 1,0,Projection,SegmentDistance,0,R,chr16_sen,chr16-0-100000,chr16-200000-300000,chr16-1100000-1200000,chr16-3500000-3600000,false
 1,0,Projection,PointDistance,0,T,chr16_sen,chr16-66600000-66700000,chr16-51100000-51200000,chr16-0-100000,chr16-67700000-67800000,true
 1,0,Projection,PointDistance,0,R,chr16_sen,chr16-66600000-66700000,chr16-51100000-51200000,chr16-0-100000,chr16-67700000-67800000,true
+1,0,Heatmap,PointDistance,0,T,16_formatted.bed.sen,chr16-66600000-66700000,chr16-51100000-51200000,chr16-0-100000,chr16-67700000-67800000,true
+1,0,Heatmap,PointDistance,0,R,16_formatted.bed.sen,chr16-66600000-66700000,chr16-51100000-51200000,chr16-0-100000,chr16-67700000-67800000,true
 1,0,Heatmap,AttributeUnderstanding,0,T,16_formatted.bed.sen,chr16-0-100000,chr16-200000-300000,Find the color of the region which is largest,true
 1,0,Heatmap,AttributeUnderstanding,0,R,16_formatted.bed.sen,chr16-0-100000,chr16-200000-300000,Find the color of the region which is largest,true
 1,0,Heatmap,SegmentDistance,0,T,16_formatted.bed.sen,chr16-0-100000,chr16-200000-300000,chr16-1100000-1200000,chr16-3500000-3600000,false
 1,0,Heatmap,SegmentDistance,0,R,16_formatted.bed.sen,chr16-0-100000,chr16-200000-300000,chr16-1100000-1200000,chr16-3500000-3600000,false
-1,0,Heatmap,PointDistance,0,T,16_formatted.bed.sen,chr16-66600000-66700000,chr16-51100000-51200000,chr16-0-100000,chr16-67700000-67800000,true
-1,0,Heatmap,PointDistance,0,R,16_formatted.bed.sen,chr16-66600000-66700000,chr16-51100000-51200000,chr16-0-100000,chr16-67700000-67800000,true
 1,0,Heatmap,CurveComparison,0,T,16_formatted.bed.sen,16_formatted.bed.pro,17_formatted.bed.sen,true
 1,0,Heatmap,CurveComparison,0,R,16_formatted.bed.sen,16_formatted.bed.pro,17_formatted.bed.sen,true

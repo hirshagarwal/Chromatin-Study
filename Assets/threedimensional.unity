@@ -5070,9 +5070,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b184e78b6d0c78d4392dd681add8280b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  studyFormat: 0
-  baseMaterial: {fileID: 0}
-  textFile: {fileID: 0}
 --- !u!4 &2030969603
 Transform:
   m_ObjectHideFlags: 0
@@ -5098,7 +5095,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   numberOfParticipants: 2
-  objectManager: {fileID: 2030969602}
+  objectManager2D: {fileID: 0}
+  objectManager3D: {fileID: 2030969602}
   studyFormat: 1
   orbitScript: {fileID: 1435786253}
   totalTrials: 208

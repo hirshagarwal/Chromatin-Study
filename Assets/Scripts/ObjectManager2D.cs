@@ -7,6 +7,7 @@ using UnityEngine;
 public class ObjectManager2D : MonoBehaviour, IObjectManager
 {
     private Formats studyFormat;
+    private Tasks studyTask;
     private Material baseMaterial;
     private TextAsset textFile;
     private Curve mainCurve;
@@ -163,7 +164,7 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
                 if (interactions.ContainsKey(uniqueRanges[itrcx]) && interactions[uniqueRanges[itrcx]].ContainsKey(uniqueRanges[itrcy]))
                     col += interactions[uniqueRanges[itrcx]][uniqueRanges[itrcy]];
                 Color color = new Color(red, green, blue, 0);
-                if (redA != null)
+                if (studyTask == Tasks.PointDistance || studyTask == Tasks.SegmentDistance)
                 {
                     if (isRange)
                     {
@@ -359,6 +360,7 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
 
     public void SetupCurveComparisonTrial(CurveComparisonTrial curveComparisonTrial)
     {
+        studyTask = Tasks.CurveComparison;
         mainTexture = LoadNextFile(curveComparisonTrial.ReferenceChromosome, 0.0f, 0.0f, 0.0f);
         redTexture = LoadNextFile(curveComparisonTrial.RedChromosome, 1.0f, 0.0f, 0.0f);
         blueTexture = LoadNextFile(curveComparisonTrial.BlueChromosome, 0.0f, 0.0f, 1.0f);
@@ -370,6 +372,7 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
 
     public void SetupPointDistanceTrial(PointDistanceTrial pdt, string chrfn)
     {
+        studyTask = Tasks.PointDistance;
         Range redA = new Range(pdt.RedA);
         Range redB = new Range(pdt.RedB);
         Range blueA = new Range(pdt.BlueA);
@@ -380,6 +383,7 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
 
     public void SetupAttributeUnderstandingTrial(AttributeUnderstandingTrial adt)
     {
+        studyTask = Tasks.AttributeUnderstanding;
         //mainCurve = new Curve(adt.Chromosome, false, true);
         mainTexture = LoadNextFile(adt.Chromosome, attributeUnderstanding:true);
         mainSpriteRenderer = DisplayTexture(mainTexture, mainSprite, mainSpriteRenderer, 1);
@@ -390,6 +394,7 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
 
     public void SetupSegmentDistanceTrial(SegmentDistanceTrial sdt, string chrfn)
     {
+        studyTask = Tasks.SegmentDistance;
         Range redA = new Range(sdt.RedA);
         Range redB = new Range(sdt.RedB);
         Range blueA = new Range(sdt.BlueA);
