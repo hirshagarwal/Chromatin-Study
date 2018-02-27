@@ -92,6 +92,7 @@ namespace Assets.Scripts
                 {
                     pointarray[i] = (points[i].Position / scale) + shift + (projection ? new Vector3(0, 0, 2) : new Vector3(0, 0, 0));
                 }
+                pointarray = MakeSplines(pointarray);
                 if (!grayscale)
                 {
                     float alpha = 1.0f;
@@ -116,6 +117,61 @@ namespace Assets.Scripts
 
                 //lineRenderer.materials = matarray;
             }
+        }
+        //Based on http://www.habrador.com/tutorials/interpolation/1-catmull-rom-splines//
+        private Vector3[] MakeSplines(Vector3[] pointarray)
+        {
+            float res = 0.2f;
+            int loops = Mathf.FloorToInt(1f / res);
+            int l = pointarray.Length;
+            Vector3[] output = new Vector3[l * loops];
+
+            for (int i = 0; i < l; i++)
+            {
+                Vector3 p0 = pointarray[ClampPos(i - 1, l)];
+                Vector3 p1 = pointarray[i];
+                Vector3 p2 = pointarray[ClampPos(i + 1, l)];
+                Vector3 p3 = pointarray[ClampPos(i + 2, l)];
+
+                
+                for (int j = 0; j <= loops; j++)
+                {
+                    float t = j * res;
+                    Vector3 newPos = GetCatmullRomPosition(t, p0, p1, p2, p3);
+                    output[i + j] = newPos;
+                }
+            }
+            return output;
+        }
+
+        //http://www.iquilezles.org/www/articles/minispline/minispline.htm
+        private Vector3 GetCatmullRomPosition(float t, Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3)
+        {
+            p0 *= 1000;
+            p1 *= 1000;
+            p2 *= 1000;
+            p3 *= 1000;
+            //The coefficients of the cubic polynomial (except the 0.5f * which is added later for performance)
+            Vector3 a = 2f * p1;
+            Vector3 b = p2 - p0;
+            Vector3 c = 2f * p0 - 5f * p1 + 4f * p2 - p3;
+            Vector3 d = -p0 + 3f * p1 - 3f * p2 + p3;
+
+            //The cubic polynomial: a + b * t + c * t^2 + d * t^3
+            Vector3 pos = 0.5f * (a + (b * t) + (c * t * t) + (d * t * t * t));
+
+            return pos/100;
+        }
+
+        private int ClampPos(int i, int l)
+        {
+            if (i < 0)
+                return l - 1;
+            if (i > l)
+                return 1;
+            if (i > l - 1)
+                return 0;
+            return i;
         }
 
         ~Curve()
