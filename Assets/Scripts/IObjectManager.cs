@@ -19,5 +19,6 @@ namespace Assets.Scripts
         void SetupPointDistanceTrial(PointDistanceTrial pdt, string chrfn);
         void SetupAttributeUnderstandingTrial(AttributeUnderstandingTrial adt);
         void SetupSegmentDistanceTrial(SegmentDistanceTrial sdt, string chrfn);
+        void LoadNextFile(string filename);
     }
 }

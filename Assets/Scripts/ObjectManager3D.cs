@@ -15,6 +15,9 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
     private bool showUnderstanding = false;
     private string understandingString = "";
     private string guiText = "";
+    private string[] files = { "1", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "X" };
+    private string chrtype = "sen";
+    private int current_file = 7;
     private Vector2 mousePosition = new Vector2(0, 0);
     private List<GameObject> spheres = new List<GameObject>();
 
@@ -155,6 +158,14 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
         blueObject = mainCurve.GenerateLineSegment(sdt, false);
     }
 
+    public void LoadNextFile(string filename = "")
+    {
+        if ("" == filename)
+            filename = "chr" + files[current_file] + "_" + chrtype;
+        Destroy(mainCurve);
+        mainCurve = new Curve(filename);
+    }
+
     private LineRenderer BuildLR(Connector connector)
     {
         LineRenderer lr = new LineRenderer();
@@ -195,6 +206,78 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
                 Destroy(sph);
             }
             showUnderstanding = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            current_file--;
+            current_file = ((current_file %= files.Length) < 0) ? current_file + files.Length : current_file;
+            Destroy(gameObject.GetComponent<LineRenderer>());
+            Destroy(redObject);
+            Destroy(blueObject);
+            mainCurve.DestroyEverything();
+            try
+            {
+                redCurve.DestroyEverything();
+                blueCurve.DestroyEverything();
+            }
+            catch
+            {
+            }
+            foreach (var sph in spheres)
+            {
+                Destroy(sph);
+            }
+            LoadNextFile();
+        }
+        else if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            current_file = (current_file + 1) % files.Length;
+            Destroy(gameObject.GetComponent<LineRenderer>());
+            Destroy(redObject);
+            Destroy(blueObject);
+            mainCurve.DestroyEverything();
+            try
+            {
+                redCurve.DestroyEverything();
+                blueCurve.DestroyEverything();
+            }
+            catch
+            {
+            }
+            foreach (var sph in spheres)
+            {
+                Destroy(sph);
+            }
+            LoadNextFile();
+        }
+        else if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            if (chrtype == "sen")
+            {
+                chrtype = "pro";
+            }
+            else
+            {
+                chrtype = "sen";
+            }
+            Destroy(gameObject.GetComponent<LineRenderer>());
+            Destroy(redObject);
+            Destroy(blueObject);
+            mainCurve.DestroyEverything();
+            try
+            {
+                redCurve.DestroyEverything();
+                blueCurve.DestroyEverything();
+            }
+            catch
+            {
+            }
+            foreach (var sph in spheres)
+            {
+                Destroy(sph);
+            }
+            LoadNextFile();
         }
     }
 }

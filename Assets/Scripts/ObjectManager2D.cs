@@ -259,7 +259,15 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
         //LoadNextFile();
     }
 
-    private Texture2D LoadNextFile(string filename = "", float red = 1.0f, float green = 0.0f, float blue = 0.0f, Range redA = null, Range redB = null, Range blueA = null, Range blueB = null, bool isRange = false, bool attributeUnderstanding = false)
+    public void LoadNextFile(string filename = "")
+    {
+        if ("" == filename)
+            filename = files[current_file] + "_formatted.bed." + chrtype;
+        mainTexture = CreateTexture(filename);
+        mainSpriteRenderer = DisplayTexture(mainTexture, mainSprite, mainSpriteRenderer, 1);
+    }
+
+    private Texture2D CreateTexture(string filename = "", float red = 1.0f, float green = 0.0f, float blue = 0.0f, Range redA = null, Range redB = null, Range blueA = null, Range blueB = null, bool isRange = false, bool attributeUnderstanding = false)
     {
         Debug.Log("Starting...");
         if ("" == filename)
@@ -361,9 +369,9 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
     public void SetupCurveComparisonTrial(CurveComparisonTrial curveComparisonTrial)
     {
         studyTask = Tasks.CurveComparison;
-        mainTexture = LoadNextFile(curveComparisonTrial.ReferenceChromosome, 0.0f, 0.0f, 0.0f);
-        redTexture = LoadNextFile(curveComparisonTrial.RedChromosome, 1.0f, 0.0f, 0.0f);
-        blueTexture = LoadNextFile(curveComparisonTrial.BlueChromosome, 0.0f, 0.0f, 1.0f);
+        mainTexture = CreateTexture(curveComparisonTrial.ReferenceChromosome, 0.0f, 0.0f, 0.0f);
+        redTexture = CreateTexture(curveComparisonTrial.RedChromosome, 1.0f, 0.0f, 0.0f);
+        blueTexture = CreateTexture(curveComparisonTrial.BlueChromosome, 0.0f, 0.0f, 1.0f);
 
         mainSpriteRenderer = DisplayTexture(mainTexture, mainSprite, mainSpriteRenderer, 3);
         redSpriteRenderer = DisplayTexture(redTexture, redSprite, redSpriteRenderer, 3);
@@ -377,7 +385,7 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
         Range redB = new Range(pdt.RedB);
         Range blueA = new Range(pdt.BlueA);
         Range blueB = new Range(pdt.BlueB);
-        mainTexture = LoadNextFile(pdt.Chromosome, 0.0f, 0.0f, 0.0f, redA, redB, blueA, blueB);
+        mainTexture = CreateTexture(pdt.Chromosome, 0.0f, 0.0f, 0.0f, redA, redB, blueA, blueB);
         mainSpriteRenderer = DisplayTexture(mainTexture, mainSprite, mainSpriteRenderer, 1);
     }
 
@@ -385,7 +393,7 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
     {
         studyTask = Tasks.AttributeUnderstanding;
         //mainCurve = new Curve(adt.Chromosome, false, true);
-        mainTexture = LoadNextFile(adt.Chromosome, attributeUnderstanding:true);
+        mainTexture = CreateTexture(adt.Chromosome, attributeUnderstanding:true);
         mainSpriteRenderer = DisplayTexture(mainTexture, mainSprite, mainSpriteRenderer, 1);
         understandingString = adt.Question;
         showUnderstanding = true;
@@ -399,7 +407,7 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
         Range redB = new Range(sdt.RedB);
         Range blueA = new Range(sdt.BlueA);
         Range blueB = new Range(sdt.BlueB);
-        mainTexture = LoadNextFile(sdt.Chromosome, 0.0f, 0.0f, 0.0f, redA, redB, blueA, blueB, true);
+        mainTexture = CreateTexture(sdt.Chromosome, 0.0f, 0.0f, 0.0f, redA, redB, blueA, blueB, true);
         mainSpriteRenderer = DisplayTexture(mainTexture, mainSprite, mainSpriteRenderer, 1);
     }
 }

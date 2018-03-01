@@ -34,6 +34,8 @@ public class StudyManager : MonoBehaviour
     internal string mainTracking = "TIME, VIS_X, VIS_Y, VIS_Z,  VIS_A, VIS_B, VIS_C,  CAM_A, CAM_B, CAM_C";
     internal bool running = false;
     internal bool shiftDown = false;
+    public bool exploratory = false;
+    public bool twodim = true;
     internal int trialNumber = 0;
     private List<GameObject> activePoints = new List<GameObject>();
     private Participant currentParticipant;
@@ -309,10 +311,10 @@ Please, call the instructor.";
     //Step 1
     private void Start()
     {
-        if (objectManager2D != null)
+        if (twodim)
         {
             objectManager = objectManager2D;
-        } else if (objectManager3D != null)
+        } else if (!twodim)
         {
             objectManager = objectManager3D;
         } else
@@ -382,6 +384,12 @@ Please, call the instructor.";
         infoPanel.SetActive(false);
         feedbackPanel.SetActive(false);
         PopulateParticipantSelectionDialog(numberOfParticipants);
+        if (exploratory)
+        {
+            participantPanel.SetActive(false);
+            panel.SetActive(false);
+            objectManager.LoadNextFile("");
+        }
     }
 
     // Use this for initialization
