@@ -14,7 +14,7 @@ public class OrbitScript : MonoBehaviour
     public float yMaxLimit = 80f;
 
     public float distanceMin = 0f;
-    public float distanceMax = 100f;
+    public float distanceMax = 1f;
 
     private Rigidbody rigidbody;
 

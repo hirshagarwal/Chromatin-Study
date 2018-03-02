@@ -7,6 +7,7 @@ namespace Assets.Scripts
     public class Curve : MonoBehaviour
     {
         public GameObject go;
+        public float splineRes = 2f;
         public static int currentFile = 13;
         public const bool fastDraw = false;
         private Material baseMaterial;
@@ -66,14 +67,14 @@ namespace Assets.Scripts
                 lineRenderer.material = new Material(Shader.Find("Particles/Alpha Blended Premultiply"));
 
                 lineRenderer.widthMultiplier = 0.01f / scale;
-                lineRenderer.positionCount = points.Count;
+                lineRenderer.positionCount = points.Count * (int)splineRes;
                 var pointarray = new Vector3[points.Count];
-                var matarray = new Material[points.Count];
+                //var matarray = new Material[points.Count];
                 for (int i = 0; i < points.Count; i++)
                 {
                     pointarray[i] = (points[i].Position / scale) + shift + (projection ? new Vector3(0, 0, 2) : new Vector3(0, 0, 0));
                 }
-                pointarray = MakeSplines(pointarray);
+                Vector3[] splinePoints = MakeSplines(pointarray);
                 if (!grayscale)
                 {
                     float alpha = 1.0f;
@@ -94,41 +95,34 @@ namespace Assets.Scripts
                         );
                     lineRenderer.colorGradient = gradient;
                 }
-                lineRenderer.SetPositions(pointarray);
-
+                lineRenderer.SetPositions(splinePoints);
+                lineRenderer.Simplify(0.001f);
                 //lineRenderer.materials = matarray;
             } else
             {
                 cylinders = new List<GameObject>();
-                foreach (Point point in points)
+                Point[] pointArray = new Point[points.Count * 10];
+                Point[] splinePoints = MakeSplines(points.ToArray());
+                Point lastPoint = splinePoints[0];
+                for (int i = 0; i < pointArray.Length; i++)
                 {
-                    int closest_value = Int32.MaxValue;
-                    Point closest_point = point;
-                    foreach (Point neighbouring_point in points)
-                    {
-                        if (point != neighbouring_point)
-                        {
-                            int v = neighbouring_point.Start - point.End;
-                            if (v > 0 && v < closest_value)
-                            {
-                                closest_value = v;
-                                closest_point = neighbouring_point;
-                            }
-                        }
-                    }
-                    connectors.Add(new Connector(point.Displaced(displacement), closest_point.Displaced(displacement)));
+                    connectors.Add(
+                        new Connector(lastPoint.Displaced(displacement),
+                        splinePoints[i].Displaced(displacement))
+                        );
                     cylinders.Add(BuildConnector(connectors[connectors.Count - 1]));
+                    lastPoint = splinePoints[i];
                 }
             }
         }
         //Based on http://www.habrador.com/tutorials/interpolation/1-catmull-rom-splines//
         private Vector3[] MakeSplines(Vector3[] pointarray)
         {
-            float res = 0.2f;
-            int loops = Mathf.FloorToInt(1f / res);
+            int loops = (int)splineRes;//Mathf.FloorToInt(1f / res);
+            float res = 1f / splineRes;
             int l = pointarray.Length;
             Vector3[] output = new Vector3[l * loops];
-
+            int nextPoint = 0;
             for (int i = 0; i < l; i++)
             {
                 Vector3 p0 = pointarray[ClampPos(i - 1, l)];
@@ -137,11 +131,45 @@ namespace Assets.Scripts
                 Vector3 p3 = pointarray[ClampPos(i + 2, l)];
 
                 
-                for (int j = 0; j <= loops; j++)
+                for (int j = 0; j < loops; j++)
                 {
                     float t = j * res;
                     Vector3 newPos = GetCatmullRomPosition(t, p0, p1, p2, p3);
-                    output[i + j] = newPos;
+                    output[nextPoint] = newPos;
+                    nextPoint++;
+                }
+            }
+            return output;
+        }
+
+        private Point[] MakeSplines(Point[] pointArray)
+        {
+            int loops = (int)splineRes;//Mathf.FloorToInt(1f / res);
+            float res = 1f / splineRes;
+            int l = pointArray.Length;
+            Point[] output = new Point[l * loops];
+            int nextPoint = 0;
+            for (int i = 0; i < l; i++)
+            {
+                Vector3 p0 = pointArray[ClampPos(i - 1, l)].Position;
+                Vector3 p1 = pointArray[i].Position;
+                Vector3 p2 = pointArray[ClampPos(i + 1, l)].Position;
+                Vector3 p3 = pointArray[ClampPos(i + 2, l)].Position;
+
+
+                for (int j = 0; j < loops; j++)
+                {
+                    float t = j * res;
+                    Vector3 newPos = GetCatmullRomPosition(t, p0, p1, p2, p3);
+                    output[nextPoint] = new Point(
+                        newPos.x, 
+                        newPos.y, 
+                        newPos.z, 
+                        pointArray[i].Name, 
+                        pointArray[i].Color, 
+                        pointArray[i].ColorRGB
+                        );
+                    nextPoint++;
                 }
             }
             return output;
@@ -163,7 +191,7 @@ namespace Assets.Scripts
             //The cubic polynomial: a + b * t + c * t^2 + d * t^3
             Vector3 pos = 0.5f * (a + (b * t) + (c * t * t) + (d * t * t * t));
 
-            return pos/100;
+            return pos/1000;
         }
 
         private int ClampPos(int i, int l)

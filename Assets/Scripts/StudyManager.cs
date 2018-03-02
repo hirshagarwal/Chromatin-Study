@@ -321,6 +321,8 @@ Please, call the instructor.";
             if (!Curve.fastDraw)
             {
                 GameObject.Find("ObjectManager").transform.localPosition = new Vector3(0, 0, 5);
+                orbitScript.distanceMax = 4f;
+                orbitScript.distance = 3.5f;
             }
             objectManager = objectManager3D;
         } else
