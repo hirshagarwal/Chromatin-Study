@@ -30,6 +30,21 @@ namespace Assets.Scripts
             this.color = color;
         }
 
+        public Point(float x, float y, float z, string name, float color, Color colorRGB)
+        {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            position = new Vector3(x, y, z);
+            this.name = name;
+            string[] nameparts = name.Split('-');
+            chromosome = (nameparts[0].Substring(3));
+            start = Int32.Parse(nameparts[1]);
+            end = Int32.Parse(nameparts[2]);
+            this.color = color;
+            this.colorRGB = colorRGB;
+        }
+
         public Point(string line)
         {
             string[] parameters = line.Split('\t');
@@ -44,6 +59,17 @@ namespace Assets.Scripts
             start = Int32.Parse(nameparts[1]);
             end = Int32.Parse(nameparts[2]);
             color = float.Parse(parameters[4]);
+        }
+
+        public Point Displaced(Vector3 displacement)
+        {
+            return new Point(
+                x + displacement.x,
+                y + displacement.y,
+                z + displacement.z,
+                name,
+                color,
+                colorRGB);
         }
 
         public void InitialiseRGBSequence(int current, int total)

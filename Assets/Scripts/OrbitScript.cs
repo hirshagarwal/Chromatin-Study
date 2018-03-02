@@ -6,7 +6,7 @@ public class OrbitScript : MonoBehaviour
     public bool menu = true;
     public Transform target;
     public Vector3 shift = new Vector3(0, 0, 0);
-    public float distance = 5.0f;
+    public float distance = 50.0f;
     public float xSpeed = 240.0f;
     public float ySpeed = 480.0f;
 
@@ -14,7 +14,7 @@ public class OrbitScript : MonoBehaviour
     public float yMaxLimit = 80f;
 
     public float distanceMin = 0f;
-    public float distanceMax = 1f;
+    public float distanceMax = 100f;
 
     private Rigidbody rigidbody;
 

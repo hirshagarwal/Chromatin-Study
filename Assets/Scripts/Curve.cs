@@ -8,16 +8,17 @@ namespace Assets.Scripts
     {
         public GameObject go;
         public static int currentFile = 13;
-        private const bool fastDraw = true;
+        public const bool fastDraw = false;
         private Material baseMaterial;
         private string chrtype = "sen";
         private List<GameObject> cylinders = new List<GameObject>();
-        private float cylinderWidth;
+        private float cylinderWidth = 0.02f;
         private string fileName;
         private string[] files = { "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "X" };
         private List<Point> points;
         private int scale = 3;
         private float sphereWidth = 0.01f;
+        public static Vector3 displacement = new Vector3(0, 0, 5);
 
         public Curve(string filen = "", Boolean grayscale = false, Boolean projection = true, int colorID = 0)
         {
@@ -54,31 +55,11 @@ namespace Assets.Scripts
                     case 2: color = Color.blue; shift = new Vector3(1.5f, 0, 0); break;
                 }
             }
-            //List<Connector> connectors = new List<Connector>();
-            //List<LineRenderer> lines = new List<LineRenderer>();
             Debug.Log("Read in file successfully");
+            List<Connector> connectors = new List<Connector>();
+            List<LineRenderer> lines = new List<LineRenderer>();
 
-            //cylinders = new List<GameObject>();
-            //foreach (Point point in points)
-            //{
-            //    int closest_value = Int32.MaxValue;
-            //    Point closest_point = point;
-            //    foreach (Point neighbouring_point in points)
-            //    {
-            //        if (point != neighbouring_point)
-            //        {
-            //            int v = neighbouring_point.Start - point.End;
-            //            if (v > 0 && v < closest_value)
-            //            {
-            //                closest_value = v;
-            //                closest_point = neighbouring_point;
-            //            }
-            //        }
-            //    }
-            //    connectors.Add(new Connector(point, closest_point));
-            //    if (!fastDraw)
-            //        cylinders.Add(BuildConnector(connectors[connectors.Count - 1]));
-            //}
+
             if (fastDraw)
             {
                 LineRenderer lineRenderer = go.AddComponent<LineRenderer>();
@@ -116,6 +97,28 @@ namespace Assets.Scripts
                 lineRenderer.SetPositions(pointarray);
 
                 //lineRenderer.materials = matarray;
+            } else
+            {
+                cylinders = new List<GameObject>();
+                foreach (Point point in points)
+                {
+                    int closest_value = Int32.MaxValue;
+                    Point closest_point = point;
+                    foreach (Point neighbouring_point in points)
+                    {
+                        if (point != neighbouring_point)
+                        {
+                            int v = neighbouring_point.Start - point.End;
+                            if (v > 0 && v < closest_value)
+                            {
+                                closest_value = v;
+                                closest_point = neighbouring_point;
+                            }
+                        }
+                    }
+                    connectors.Add(new Connector(point.Displaced(displacement), closest_point.Displaced(displacement)));
+                    cylinders.Add(BuildConnector(connectors[connectors.Count - 1]));
+                }
             }
         }
         //Based on http://www.habrador.com/tutorials/interpolation/1-catmull-rom-splines//
