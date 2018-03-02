@@ -101,10 +101,9 @@ namespace Assets.Scripts
             } else
             {
                 cylinders = new List<GameObject>();
-                Point[] pointArray = new Point[points.Count * 10];
                 Point[] splinePoints = MakeSplines(points.ToArray());
                 Point lastPoint = splinePoints[0];
-                for (int i = 0; i < pointArray.Length; i++)
+                for (int i = 0; i < splinePoints.Length; i++)
                 {
                     connectors.Add(
                         new Connector(lastPoint.Displaced(displacement),

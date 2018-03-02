@@ -27,6 +27,7 @@ public class StudyManager : MonoBehaviour
     public ObjectManager3D objectManager3D;
     public Formats studyFormat;
     public OrbitScript orbitScript;
+    public OrbitScript lightScript;
     public int totalTrials = 208;
     internal int clickCount;
     internal string cursorTracking = "TIME, C_X, C_Y, C_Z";
@@ -66,14 +67,16 @@ public class StudyManager : MonoBehaviour
 You have completed this condition.
 Please, call the instructor.";
             GameObject.Find("ContinueButton").SetActive(false);
-            using (System.IO.StreamWriter sw = new System.IO.StreamWriter(saveFileName, true))
-            {
+
+            //using (System.IO.StreamWriter sw = new System.IO.StreamWriter(saveFileName, true))
+            //{
                 foreach (string line in results.Split(System.Environment.NewLine.ToCharArray()))
                 {
-                    sw.WriteLine(line);
+                    Debug.Log(line);
+                    //sw.WriteLine(line);
                 }
-                sw.Close();
-            }
+                //sw.Dispose();
+           //}
         }
         trialNumber++;
     }
@@ -317,12 +320,17 @@ Please, call the instructor.";
         } else if (!twodim)
         {
             if (exploratory)
+            {
                 orbitScript.menu = false;
+                lightScript.menu = false;
+            }
             if (!Curve.fastDraw)
             {
                 GameObject.Find("ObjectManager").transform.localPosition = new Vector3(0, 0, 5);
                 orbitScript.distanceMax = 4f;
                 orbitScript.distance = 3.5f;
+                lightScript.distanceMax = 4f;
+                lightScript.distance = 3.5f;
             }
             objectManager = objectManager3D;
         } else
