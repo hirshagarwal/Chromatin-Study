@@ -316,21 +316,33 @@ Please, call the instructor.";
     {
         if (twodim)
         {
+            if (objectManager2D == null)
+                throw new ArgumentNullException("Error: Two dimensional flag active but objectManager2D is null");
             objectManager = objectManager2D;
         } else if (!twodim)
         {
+            if (objectManager3D == null)
+                throw new ArgumentNullException("Error: Three dimensional flag inactive but objectManager3D is null");
             if (exploratory)
             {
-                orbitScript.menu = false;
-                lightScript.menu = false;
+                if (orbitScript != null)
+                    orbitScript.menu = false;
+                if (lightScript != null)
+                    lightScript.menu = false;
             }
             if (!Curve.fastDraw)
             {
                 GameObject.Find("ObjectManager").transform.localPosition = new Vector3(0, 0, 5);
-                orbitScript.distanceMax = 4f;
-                orbitScript.distance = 3.5f;
-                lightScript.distanceMax = 4f;
-                lightScript.distance = 3.5f;
+                if (orbitScript != null)
+                {
+                    orbitScript.distanceMax = 4f;
+                    orbitScript.distance = 3.5f;
+                }
+                if (lightScript != null)
+                {
+                    lightScript.distanceMax = 4f;
+                    lightScript.distance = 3.5f;
+                }
             }
             objectManager = objectManager3D;
         } else
