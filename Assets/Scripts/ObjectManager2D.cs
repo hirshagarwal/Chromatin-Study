@@ -259,7 +259,7 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
         //LoadNextFile();
     }
 
-    public void LoadNextFile(string filename = "")
+    public void LoadNextFile(string filename = "", bool isFast = false)
     {
         if ("" == filename)
             filename = files[current_file] + "_formatted.bed." + chrtype;

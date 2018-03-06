@@ -103,9 +103,10 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
 
     public void SetupCurveComparisonTrial(CurveComparisonTrial curveComparisonTrial)
     {
-        mainCurve = new Curve(curveComparisonTrial.ReferenceChromosome, true, true, 0);
-        redCurve = new Curve(curveComparisonTrial.RedChromosome, true, true, 1);
-        blueCurve = new Curve(curveComparisonTrial.BlueChromosome, true, true, 2);
+        bool fast = (studyFormat == Formats.HoloLens);
+        mainCurve = new Curve(curveComparisonTrial.ReferenceChromosome, true, true, 0, fast);
+        redCurve = new Curve(curveComparisonTrial.RedChromosome, true, true, 1, fast);
+        blueCurve = new Curve(curveComparisonTrial.BlueChromosome, true, true, 2, fast);
     }
 
     internal GameObject BuildSphere(Color color, Vector3 position)
@@ -130,7 +131,9 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
 
     public void SetupPointDistanceTrial(PointDistanceTrial pdt, string chrfn)
     {
-        mainCurve = new Curve(chrfn, true);
+        bool isFast = (studyFormat == Formats.HoloLens);
+
+        mainCurve = new Curve(chrfn, true, fast:isFast);
         foreach (Point point in mainCurve.Points)
         {
             if (point.Name == pdt.BlueA || point.Name == pdt.BlueB)
@@ -146,24 +149,32 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
 
     public void SetupAttributeUnderstandingTrial(AttributeUnderstandingTrial adt)
     {
-        mainCurve = new Curve(adt.Chromosome, false, true);
+        bool isFast = (studyFormat == Formats.HoloLens);
+
+        mainCurve = new Curve(adt.Chromosome, false, true, fast:isFast);
         understandingString = adt.Question;
         showUnderstanding = true;
     }
 
     public void SetupSegmentDistanceTrial(SegmentDistanceTrial sdt, string chrfn)
     {
-        mainCurve = new Curve(chrfn, true, true);
+        bool isFast = (studyFormat == Formats.HoloLens);
+
+        mainCurve = new Curve(chrfn, true, true, fast:isFast);
         redObject = mainCurve.GenerateLineSegment(sdt, true);
         blueObject = mainCurve.GenerateLineSegment(sdt, false);
     }
 
-    public void LoadNextFile(string filename = "")
+    public void LoadNextFile(string filename = "", bool isFast = false)
     {
+        if (isFast == true)
+        {
+            studyFormat = Formats.HoloLens;
+        }
         if ("" == filename)
             filename = "chr" + files[current_file] + "_" + chrtype;
         Destroy(mainCurve);
-        mainCurve = new Curve(filename);
+        mainCurve = new Curve(filename, fast: studyFormat == Formats.HoloLens);
     }
 
     private LineRenderer BuildLR(Connector connector)

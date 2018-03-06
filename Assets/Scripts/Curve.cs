@@ -9,7 +9,6 @@ namespace Assets.Scripts
         public GameObject go;
         public float splineRes = 2f;
         public static int currentFile = 13;
-        public const bool fastDraw = false;
         private Material baseMaterial;
         private string chrtype = "sen";
         private List<GameObject> cylinders = new List<GameObject>();
@@ -21,7 +20,7 @@ namespace Assets.Scripts
         private float sphereWidth = 0.01f;
         public static Vector3 displacement = new Vector3(0, 0, 5);
 
-        public Curve(string filen = "", Boolean grayscale = false, Boolean projection = true, int colorID = 0)
+        public Curve(string filen = "", Boolean grayscale = false, Boolean projection = true, int colorID = 0, bool fast = false)
         {
             if (filen == "")
                 filen = "chr" + files[currentFile] + "_" + chrtype + ".cpoints";
@@ -61,7 +60,7 @@ namespace Assets.Scripts
             List<LineRenderer> lines = new List<LineRenderer>();
 
 
-            if (fastDraw)
+            if (fast)
             {
                 LineRenderer lineRenderer = go.AddComponent<LineRenderer>();
                 lineRenderer.material = new Material(Shader.Find("Particles/Alpha Blended Premultiply"));

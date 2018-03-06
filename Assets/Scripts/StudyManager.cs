@@ -330,7 +330,7 @@ Please, call the instructor.";
                 if (lightScript != null)
                     lightScript.menu = false;
             }
-            if (!Curve.fastDraw)
+            if (studyFormat != Formats.HoloLens)
             {
                 GameObject.Find("ObjectManager").transform.localPosition = new Vector3(0, 0, 5);
                 if (orbitScript != null)
@@ -416,7 +416,7 @@ Please, call the instructor.";
         {
             participantPanel.SetActive(false);
             panel.SetActive(false);
-            objectManager.LoadNextFile("");
+            objectManager.LoadNextFile("", true);
         }
     }
 
