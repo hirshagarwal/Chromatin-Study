@@ -109,11 +109,17 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
         blueCurve = new Curve(curveComparisonTrial.BlueChromosome, true, true, 2, fast);
     }
 
-    internal GameObject BuildSphere(Color color, Vector3 position)
+    internal GameObject BuildSphere(Color color, Vector3 position, bool force = false)
     {
         GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         sphere.GetComponent<Collider>().enabled = false;
         sphere.GetComponent<MeshRenderer>().material.color = color;
+        if (force)
+        {
+            sphere.transform.position = position;
+            sphere.transform.localScale = new Vector3(mainCurve.SphereWidth*10, mainCurve.SphereWidth*10, mainCurve.SphereWidth*10);
+            return sphere;
+        }
         sphere.transform.position = (position / mainCurve.Scale) + new Vector3(0, 0, 2);
         sphere.transform.localScale = new Vector3(mainCurve.SphereWidth, mainCurve.SphereWidth, mainCurve.SphereWidth);
         return sphere;
@@ -289,6 +295,24 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
                 Destroy(sph);
             }
             LoadNextFile();
+        }
+    }
+
+    public void SetupTouchingSegments(TouchingSegmentsTrial tst)
+    {
+        bool isFast = (studyFormat == Formats.HoloLens);
+
+        mainCurve = new Curve(tst.Chrom, tst.Count, tst.Split);
+        foreach (Point point in mainCurve.Points)
+        {
+            if (point.IsBlue)
+            {
+                spheres.Add(BuildSphere(Color.blue, point.Position + Curve.displacement,true));
+            }
+            else if (point.IsRed)
+            {
+                spheres.Add(BuildSphere(Color.red, point.Position + Curve.displacement ,true));
+            }
         }
     }
 }

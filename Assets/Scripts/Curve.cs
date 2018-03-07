@@ -20,6 +20,81 @@ namespace Assets.Scripts
         private float sphereWidth = 0.01f;
         public static Vector3 displacement = new Vector3(0, 0, 5);
 
+        public Curve(string filen, int skips, float ratio)
+        {
+            go = new GameObject();
+            List<Point> allPoints = ReadInFile(filen);
+            points = new List<Point>();
+            Color color = Color.black;
+            List<float> colorsIn = new List<float>();
+            float maxColor = 0.0f;
+            System.Random rnd = new System.Random(0);
+
+            for (int i = 0; i < allPoints.Count; i += skips)
+            {
+                points.Add(allPoints[i]);
+            }
+
+            int numberOfReds = (int)Math.Floor(0.1 * points.Count * ratio);
+            int numberOfBlues = (int)Math.Floor(0.1 * points.Count * (1 - ratio));
+            int currentReds = 0;
+            int currentBlues = 0;
+            while(currentReds < numberOfReds || currentBlues < numberOfBlues)
+            {
+                splineRes *= 2;
+                for (int i = 0; i < points.Count; i++)
+                {
+                    int r = rnd.Next(50);
+                    if (r == 2 || r == 3)
+                    {
+                        if (!points[i].IsRed && !points[i].IsBlue)
+                        {
+                            points[i] = points[i].Displaced(new Vector3(rnd.Next(10) / 10f, rnd.Next(10) / 10f, rnd.Next(10) / 10f));
+                            points[ClampPos(i - 1, points.Count)].MakeRed();
+                            points[ClampPos(i + 1, points.Count)].MakeRed();
+                            currentReds++;
+                        }
+                    } else if (r == 4)
+                    {
+                        if (!points[i].IsRed && !points[i].IsBlue)
+                        {
+                            points[i] = points[i].Displaced(new Vector3(rnd.Next(10) / 10f, rnd.Next(10) / 10f, rnd.Next(10) / 10f));
+                            points[ClampPos(i - 1, points.Count)].MakeBlue();
+                            points[ClampPos(i + 1, points.Count)].MakeBlue();
+                            currentBlues++;
+                        }
+                    }
+                }
+            }
+
+            foreach (Point point in points)
+            {
+                colorsIn.Add(point.Color);
+                if (point.Color > maxColor)
+                    maxColor = point.Color;
+            }
+            List<Color> colorMap = BuildColorMap(colorsIn);
+            int stepsize = colorMap.Count / points.Count;
+            for (int i = 0; i < points.Count; i++)
+            {
+                int idx = (int)Math.Floor((points[i].Color / maxColor) * (colorMap.Count - 1));
+                points[i].ColorRGB = colorMap[idx];
+            }
+            cylinders = new List<GameObject>();
+            List<Connector> connectors = new List<Connector>();
+            Point[] splinePoints = MakeSplines(points.ToArray());
+            Point lastPoint = splinePoints[0];
+            for (int i = 0; i < splinePoints.Length; i++)
+            {
+                connectors.Add(
+                    new Connector(lastPoint.Displaced(displacement),
+                    splinePoints[i].Displaced(displacement))
+                    );
+                cylinders.Add(BuildConnector(connectors[connectors.Count - 1]));
+                lastPoint = splinePoints[i];
+            }
+        }
+
         public Curve(string filen = "", Boolean grayscale = false, Boolean projection = true, int colorID = 0, bool fast = false)
         {
             if (filen == "")

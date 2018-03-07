@@ -121,10 +121,8 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
 
     private Texture2D ReadInFile(string filename, float red = 1.0f, float green = 0.0f, float blue = 0.0f, Range redA = null, Range redB = null, Range blueA = null, Range blueB = null, bool isRange = false, bool attributeUnderstanding = false)
     {
-        Debug.Log("About to load in the file");
 
         TextAsset file = Resources.Load(filename) as TextAsset;
-        Debug.Log("Loaded in the file");
         int counter = 0;
 
         List<Range> ranges = new List<Range>();
@@ -146,10 +144,7 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
             }
         }
         Resources.UnloadAsset(file);
-        Debug.Log("Initialisation complete");
-        Debug.Log(ranges.Count);
         List<Range> uniqueRanges = new HashSet<Range>(ranges).ToList();
-        Debug.Log(uniqueRanges.Count);
         uniqueRanges.Sort();
         int items_per_bucket = 1;
         int buckets = uniqueRanges.Count / items_per_bucket;
@@ -212,7 +207,6 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
             x++;
         }
         tex.Apply();
-        Debug.Log("Rendering complete.");
         sortedRanges = uniqueRanges;
         return tex;
     }
@@ -263,13 +257,13 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
     {
         if ("" == filename)
             filename = files[current_file] + "_formatted.bed." + chrtype;
+        Debug.Log("Loading file: " + filename);
         mainTexture = CreateTexture(filename);
         mainSpriteRenderer = DisplayTexture(mainTexture, mainSprite, mainSpriteRenderer, 1);
     }
 
     private Texture2D CreateTexture(string filename = "", float red = 1.0f, float green = 0.0f, float blue = 0.0f, Range redA = null, Range redB = null, Range blueA = null, Range blueB = null, bool isRange = false, bool attributeUnderstanding = false)
     {
-        Debug.Log("Starting...");
         if ("" == filename)
             filename = files[current_file] + "_formatted.bed." + chrtype;
         return ReadInFile(filename, red, green, blue, redA, redB, blueA, blueB, isRange, attributeUnderstanding);
@@ -409,5 +403,10 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
         Range blueB = new Range(sdt.BlueB);
         mainTexture = CreateTexture(sdt.Chromosome, 0.0f, 0.0f, 0.0f, redA, redB, blueA, blueB, true);
         mainSpriteRenderer = DisplayTexture(mainTexture, mainSprite, mainSpriteRenderer, 1);
+    }
+
+    public void SetupTouchingSegments(TouchingSegmentsTrial touchingSegmentsTrial)
+    {
+        throw new NotImplementedException();
     }
 }

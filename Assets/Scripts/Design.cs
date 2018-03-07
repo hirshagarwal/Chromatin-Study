@@ -2,16 +2,21 @@
 
 public enum Formats
 {
-    HoloLens, Projection, Heatmap
+    HoloLens, Projection, Heatmap, Vive
 }
 
 public enum Tasks
 {
-    PointDistance, SegmentDistance, CurveComparison, AttributeUnderstanding
+    PointDistance, SegmentDistance, CurveComparison, AttributeUnderstanding, TouchingSegments
 }
 
 public class Design
 {
+    public static string TASK_TOUCHING_SEGMENTS =
+        @"NEW TASK: Touching Segments
+...
+
+Call the instructor before continuing.";
     public static string TASK_DESCRIPTION_ATTRIBUTE =
 
 @"NEW TASK: Attribute Understanding

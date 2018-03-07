@@ -13,6 +13,8 @@ namespace Assets.Scripts
         private int start;
         private int end;
         private float color;
+        private bool isRed = false;
+        private bool isBlue = false;
         private Color colorRGB = new Color(0, 1, 0);
         private Vector3 position;
 
@@ -189,9 +191,35 @@ namespace Assets.Scripts
             get { return y; }
         }
 
+        public void MakeRed()
+        {
+            isRed = true;
+        }
+
+        public void MakeBlue()
+        {
+            isBlue = true;
+        }
+
         public String Name
         {
             get { return name; }
+        }
+
+        public bool IsRed
+        {
+            get
+            {
+                return isRed;
+            }
+        }
+
+        public bool IsBlue
+        {
+            get
+            {
+                return isBlue;
+            }
         }
     }
 }

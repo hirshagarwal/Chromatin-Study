@@ -11,6 +11,7 @@ public class StudyManager : MonoBehaviour
     public static GameObject choicePanelCurve;
     public static GameObject choicePanelDistance;
     public static GameObject choicePanelUnderstanding;
+    public static GameObject choicePanelTouching;
     public static TimeSpan duration;
     public static GameObject feedbackPanel;
     public static string FILE_SEPARATOR = "\\";
@@ -116,7 +117,14 @@ Please, call the instructor.";
             if (rawAnswer.Contains("AnswerButton_Blue"))
                 correct = ((AttributeUnderstandingTrial)currentTrial.TrialDetails).Correct(false).ToString();
         }
-        else
+        else if (currentTrial.Task == Tasks.TouchingSegments)
+        {
+            print(">>> TOUCHING SEGMENTS ANSWER: " + rawAnswer);
+            if (rawAnswer.Contains("AnswerButton_Red"))
+                correct = ((TouchingSegmentsTrial)currentTrial.TrialDetails).Correct(true).ToString();
+            if (rawAnswer.Contains("AnswerButton_Blue"))
+                correct = ((TouchingSegmentsTrial)currentTrial.TrialDetails).Correct(true).ToString();
+        }else
         {
             throw new Exception("Result test for " + currentTrial.Task.ToString() + " not implemented");
         }
@@ -137,6 +145,7 @@ Please, call the instructor.";
         choicePanelDistance.SetActive(false);
         choicePanelSegment.SetActive(false);
         choicePanelCurve.SetActive(false);
+        choicePanelTouching.SetActive(false);
         choicePanelUnderstanding.SetActive(false);
         infoPanel.SetActive(false);
         feedbackPanel.SetActive(true);
@@ -175,7 +184,11 @@ Please, call the instructor.";
             panelCanvas.SetActive(true);
             choicePanelUnderstanding.SetActive(true);
         }
-        else
+        else if (currentTrial.Task == Tasks.TouchingSegments)
+        {
+            panelCanvas.SetActive(true);
+            choicePanelTouching.SetActive(true);
+        }else
         {
             throw new Exception("Recording for " + currentTrial.Task.ToString() + " not implemented");
         }
@@ -298,7 +311,10 @@ Please, call the instructor.";
         {
             infoMessage.text = Design.TASK_DESCRIPTION_ATTRIBUTE;
         }
-        else
+        else if (task == Tasks.TouchingSegments)
+        {
+            infoMessage.text = Design.TASK_TOUCHING_SEGMENTS;
+        }else
         {
             throw new Exception("Message for " + task + " not implemented");
         }
@@ -380,6 +396,10 @@ Please, call the instructor.";
         GameObject.Find("AnswerButton_RedUnderstanding").GetComponent<GenericButton>().value = "red";
         GameObject.Find("AnswerButton_BlueUnderstanding").AddComponent<GenericButton>();
         GameObject.Find("AnswerButton_BlueUnderstanding").GetComponent<GenericButton>().value = "blue";
+        GameObject.Find("AnswerButton_RedTouching").AddComponent<GenericButton>();
+        GameObject.Find("AnswerButton_RedTouching").GetComponent<GenericButton>().value = "red";
+        GameObject.Find("AnswerButton_BlueTouching").AddComponent<GenericButton>();
+        GameObject.Find("AnswerButton_BlueTouching").GetComponent<GenericButton>().value = "blue";
         GameObject.Find("AnswerButton_3").AddComponent<GenericButton>();
         GameObject.Find("AnswerButton_4").AddComponent<GenericButton>();
         GameObject.Find("AnswerButton_5").AddComponent<GenericButton>();
@@ -405,6 +425,9 @@ Please, call the instructor.";
 
         choicePanelCurve = GameObject.Find("ChoicePanelCurve");
         choicePanelCurve.SetActive(false);
+
+        choicePanelTouching = GameObject.Find("ChoicePanelTouching");
+        choicePanelTouching.SetActive(false);
 
         choicePanelUnderstanding = GameObject.Find("ChoicePanelUnderstanding");
         choicePanelUnderstanding.SetActive(false);
@@ -439,7 +462,10 @@ Please, call the instructor.";
         {
             objectManager.SetupAttributeUnderstandingTrial(currentTrial.TrialDetails as AttributeUnderstandingTrial);
         }
-        else
+        else if (currentTrial.Task == Tasks.TouchingSegments)
+        {
+            objectManager.SetupTouchingSegments(currentTrial.TrialDetails as TouchingSegmentsTrial);
+        }else
         {
             throw new Exception("Configuration for " + currentTrial.Task.ToString() + " not implemented");
         }

@@ -61,7 +61,14 @@ namespace Assets.Scripts
                     trialConditions[9],
                     Boolean.Parse(trialConditions[10]));
             }
-            else
+            else if (Tasks.TouchingSegments.ToString() == trialConditions[3])
+            {
+                task = Tasks.TouchingSegments;
+                trialDetails = new TouchingSegmentsTrial(
+                    trialConditions[6],
+                    trialConditions[7],
+                    trialConditions[8]);
+            }else
             {
                 throw new Exception("Unhandled task: " + trialConditions[3]);
             }
