@@ -8,15 +8,17 @@ namespace Assets.Scripts
         private string start;
         private string end;
         private string question;
+        private Formats studyFormat;
         private Boolean answerIsRed;
 
-        internal AttributeUnderstandingTrial(string chromosome, string start, string end, string question, bool answerIsRed)
+        internal AttributeUnderstandingTrial(string chromosome, string start, string end, string question, bool answerIsRed, Formats studyFormat)
         {
             this.chromosome = chromosome;
             this.start = start;
             this.end = end;
             this.question = question;
             this.answerIsRed = answerIsRed;
+            this.studyFormat = studyFormat;
         }
 
         public string Chromosome
@@ -48,6 +50,14 @@ namespace Assets.Scripts
             get
             {
                 return question;
+            }
+        }
+
+        public Formats StudyFormat
+        {
+            get
+            {
+                return studyFormat;
             }
         }
 

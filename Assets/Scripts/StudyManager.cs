@@ -71,13 +71,13 @@ Please, call the instructor.";
 
             //using (System.IO.StreamWriter sw = new System.IO.StreamWriter(saveFileName, true))
             //{
-                foreach (string line in results.Split(System.Environment.NewLine.ToCharArray()))
-                {
-                    Debug.Log(line);
-                    //sw.WriteLine(line);
-                }
-                //sw.Dispose();
-           //}
+            foreach (string line in results.Split(System.Environment.NewLine.ToCharArray()))
+            {
+                Debug.Log(line);
+                //sw.WriteLine(line);
+            }
+            //sw.Dispose();
+            //}
         }
         trialNumber++;
     }
@@ -123,8 +123,9 @@ Please, call the instructor.";
             if (rawAnswer.Contains("AnswerButton_Red"))
                 correct = ((TouchingSegmentsTrial)currentTrial.TrialDetails).Correct(true).ToString();
             if (rawAnswer.Contains("AnswerButton_Blue"))
-                correct = ((TouchingSegmentsTrial)currentTrial.TrialDetails).Correct(true).ToString();
-        }else
+                correct = ((TouchingSegmentsTrial)currentTrial.TrialDetails).Correct(false).ToString();
+        }
+        else
         {
             throw new Exception("Result test for " + currentTrial.Task.ToString() + " not implemented");
         }
@@ -188,7 +189,8 @@ Please, call the instructor.";
         {
             panelCanvas.SetActive(true);
             choicePanelTouching.SetActive(true);
-        }else
+        }
+        else
         {
             throw new Exception("Recording for " + currentTrial.Task.ToString() + " not implemented");
         }
@@ -314,7 +316,8 @@ Please, call the instructor.";
         else if (task == Tasks.TouchingSegments)
         {
             infoMessage.text = Design.TASK_TOUCHING_SEGMENTS;
-        }else
+        }
+        else
         {
             throw new Exception("Message for " + task + " not implemented");
         }
@@ -335,7 +338,8 @@ Please, call the instructor.";
             if (objectManager2D == null)
                 throw new ArgumentNullException("Error: Two dimensional flag active but objectManager2D is null");
             objectManager = objectManager2D;
-        } else if (!twodim)
+        }
+        else if (!twodim)
         {
             if (objectManager3D == null)
                 throw new ArgumentNullException("Error: Three dimensional flag inactive but objectManager3D is null");
@@ -361,7 +365,8 @@ Please, call the instructor.";
                 }
             }
             objectManager = objectManager3D;
-        } else
+        }
+        else
         {
             throw new Exception("Neither object manager has been initialised!");
         }
@@ -439,7 +444,7 @@ Please, call the instructor.";
         {
             participantPanel.SetActive(false);
             panel.SetActive(false);
-            objectManager.LoadNextFile("", true);
+            objectManager.LoadNextFile("");
         }
     }
 
@@ -465,7 +470,8 @@ Please, call the instructor.";
         else if (currentTrial.Task == Tasks.TouchingSegments)
         {
             objectManager.SetupTouchingSegments(currentTrial.TrialDetails as TouchingSegmentsTrial);
-        }else
+        }
+        else
         {
             throw new Exception("Configuration for " + currentTrial.Task.ToString() + " not implemented");
         }

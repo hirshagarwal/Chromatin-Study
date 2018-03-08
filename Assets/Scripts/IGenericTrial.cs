@@ -6,6 +6,8 @@ namespace Assets.Scripts
     {
         Boolean Correct(object subjectAnswer);
 
+        Formats StudyFormat { get; }
+
         string ToCSV();
     }
 }

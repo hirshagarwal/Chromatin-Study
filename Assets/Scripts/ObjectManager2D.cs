@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class ObjectManager2D : MonoBehaviour, IObjectManager
 {
-    private Formats studyFormat;
     private Tasks studyTask;
     private Material baseMaterial;
     private TextAsset textFile;
@@ -38,14 +37,6 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
     private List<Range> sortedRanges;
     private Vector2 mousePosition = new Vector2(0, 0);
     private Dictionary<Range, Dictionary<Range, float>> interactions;
-
-    public Formats StudyFormat
-    {
-        get
-        {
-            return studyFormat;
-        }
-    }
 
     public Material BaseMaterial
     {
@@ -121,7 +112,6 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
 
     private Texture2D ReadInFile(string filename, float red = 1.0f, float green = 0.0f, float blue = 0.0f, Range redA = null, Range redB = null, Range blueA = null, Range blueB = null, bool isRange = false, bool attributeUnderstanding = false)
     {
-
         TextAsset file = Resources.Load(filename) as TextAsset;
         int counter = 0;
 
@@ -253,7 +243,7 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
         //LoadNextFile();
     }
 
-    public void LoadNextFile(string filename = "", bool isFast = false)
+    public void LoadNextFile(string filename = "")
     {
         if ("" == filename)
             filename = files[current_file] + "_formatted.bed." + chrtype;
@@ -387,12 +377,11 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
     {
         studyTask = Tasks.AttributeUnderstanding;
         //mainCurve = new Curve(adt.Chromosome, false, true);
-        mainTexture = CreateTexture(adt.Chromosome, attributeUnderstanding:true);
+        mainTexture = CreateTexture(adt.Chromosome, attributeUnderstanding: true);
         mainSpriteRenderer = DisplayTexture(mainTexture, mainSprite, mainSpriteRenderer, 1);
         understandingString = adt.Question;
         showUnderstanding = true;
     }
-   
 
     public void SetupSegmentDistanceTrial(SegmentDistanceTrial sdt, string chrfn)
     {

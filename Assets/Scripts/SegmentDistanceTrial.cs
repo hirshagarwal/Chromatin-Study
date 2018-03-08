@@ -9,9 +9,10 @@ namespace Assets.Scripts
         private string redB;
         private string blueA;
         private string blueB;
+        private Formats studyFormat;
         private Boolean redIsShorter;
 
-        public SegmentDistanceTrial(string chromosome, string redA, string redB, string blueA, string blueB, bool redIsShorter)
+        public SegmentDistanceTrial(string chromosome, string redA, string redB, string blueA, string blueB, bool redIsShorter, Formats studyFormat)
         {
             this.chromosome = chromosome;
             this.redA = redA;
@@ -19,6 +20,7 @@ namespace Assets.Scripts
             this.blueA = blueA;
             this.blueB = blueB;
             this.redIsShorter = redIsShorter;
+            this.studyFormat = studyFormat;
         }
 
         public string Chromosome
@@ -58,6 +60,14 @@ namespace Assets.Scripts
             get
             {
                 return blueB;
+            }
+        }
+
+        public Formats StudyFormat
+        {
+            get
+            {
+                return studyFormat;
             }
         }
 

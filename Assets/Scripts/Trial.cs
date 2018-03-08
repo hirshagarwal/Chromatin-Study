@@ -10,7 +10,7 @@ namespace Assets.Scripts
         private Boolean training;
         private IGenericTrial trialDetails;
 
-        public Trial(String s)
+        public Trial(String s, Formats format)
         {
             //0             1   	  2         	3    	 4     	     5        6          7    8    9     10    11
             //SUBJECTNUMBER,ROWNUMBER,TECHNIQUENAME,TASKNAME,TRIALNUMBER,TRAINING,CHROMOSOME,REDA,REDB,BLUEA,BLUEB,REDISSHORTER
@@ -27,7 +27,8 @@ namespace Assets.Scripts
                     trialConditions[8],
                     trialConditions[9],
                     trialConditions[10],
-                    Boolean.Parse(trialConditions[11])
+                    Boolean.Parse(trialConditions[11]),
+                    format
                     );
             }
             else if (Tasks.SegmentDistance.ToString() == trialConditions[3])
@@ -39,7 +40,8 @@ namespace Assets.Scripts
                     trialConditions[8],
                     trialConditions[9],
                     trialConditions[10],
-                    Boolean.Parse(trialConditions[11])
+                    Boolean.Parse(trialConditions[11]),
+                    format
                     );
             }
             else if (Tasks.CurveComparison.ToString() == trialConditions[3])
@@ -49,7 +51,9 @@ namespace Assets.Scripts
                     trialConditions[6],
                     trialConditions[7],
                     trialConditions[8],
-                    Boolean.Parse(trialConditions[9]));
+                    Boolean.Parse(trialConditions[9]),
+                    format
+                    );
             }
             else if (Tasks.AttributeUnderstanding.ToString() == trialConditions[3])
             {
@@ -59,7 +63,9 @@ namespace Assets.Scripts
                     trialConditions[7],
                     trialConditions[8],
                     trialConditions[9],
-                    Boolean.Parse(trialConditions[10]));
+                    Boolean.Parse(trialConditions[10]),
+                    format
+                    );
             }
             else if (Tasks.TouchingSegments.ToString() == trialConditions[3])
             {
@@ -67,8 +73,11 @@ namespace Assets.Scripts
                 trialDetails = new TouchingSegmentsTrial(
                     trialConditions[6],
                     trialConditions[7],
-                    trialConditions[8]);
-            }else
+                    trialConditions[8],
+                    format
+                    );
+            }
+            else
             {
                 throw new Exception("Unhandled task: " + trialConditions[3]);
             }

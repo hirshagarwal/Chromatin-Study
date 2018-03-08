@@ -8,10 +8,12 @@ namespace Assets.Scripts
         private int participantID;
         private List<string> trials = new List<string>();
         private int nextTrialLocation = 0;
+        private Formats format;
 
         public Participant(int participantID, Formats trialFormat)
         {
             Debug.Log("Trial format is " + trialFormat.ToString());
+            format = trialFormat;
             TextAsset file = Resources.Load(participantID.ToString()) as TextAsset;
             this.participantID = participantID;
             string[] blocks = file.text.Split(StudyManager.LINE_BREAK);
@@ -40,7 +42,7 @@ namespace Assets.Scripts
 
         public Trial NextTrial()
         {
-            return new Trial(trials[nextTrialLocation++]);
+            return new Trial(trials[nextTrialLocation++], format);
         }
     }
 }

@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class ObjectManager3D : MonoBehaviour, IObjectManager
 {
-    private Formats studyFormat;
     private Material baseMaterial;
     private TextAsset textFile;
     private Curve mainCurve;
@@ -20,14 +19,6 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
     private int current_file = 7;
     private Vector2 mousePosition = new Vector2(0, 0);
     private List<GameObject> spheres = new List<GameObject>();
-
-    public Formats StudyFormat
-    {
-        get
-        {
-            return studyFormat;
-        }
-    }
 
     public Material BaseMaterial
     {
@@ -103,7 +94,7 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
 
     public void SetupCurveComparisonTrial(CurveComparisonTrial curveComparisonTrial)
     {
-        bool fast = (studyFormat == Formats.HoloLens);
+        bool fast = (curveComparisonTrial.StudyFormat == Formats.HoloLens);
         mainCurve = new Curve(curveComparisonTrial.ReferenceChromosome, true, true, 0, fast);
         redCurve = new Curve(curveComparisonTrial.RedChromosome, true, true, 1, fast);
         blueCurve = new Curve(curveComparisonTrial.BlueChromosome, true, true, 2, fast);
@@ -117,7 +108,7 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
         if (force)
         {
             sphere.transform.position = position;
-            sphere.transform.localScale = new Vector3(mainCurve.SphereWidth*10, mainCurve.SphereWidth*10, mainCurve.SphereWidth*10);
+            sphere.transform.localScale = new Vector3(mainCurve.SphereWidth * 10, mainCurve.SphereWidth * 10, mainCurve.SphereWidth * 10);
             return sphere;
         }
         sphere.transform.position = (position / mainCurve.Scale) + new Vector3(0, 0, 2);
@@ -137,9 +128,9 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
 
     public void SetupPointDistanceTrial(PointDistanceTrial pdt, string chrfn)
     {
-        bool isFast = (studyFormat == Formats.HoloLens);
+        bool isFast = (pdt.StudyFormat == Formats.HoloLens);
 
-        mainCurve = new Curve(chrfn, true, fast:isFast);
+        mainCurve = new Curve(chrfn, true, fast: isFast);
         foreach (Point point in mainCurve.Points)
         {
             if (point.Name == pdt.BlueA || point.Name == pdt.BlueB)
@@ -155,32 +146,28 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
 
     public void SetupAttributeUnderstandingTrial(AttributeUnderstandingTrial adt)
     {
-        bool isFast = (studyFormat == Formats.HoloLens);
+        bool isFast = (adt.StudyFormat == Formats.HoloLens);
 
-        mainCurve = new Curve(adt.Chromosome, false, true, fast:isFast);
+        mainCurve = new Curve(adt.Chromosome, false, true, fast: isFast);
         understandingString = adt.Question;
         showUnderstanding = true;
     }
 
     public void SetupSegmentDistanceTrial(SegmentDistanceTrial sdt, string chrfn)
     {
-        bool isFast = (studyFormat == Formats.HoloLens);
+        bool isFast = (sdt.StudyFormat == Formats.HoloLens);
 
-        mainCurve = new Curve(chrfn, true, true, fast:isFast);
+        mainCurve = new Curve(chrfn, true, true, fast: isFast);
         redObject = mainCurve.GenerateLineSegment(sdt, true);
         blueObject = mainCurve.GenerateLineSegment(sdt, false);
     }
 
-    public void LoadNextFile(string filename = "", bool isFast = false)
+    public void LoadNextFile(string filename = "")
     {
-        if (isFast == true)
-        {
-            studyFormat = Formats.HoloLens;
-        }
         if ("" == filename)
             filename = "chr" + files[current_file] + "_" + chrtype;
         Destroy(mainCurve);
-        mainCurve = new Curve(filename, fast: studyFormat == Formats.HoloLens);
+        mainCurve = new Curve(filename);
     }
 
     private LineRenderer BuildLR(Connector connector)
@@ -300,18 +287,18 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
 
     public void SetupTouchingSegments(TouchingSegmentsTrial tst)
     {
-        bool isFast = (studyFormat == Formats.HoloLens);
+        bool isFast = (tst.StudyFormat == Formats.HoloLens);
 
         mainCurve = new Curve(tst.Chrom, tst.Count, tst.Split);
         foreach (Point point in mainCurve.Points)
         {
             if (point.IsBlue)
             {
-                spheres.Add(BuildSphere(Color.blue, point.Position + Curve.displacement,true));
+                spheres.Add(BuildSphere(Color.blue, point.Position + Curve.displacement, true));
             }
             else if (point.IsRed)
             {
-                spheres.Add(BuildSphere(Color.red, point.Position + Curve.displacement ,true));
+                spheres.Add(BuildSphere(Color.red, point.Position + Curve.displacement, true));
             }
         }
     }

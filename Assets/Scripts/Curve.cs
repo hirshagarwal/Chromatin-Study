@@ -39,7 +39,7 @@ namespace Assets.Scripts
             int numberOfBlues = (int)Math.Floor(0.1 * points.Count * (1 - ratio));
             int currentReds = 0;
             int currentBlues = 0;
-            while(currentReds < numberOfReds || currentBlues < numberOfBlues)
+            while (currentReds < numberOfReds || currentBlues < numberOfBlues)
             {
                 splineRes *= 2;
                 for (int i = 0; i < points.Count; i++)
@@ -54,7 +54,8 @@ namespace Assets.Scripts
                             points[ClampPos(i + 1, points.Count)].MakeRed();
                             currentReds++;
                         }
-                    } else if (r == 4)
+                    }
+                    else if (r == 4)
                     {
                         if (!points[i].IsRed && !points[i].IsBlue)
                         {
@@ -134,7 +135,6 @@ namespace Assets.Scripts
             List<Connector> connectors = new List<Connector>();
             List<LineRenderer> lines = new List<LineRenderer>();
 
-
             if (fast)
             {
                 LineRenderer lineRenderer = go.AddComponent<LineRenderer>();
@@ -172,7 +172,8 @@ namespace Assets.Scripts
                 lineRenderer.SetPositions(splinePoints);
                 lineRenderer.Simplify(0.001f);
                 //lineRenderer.materials = matarray;
-            } else
+            }
+            else
             {
                 cylinders = new List<GameObject>();
                 Point[] splinePoints = MakeSplines(points.ToArray());
@@ -188,6 +189,7 @@ namespace Assets.Scripts
                 }
             }
         }
+
         //Based on http://www.habrador.com/tutorials/interpolation/1-catmull-rom-splines//
         private Vector3[] MakeSplines(Vector3[] pointarray)
         {
@@ -203,7 +205,6 @@ namespace Assets.Scripts
                 Vector3 p2 = pointarray[ClampPos(i + 1, l)];
                 Vector3 p3 = pointarray[ClampPos(i + 2, l)];
 
-                
                 for (int j = 0; j < loops; j++)
                 {
                     float t = j * res;
@@ -229,17 +230,16 @@ namespace Assets.Scripts
                 Vector3 p2 = pointArray[ClampPos(i + 1, l)].Position;
                 Vector3 p3 = pointArray[ClampPos(i + 2, l)].Position;
 
-
                 for (int j = 0; j < loops; j++)
                 {
                     float t = j * res;
                     Vector3 newPos = GetCatmullRomPosition(t, p0, p1, p2, p3);
                     output[nextPoint] = new Point(
-                        newPos.x, 
-                        newPos.y, 
-                        newPos.z, 
-                        pointArray[i].Name, 
-                        pointArray[i].Color, 
+                        newPos.x,
+                        newPos.y,
+                        newPos.z,
+                        pointArray[i].Name,
+                        pointArray[i].Color,
                         pointArray[i].ColorRGB
                         );
                     nextPoint++;
@@ -264,7 +264,7 @@ namespace Assets.Scripts
             //The cubic polynomial: a + b * t + c * t^2 + d * t^3
             Vector3 pos = 0.5f * (a + (b * t) + (c * t * t) + (d * t * t * t));
 
-            return pos/1000;
+            return pos / 1000;
         }
 
         private int ClampPos(int i, int l)

@@ -17,6 +17,7 @@ public class Design
 ...
 
 Call the instructor before continuing.";
+
     public static string TASK_DESCRIPTION_ATTRIBUTE =
 
 @"NEW TASK: Attribute Understanding

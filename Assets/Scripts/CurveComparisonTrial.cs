@@ -7,14 +7,16 @@ namespace Assets.Scripts
         private string referenceChromosome;
         private string blueChromosome;
         private string redChromosome;
+        private Formats studyFormat;
         private Boolean redIsCloser;
 
-        public CurveComparisonTrial(string referenceChromosome, string blueChromosome, string redChromosome, bool redIsCloser)
+        public CurveComparisonTrial(string referenceChromosome, string blueChromosome, string redChromosome, bool redIsCloser, Formats studyFormat)
         {
             this.referenceChromosome = referenceChromosome;
             this.blueChromosome = blueChromosome;
             this.redChromosome = redChromosome;
             this.redIsCloser = redIsCloser;
+            this.studyFormat = studyFormat;
         }
 
         public string ReferenceChromosome
@@ -46,6 +48,14 @@ namespace Assets.Scripts
             get
             {
                 return redIsCloser;
+            }
+        }
+
+        public Formats StudyFormat
+        {
+            get
+            {
+                return studyFormat;
             }
         }
 

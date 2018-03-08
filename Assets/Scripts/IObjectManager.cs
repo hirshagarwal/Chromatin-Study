@@ -4,7 +4,6 @@ namespace Assets.Scripts
 {
     public interface IObjectManager
     {
-        Formats StudyFormat { get; }
         Material BaseMaterial { get; }
         TextAsset TextFile { get; }
         Curve MainCurve { get; }
@@ -16,10 +15,15 @@ namespace Assets.Scripts
         string UnderstandingString { get; }
 
         void SetupCurveComparisonTrial(CurveComparisonTrial curveComparisonTrial);
+
         void SetupPointDistanceTrial(PointDistanceTrial pdt, string chrfn);
+
         void SetupAttributeUnderstandingTrial(AttributeUnderstandingTrial adt);
+
         void SetupSegmentDistanceTrial(SegmentDistanceTrial sdt, string chrfn);
+
         void SetupTouchingSegments(TouchingSegmentsTrial touchingSegmentsTrial);
-        void LoadNextFile(string filename, bool isFast = false);
+
+        void LoadNextFile(string filename);
     }
 }
