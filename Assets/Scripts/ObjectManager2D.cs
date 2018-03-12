@@ -182,7 +182,7 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
                         }
                     }
                 }
-                else if (attributeUnderstanding)
+                else if (attributeUnderstanding || studyTask == Tasks.LargerTad)
                 {
                     if (col > 0)
                         color = new Color((float)itrcx / buckets, (float)itrcy / buckets, 1 - ((float)itrcx / buckets), threshold * (1 - threshold * (col / maxCol)));
@@ -394,8 +394,15 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
         mainSpriteRenderer = DisplayTexture(mainTexture, mainSprite, mainSpriteRenderer, 1);
     }
 
-    public void SetupTouchingSegments(TouchingSegmentsTrial touchingSegmentsTrial)
+    public void SetupTouchingSegments(TouchingPointsTrial touchingSegmentsTrial)
     {
         throw new NotImplementedException();
+    }
+
+    public void SetupLargerTadTrial(LargerTadTrial ltt)
+    {
+        studyTask = Tasks.LargerTad;
+        mainTexture = CreateTexture(ltt.Chrom);
+        mainSpriteRenderer = DisplayTexture(mainTexture, mainSprite, mainSpriteRenderer, 1);
     }
 }

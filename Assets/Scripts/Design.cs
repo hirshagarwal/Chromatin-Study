@@ -7,11 +7,19 @@ public enum Formats
 
 public enum Tasks
 {
-    PointDistance, SegmentDistance, CurveComparison, AttributeUnderstanding, TouchingSegments
+    PointDistance, SegmentDistance, CurveComparison, AttributeUnderstanding, TouchingSegments,
+    LargerTad
 }
 
 public class Design
 {
+    public static string TASK_LARGER_TAD =
+        @"NEW TASK: Larger TAD
+
+...
+
+Call the instructor before continuing.";
+
     public static string TASK_TOUCHING_SEGMENTS =
         @"NEW TASK: Touching Segments
 ...

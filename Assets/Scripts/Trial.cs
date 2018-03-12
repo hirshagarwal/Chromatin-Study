@@ -70,10 +70,18 @@ namespace Assets.Scripts
             else if (Tasks.TouchingSegments.ToString() == trialConditions[3])
             {
                 task = Tasks.TouchingSegments;
-                trialDetails = new TouchingSegmentsTrial(
+                trialDetails = new TouchingPointsTrial(
                     trialConditions[6],
                     trialConditions[7],
-                    trialConditions[8],
+                    format
+                    );
+            }
+            else if (Tasks.LargerTad.ToString() == trialConditions[3])
+            {
+                task = Tasks.LargerTad;
+                trialDetails = new LargerTadTrial(
+                    trialConditions[6],
+                    trialConditions[7],
                     format
                     );
             }

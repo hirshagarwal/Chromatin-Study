@@ -12,6 +12,7 @@ public class StudyManager : MonoBehaviour
     public static GameObject choicePanelDistance;
     public static GameObject choicePanelUnderstanding;
     public static GameObject choicePanelTouching;
+    public static GameObject choicePanelTad;
     public static TimeSpan duration;
     public static GameObject feedbackPanel;
     public static string FILE_SEPARATOR = "\\";
@@ -121,9 +122,17 @@ Please, call the instructor.";
         {
             print(">>> TOUCHING SEGMENTS ANSWER: " + rawAnswer);
             if (rawAnswer.Contains("AnswerButton_Red"))
-                correct = ((TouchingSegmentsTrial)currentTrial.TrialDetails).Correct(true).ToString();
+                correct = ((TouchingPointsTrial)currentTrial.TrialDetails).Correct(true).ToString();
             if (rawAnswer.Contains("AnswerButton_Blue"))
-                correct = ((TouchingSegmentsTrial)currentTrial.TrialDetails).Correct(false).ToString();
+                correct = ((TouchingPointsTrial)currentTrial.TrialDetails).Correct(false).ToString();
+        }
+        else if (currentTrial.Task == Tasks.LargerTad)
+        {
+            print(">>> LARGER TAD ANSWER: " + rawAnswer);
+            if (rawAnswer.Contains("AnswerButton_Red"))
+                correct = ((LargerTadTrial)currentTrial.TrialDetails).Correct(0).ToString();
+            if (rawAnswer.Contains("AnswerButton_Blue"))
+                correct = ((LargerTadTrial)currentTrial.TrialDetails).Correct(1).ToString();
         }
         else
         {
@@ -148,6 +157,7 @@ Please, call the instructor.";
         choicePanelCurve.SetActive(false);
         choicePanelTouching.SetActive(false);
         choicePanelUnderstanding.SetActive(false);
+        choicePanelTad.SetActive(false);
         infoPanel.SetActive(false);
         feedbackPanel.SetActive(true);
         panelCanvas.SetActive(true);
@@ -190,7 +200,11 @@ Please, call the instructor.";
             panelCanvas.SetActive(true);
             choicePanelTouching.SetActive(true);
         }
-        else
+        else if (currentTrial.Task == Tasks.LargerTad)
+        {
+            panelCanvas.SetActive(true);
+            choicePanelTad.SetActive(true);
+        }else
         {
             throw new Exception("Recording for " + currentTrial.Task.ToString() + " not implemented");
         }
@@ -317,6 +331,10 @@ Please, call the instructor.";
         {
             infoMessage.text = Design.TASK_TOUCHING_SEGMENTS;
         }
+        else if (task == Tasks.LargerTad)
+        {
+            infoMessage.text = Design.TASK_LARGER_TAD;
+        }
         else
         {
             throw new Exception("Message for " + task + " not implemented");
@@ -405,6 +423,10 @@ Please, call the instructor.";
         GameObject.Find("AnswerButton_RedTouching").GetComponent<GenericButton>().value = "red";
         GameObject.Find("AnswerButton_BlueTouching").AddComponent<GenericButton>();
         GameObject.Find("AnswerButton_BlueTouching").GetComponent<GenericButton>().value = "blue";
+        GameObject.Find("AnswerButton_RedTad").AddComponent<GenericButton>();
+        GameObject.Find("AnswerButton_RedTad").GetComponent<GenericButton>().value = "red";
+        GameObject.Find("AnswerButton_BlueTad").AddComponent<GenericButton>();
+        GameObject.Find("AnswerButton_BlueTad").GetComponent<GenericButton>().value = "blue";
         GameObject.Find("AnswerButton_3").AddComponent<GenericButton>();
         GameObject.Find("AnswerButton_4").AddComponent<GenericButton>();
         GameObject.Find("AnswerButton_5").AddComponent<GenericButton>();
@@ -433,6 +455,9 @@ Please, call the instructor.";
 
         choicePanelTouching = GameObject.Find("ChoicePanelTouching");
         choicePanelTouching.SetActive(false);
+
+        choicePanelTad = GameObject.Find("ChoicePanelTad");
+        choicePanelTad.SetActive(false);
 
         choicePanelUnderstanding = GameObject.Find("ChoicePanelUnderstanding");
         choicePanelUnderstanding.SetActive(false);
@@ -469,7 +494,11 @@ Please, call the instructor.";
         }
         else if (currentTrial.Task == Tasks.TouchingSegments)
         {
-            objectManager.SetupTouchingSegments(currentTrial.TrialDetails as TouchingSegmentsTrial);
+            objectManager.SetupTouchingSegments(currentTrial.TrialDetails as TouchingPointsTrial);
+        }
+        else if (currentTrial.Task == Tasks.LargerTad)
+        {
+            objectManager.SetupLargerTadTrial(currentTrial.TrialDetails as LargerTadTrial);
         }
         else
         {

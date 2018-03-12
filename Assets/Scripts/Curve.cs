@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Assets.Scripts;
+using UnityEngine.UI;
 
 namespace Assets.Scripts
 {
@@ -16,11 +18,12 @@ namespace Assets.Scripts
         private string fileName;
         private string[] files = { "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "X" };
         private List<Point> points;
-        private int scale = 3;
+        public static int scale = 3;
         private float sphereWidth = 0.01f;
         public static Vector3 displacement = new Vector3(0, 0, 5);
+        public List<Color> colorSpace;
 
-        public Curve(string filen, int skips, float ratio)
+        public Curve(string filen, int skips, int redCount)
         {
             go = new GameObject();
             List<Point> allPoints = ReadInFile(filen);
@@ -35,34 +38,21 @@ namespace Assets.Scripts
                 points.Add(allPoints[i]);
             }
 
-            int numberOfReds = (int)Math.Floor(0.1 * points.Count * ratio);
-            int numberOfBlues = (int)Math.Floor(0.1 * points.Count * (1 - ratio));
             int currentReds = 0;
-            int currentBlues = 0;
-            while (currentReds < numberOfReds || currentBlues < numberOfBlues)
+            splineRes *= 2;
+            while (currentReds < redCount)
             {
-                splineRes *= 2;
                 for (int i = 0; i < points.Count; i++)
                 {
-                    int r = rnd.Next(50);
-                    if (r == 2 || r == 3)
+                    int r = rnd.Next(25);
+                    if (r == 2)
                     {
                         if (!points[i].IsRed && !points[i].IsBlue)
                         {
                             points[i] = points[i].Displaced(new Vector3(rnd.Next(10) / 10f, rnd.Next(10) / 10f, rnd.Next(10) / 10f));
                             points[ClampPos(i - 1, points.Count)].MakeRed();
-                            points[ClampPos(i + 1, points.Count)].MakeRed();
-                            currentReds++;
-                        }
-                    }
-                    else if (r == 4)
-                    {
-                        if (!points[i].IsRed && !points[i].IsBlue)
-                        {
-                            points[i] = points[i].Displaced(new Vector3(rnd.Next(10) / 10f, rnd.Next(10) / 10f, rnd.Next(10) / 10f));
-                            points[ClampPos(i - 1, points.Count)].MakeBlue();
                             points[ClampPos(i + 1, points.Count)].MakeBlue();
-                            currentBlues++;
+                            currentReds++;
                         }
                     }
                 }
@@ -74,12 +64,12 @@ namespace Assets.Scripts
                 if (point.Color > maxColor)
                     maxColor = point.Color;
             }
-            List<Color> colorMap = BuildColorMap(colorsIn);
-            int stepsize = colorMap.Count / points.Count;
+            colorSpace = BuildColorMap(colorsIn);
+            int stepsize = colorSpace.Count / points.Count;
             for (int i = 0; i < points.Count; i++)
             {
-                int idx = (int)Math.Floor((points[i].Color / maxColor) * (colorMap.Count - 1));
-                points[i].ColorRGB = colorMap[idx];
+                int idx = (int)Math.Floor((points[i].Color / maxColor) * (colorSpace.Count - 1));
+                points[i].ColorRGB = colorSpace[idx];
             }
             cylinders = new List<GameObject>();
             List<Connector> connectors = new List<Connector>();
@@ -102,6 +92,7 @@ namespace Assets.Scripts
                 filen = "chr" + files[currentFile] + "_" + chrtype + ".cpoints";
             go = new GameObject();
             points = ReadInFile(filen);
+            Debug.Log("Loaded " + filen);
             Color color = Color.black;
             Vector3 shift = new Vector3(0, 0, 0);
             if (!grayscale)
@@ -114,12 +105,13 @@ namespace Assets.Scripts
                     if (point.Color > maxColor)
                         maxColor = point.Color;
                 }
-                List<Color> colorMap = BuildColorMap(colorsIn);
-                int stepsize = colorMap.Count / points.Count;
+                colorSpace = BuildColorMap(colorsIn);
+                
+                int stepsize = colorSpace.Count / points.Count;
                 for (int i = 0; i < points.Count; i++)
                 {
-                    int idx = (int)Math.Floor((points[i].Color / maxColor) * (colorMap.Count - 1));
-                    points[i].ColorRGB = colorMap[idx];
+                    int idx = (int)Math.Floor((points[i].Color / maxColor) * (colorSpace.Count - 1));
+                    points[i].ColorRGB = colorSpace[idx];
                 }
             }
             else
@@ -131,7 +123,6 @@ namespace Assets.Scripts
                     case 2: color = Color.blue; shift = new Vector3(1.5f, 0, 0); break;
                 }
             }
-            Debug.Log("Read in file successfully");
             List<Connector> connectors = new List<Connector>();
             List<LineRenderer> lines = new List<LineRenderer>();
 
@@ -452,8 +443,11 @@ namespace Assets.Scripts
                 }
                 next += (int)(buckets[i] * 10000);
             }
+
             return outSpace;
         }
+
+        
 
         private GameObject BuildConnector(Connector connector)
         {

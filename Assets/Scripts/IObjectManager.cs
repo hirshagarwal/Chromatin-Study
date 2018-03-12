@@ -22,7 +22,9 @@ namespace Assets.Scripts
 
         void SetupSegmentDistanceTrial(SegmentDistanceTrial sdt, string chrfn);
 
-        void SetupTouchingSegments(TouchingSegmentsTrial touchingSegmentsTrial);
+        void SetupTouchingSegments(TouchingPointsTrial tst);
+
+        void SetupLargerTadTrial(LargerTadTrial ltt);
 
         void LoadNextFile(string filename);
     }

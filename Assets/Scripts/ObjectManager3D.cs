@@ -1,6 +1,8 @@
 ﻿using Assets.Scripts;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+
 
 public class ObjectManager3D : MonoBehaviour, IObjectManager
 {
@@ -11,6 +13,7 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
     private Curve blueCurve;
     private GameObject blueObject;
     private GameObject redObject;
+    private LineRenderer spectrumRenderer;
     private bool showUnderstanding = false;
     private string understandingString = "";
     private string guiText = "";
@@ -168,6 +171,7 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
             filename = "chr" + files[current_file] + "_" + chrtype;
         Destroy(mainCurve);
         mainCurve = new Curve(filename);
+        DrawSpectrum(mainCurve.colorSpace);
     }
 
     private LineRenderer BuildLR(Connector connector)
@@ -186,11 +190,46 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
         if (showUnderstanding)
             GUI.Box(new Rect(0, 0, 400, 40), understandingString);
         GUI.Box(new Rect(mousePosition.x + 15, Screen.height - mousePosition.y + 15, 200, 40), guiText);
+        GUI.Box(new Rect(0, 0, 400, 25), "Attribute name goes here");
+    }
+
+    private void DrawSpectrum(List<Color> outSpace)
+    {
+        spectrumRenderer = GameObject.Find("Main Camera").AddComponent<LineRenderer>();
+        spectrumRenderer.material = new Material(Shader.Find("Particles/Alpha Blended Premultiply"));
+
+        spectrumRenderer.widthMultiplier = 0.1f / Curve.scale;
+        spectrumRenderer.positionCount = 2;
+        spectrumRenderer.useWorldSpace = false;
+        Vector3[] spectrumPoints = { new Vector3(-1.5f, 1, 2), new Vector3(1.5f, 1, 2) };
+        spectrumRenderer.SetPositions(spectrumPoints);
+        List<GradientColorKey> gradientColorKeys = new List<GradientColorKey>();
+        List<GradientAlphaKey> gradientAlphaKeys = new List<GradientAlphaKey>();
+        int increment = (int)Math.Floor(outSpace.Count / 8f);
+        float alpha = 1.0f;
+        for (int i = 0; i < 8; i++) //8 colour keys is the maximum allowed by the linerenderer object
+        {
+            gradientColorKeys.Add(new GradientColorKey(outSpace[i * increment], i / 8f));
+            gradientAlphaKeys.Add(new GradientAlphaKey(alpha, i / 8f));
+        }
+        Gradient gradient = new Gradient();
+        gradient.SetKeys(
+            gradientColorKeys.ToArray(),
+            gradientAlphaKeys.ToArray()
+            );
+        spectrumRenderer.colorGradient = gradient;
     }
 
     // Update is called once per frame
     private void Update()
     {
+        //if (spectrumRenderer != null)
+        //{
+        //    Vector3 p = GameObject.Find("Main Camera").transform.position;
+        //    Vector3[] spectrumPoints = { p + new Vector3(-1, -1, 4), p + new Vector3(1, -1, 4) };
+        //    spectrumRenderer.SetPositions(spectrumPoints);
+        //}
+        
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Destroy(gameObject.GetComponent<LineRenderer>());
@@ -285,11 +324,11 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
         }
     }
 
-    public void SetupTouchingSegments(TouchingSegmentsTrial tst)
+    public void SetupTouchingSegments(TouchingPointsTrial tst)
     {
         bool isFast = (tst.StudyFormat == Formats.HoloLens);
 
-        mainCurve = new Curve(tst.Chrom, tst.Count, tst.Split);
+        mainCurve = new Curve(tst.Chrom, tst.Count, tst.Count);
         foreach (Point point in mainCurve.Points)
         {
             if (point.IsBlue)
@@ -301,5 +340,12 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
                 spheres.Add(BuildSphere(Color.red, point.Position + Curve.displacement, true));
             }
         }
+    }
+
+    public void SetupLargerTadTrial(LargerTadTrial ltt)
+    {
+        bool isFast = (ltt.StudyFormat == Formats.HoloLens);
+
+        mainCurve = new Curve(ltt.Chrom, false, fast: isFast);
     }
 }
