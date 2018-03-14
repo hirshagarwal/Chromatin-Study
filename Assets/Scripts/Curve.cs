@@ -461,7 +461,7 @@ namespace Assets.Scripts
             int halfcount = (int)Math.Floor(pointcount / 2);
             for (float i = 0; i < (halfcount); i++)
             {
-                colorSpace.Add(new Color(i / (pointcount / 2f), 1f, 1f - (i / (pointcount / 2f))));
+                colorSpace.Add(Design.GetClosestColor((i / (pointcount / 2f))));
             }
             int next = 0;
             var outSpace = new List<Color>();

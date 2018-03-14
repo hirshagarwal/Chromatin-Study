@@ -19,22 +19,33 @@ public enum Tasks
 public class Design
 {
     public static List<Color> standardColors = new List<Color>{
-        new Color(165,0,38),
-        new Color(215,48,39),
-        new Color(244,109,67),
-        new Color(253,174,97),
-        new Color(254,224,144),
-        new Color(255,255,191),
-        new Color(224,243,248),
-        new Color(171,217,233),
-        new Color(116,173,209),
-        new Color(69,117,180),
-        new Color(49,54,149)
+        new Color(165/255f,0/255f,38/255f),
+        new Color(215/255f,48/255f,39/255f),
+        new Color(244/255f,109/255f,67/255f),
+        new Color(253/255f,174/255f,97/255f),
+        new Color(254/255f,224/255f,144/255f),
+        new Color(255/255f,255/255f,191/255f),
+        new Color(224/255f,243/255f,248/255f),
+        new Color(171/255f,217/255f,233/255f),
+        new Color(116/255f,173/255f,209/255f),
+        new Color(69/255f,117/255f,180/255f),
+        new Color(49/255f,54/255f,149/255f)
     };
 
     public static Color GetClosestColor(int c)
     {
-        int idx = (int)Math.Floor(c / (float)standardColors.Count);
+        int idx = (int)Math.Floor(c / 255f);
+        return standardColors[idx];
+    }
+
+    public static Color GetClosestColor(float c)
+    {
+        if(c > 1f)
+        {
+            Debug.LogWarning(c + " is >1 in Design.GetClosestColor()! Defaulting to 1...");
+            return standardColors[standardColors.Count - 1];
+        }
+        int idx = (int)Math.Floor(c * (standardColors.Count-1));
         return standardColors[idx];
     }
 

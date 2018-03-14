@@ -148,48 +148,48 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
                 float col = 0f;
                 if (interactions.ContainsKey(uniqueRanges[itrcx]) && interactions[uniqueRanges[itrcx]].ContainsKey(uniqueRanges[itrcy]))
                     col += interactions[uniqueRanges[itrcx]][uniqueRanges[itrcy]];
-                Color color = new Color(red, green, blue, 0);
+                Color color = Design.GetClosestColor(0.5f);
                 if (studyTask == Tasks.PointDistance || studyTask == Tasks.SegmentDistance)
                 {
                     if (isRange)
                     {
                         if (uniqueRanges[itrcx] >= redA && uniqueRanges[itrcx] <= redB)
                         {
-                            color = new Color(1, 0, 0);
+                            color = Design.GetClosestColor(0f);
                         }
                         else if (uniqueRanges[itrcx] >= blueA && uniqueRanges[itrcx] <= blueB)
                         {
-                            color = new Color(0, 0, 1);
+                            color = Design.GetClosestColor(1f);
                         }
                         else if (col > 0)
                         {
-                            color = new Color(red, green, blue, threshold * (1 - threshold * (col / maxCol)));
+                            color = Design.GetClosestColor(threshold * (1 - threshold * (col / maxCol)));
                         }
                     }
                     else
                     {
                         if (uniqueRanges[itrcx] == redA || uniqueRanges[itrcx] == redB)
                         {
-                            color = new Color(1, 0, 0);
+                            color = Design.GetClosestColor(0f);
                         }
                         else if (uniqueRanges[itrcx] == blueA || uniqueRanges[itrcx] == blueB)
                         {
-                            color = new Color(0, 0, 1);
+                            color = Design.GetClosestColor(1f);
                         }
                         else if (col > 0)
                         {
-                            color = new Color(red, green, blue, threshold * (1 - threshold * (col / maxCol)));
+                            color = Design.GetClosestColor(threshold * (1 - threshold * (col / maxCol)));
                         }
                     }
                 }
                 else if (attributeUnderstanding || studyTask == Tasks.LargerTad)
                 {
                     if (col > 0)
-                        color = new Color((float)itrcx / buckets, (float)itrcy / buckets, 1 - ((float)itrcx / buckets), threshold * (1 - threshold * (col / maxCol)));
+                        color = Design.GetClosestColor(threshold * (1 - threshold * (col / maxCol)));
                 }
                 else if (col > 0)
                 {
-                    color = new Color(red, green, blue, threshold * (1 - threshold * (col / maxCol)));
+                    color = Design.GetClosestColor(threshold * (1 - threshold * (col / maxCol)));
                 }
                 tex.SetPixel(x, y, color);
                 y--;
