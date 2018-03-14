@@ -65,33 +65,32 @@ public class OrbitScript : MonoBehaviour
             transform.position = new Vector3(0, 0, 1);
             shift = new Vector3(0, 0, 0);
         }
-
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-            if (shift == new Vector3(0, 0, 0))
-            {
-                shift = new Vector3(-1.5f, 0, 0);
-                transform.position = transform.position + shift;
-            }
-            else if (shift == new Vector3(1.5f, 0, 0))
-            {
-                transform.position = transform.position - shift;
-                shift = new Vector3(0, 0, 0);
-            }
-        }
-        else if (Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            if (shift == new Vector3(0, 0, 0))
-            {
-                shift = new Vector3(1.5f, 0, 0);
-                transform.position = transform.position + shift;
-            }
-            else if (shift == new Vector3(-1.5f, 0, 0))
-            {
-                transform.position = transform.position - shift;
-                shift = new Vector3(0, 0, 0);
-            }
-        }
+        //if (Input.GetKeyDown(KeyCode.LeftArrow))
+        //{
+        //    if (shift == new Vector3(0, 0, 0))
+        //    {
+        //        shift = new Vector3(-1.5f, 0, 0);
+        //        transform.position = transform.position + shift;
+        //    }
+        //    else if (shift == new Vector3(1.5f, 0, 0))
+        //    {
+        //        transform.position = transform.position - shift;
+        //        shift = new Vector3(0, 0, 0);
+        //    }
+        //}
+        //else if (Input.GetKeyDown(KeyCode.RightArrow))
+        //{
+        //    if (shift == new Vector3(0, 0, 0))
+        //    {
+        //        shift = new Vector3(1.5f, 0, 0);
+        //        transform.position = transform.position + shift;
+        //    }
+        //    else if (shift == new Vector3(-1.5f, 0, 0))
+        //    {
+        //        transform.position = transform.position - shift;
+        //        shift = new Vector3(0, 0, 0);
+        //    }
+        //}
     }
 
     public static float ClampAngle(float angle, float min, float max)

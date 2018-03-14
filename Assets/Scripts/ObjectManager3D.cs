@@ -13,7 +13,6 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
     private Curve blueCurve;
     private GameObject blueObject;
     private GameObject redObject;
-    private LineRenderer spectrumRenderer;
     private bool showUnderstanding = false;
     private string understandingString = "";
     private string guiText = "";
@@ -171,7 +170,7 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
             filename = "chr" + files[current_file] + "_" + chrtype;
         Destroy(mainCurve);
         mainCurve = new Curve(filename);
-        DrawSpectrum(mainCurve.colorSpace);
+        DrawSpectrum(mainCurve.colorSpace, mainCurve.colorWidth);
     }
 
     private LineRenderer BuildLR(Connector connector)
@@ -193,31 +192,40 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
         GUI.Box(new Rect(0, 0, 400, 25), "Attribute name goes here");
     }
 
-    private void DrawSpectrum(List<Color> outSpace)
+    private void DrawSpectrum(List<Color> outSpace, AnimationCurve colorWidth)
     {
-        spectrumRenderer = GameObject.Find("Main Camera").AddComponent<LineRenderer>();
-        spectrumRenderer.material = new Material(Shader.Find("Particles/Alpha Blended Premultiply"));
-
-        spectrumRenderer.widthMultiplier = 0.1f / Curve.scale;
-        spectrumRenderer.positionCount = 2;
-        spectrumRenderer.useWorldSpace = false;
-        Vector3[] spectrumPoints = { new Vector3(-1.5f, 1, 2), new Vector3(1.5f, 1, 2) };
-        spectrumRenderer.SetPositions(spectrumPoints);
-        List<GradientColorKey> gradientColorKeys = new List<GradientColorKey>();
-        List<GradientAlphaKey> gradientAlphaKeys = new List<GradientAlphaKey>();
-        int increment = (int)Math.Floor(outSpace.Count / 8f);
-        float alpha = 1.0f;
-        for (int i = 0; i < 8; i++) //8 colour keys is the maximum allowed by the linerenderer object
+        for (int c = 0; c < 7; c++)
         {
-            gradientColorKeys.Add(new GradientColorKey(outSpace[i * increment], i / 8f));
-            gradientAlphaKeys.Add(new GradientAlphaKey(alpha, i / 8f));
+            
+            GameObject go = new GameObject("SpectrumRenderer" + c);
+            go.transform.parent = GameObject.Find("Main Camera").transform;
+            LineRenderer spectrumRenderer = go.AddComponent<LineRenderer>();
+            spectrumRenderer.material = new Material(Shader.Find("Particles/Alpha Blended Premultiply"));
+
+            spectrumRenderer.widthMultiplier = 0.1f / Curve.scale;
+            spectrumRenderer.positionCount = 2;
+            spectrumRenderer.useWorldSpace = false;
+            Vector3[] spectrumPoints = { new Vector3(((3f / 7) * (c)) - 1.5f, 1, 4), new Vector3(((3f/7)*(c+1))-1.5f, 1, 4) };
+            spectrumRenderer.SetPositions(spectrumPoints);
+            List<GradientColorKey> gradientColorKeys = new List<GradientColorKey>();
+            List<GradientAlphaKey> gradientAlphaKeys = new List<GradientAlphaKey>();
+            int increment = (int)Math.Floor(outSpace.Count / 8f);
+            float alpha = 1.0f;
+            for (float i = c; i < (c+1); i+=(1/8f))
+            {
+                int idx = (int)Math.Floor(i * increment);
+                gradientColorKeys.Add(new GradientColorKey(outSpace[idx], i-c));
+                gradientAlphaKeys.Add(new GradientAlphaKey(alpha, i-c));
+            }
+            Gradient gradient = new Gradient();
+            gradient.SetKeys(
+                gradientColorKeys.ToArray(),
+                gradientAlphaKeys.ToArray()
+                );
+            spectrumRenderer.colorGradient = gradient;
+            spectrumRenderer.startWidth = colorWidth.keys[c].value;
+            spectrumRenderer.endWidth = colorWidth.keys[c + 1].value;
         }
-        Gradient gradient = new Gradient();
-        gradient.SetKeys(
-            gradientColorKeys.ToArray(),
-            gradientAlphaKeys.ToArray()
-            );
-        spectrumRenderer.colorGradient = gradient;
     }
 
     // Update is called once per frame
@@ -259,6 +267,10 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
             Destroy(redObject);
             Destroy(blueObject);
             mainCurve.DestroyEverything();
+            for (int c = 0; c < 7; c++)
+            {
+                Destroy(GameObject.Find("SpectrumRenderer" + c));
+            }
             try
             {
                 redCurve.DestroyEverything();
@@ -280,6 +292,10 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
             Destroy(redObject);
             Destroy(blueObject);
             mainCurve.DestroyEverything();
+            for (int c = 0; c < 7; c++)
+            {
+                Destroy(GameObject.Find("SpectrumRenderer" + c));
+            }
             try
             {
                 redCurve.DestroyEverything();
@@ -308,6 +324,10 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
             Destroy(redObject);
             Destroy(blueObject);
             mainCurve.DestroyEverything();
+            for (int c = 0; c < 7; c++)
+            {
+                Destroy(GameObject.Find("SpectrumRenderer" + c));
+            }
             try
             {
                 redCurve.DestroyEverything();

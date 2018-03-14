@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Assets.Scripts;
 using UnityEngine.UI;
+using System.Linq;
 
 namespace Assets.Scripts
 {
@@ -22,6 +23,7 @@ namespace Assets.Scripts
         private float sphereWidth = 0.01f;
         public static Vector3 displacement = new Vector3(0, 0, 5);
         public List<Color> colorSpace;
+        public AnimationCurve colorWidth;
 
         public Curve(string filen, int skips, int redCount)
         {
@@ -65,6 +67,7 @@ namespace Assets.Scripts
                     maxColor = point.Color;
             }
             colorSpace = BuildColorMap(colorsIn);
+            colorWidth = BuildColorCurve(colorsIn);
             int stepsize = colorSpace.Count / points.Count;
             for (int i = 0; i < points.Count; i++)
             {
@@ -106,7 +109,8 @@ namespace Assets.Scripts
                         maxColor = point.Color;
                 }
                 colorSpace = BuildColorMap(colorsIn);
-                
+                colorWidth = BuildColorCurve(colorsIn);
+
                 int stepsize = colorSpace.Count / points.Count;
                 for (int i = 0; i < points.Count; i++)
                 {
@@ -400,6 +404,32 @@ namespace Assets.Scripts
             }
             points.Sort();
             return points;
+        }
+
+        private AnimationCurve BuildColorCurve(List<float> colorsIn)
+        {
+            AnimationCurve curve = new AnimationCurve();
+            float min = colorsIn.Min();
+            float max = colorsIn.Max();
+            float step = (max - min) / 8;
+            int[] widths = new int[8];
+            float i_last = 0f;
+            int idx = 0;
+            for (float i = min; i < max; i+=step)
+            {
+                foreach (float c in colorsIn)
+                {
+                    if (c <= i && c > i_last)
+                    {
+                        widths[idx]++;
+                    }
+                }
+                curve.AddKey(idx / 8f, (widths[idx] + 1f) / colorsIn.Count);
+                i_last = i;
+                idx++;
+            }
+
+            return curve;
         }
 
         private List<Color> BuildColorMap(List<float> colorsIn)
