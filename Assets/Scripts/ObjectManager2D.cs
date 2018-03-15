@@ -405,4 +405,9 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
         mainTexture = CreateTexture(ltt.Chrom);
         mainSpriteRenderer = DisplayTexture(mainTexture, mainSprite, mainSpriteRenderer, 1);
     }
+
+    public void SetupTripleTrial(TripleTrial tripleTrial)
+    {
+        throw new NotImplementedException();
+    }
 }

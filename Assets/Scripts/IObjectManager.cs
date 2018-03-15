@@ -27,5 +27,7 @@ namespace Assets.Scripts
         void SetupLargerTadTrial(LargerTadTrial ltt);
 
         void LoadNextFile(string filename);
+
+        void SetupTripleTrial(TripleTrial tripleTrial);
     }
 }

@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
-using Assets.Scripts;
-using UnityEngine.UI;
 using System.Linq;
+using UnityEngine;
 
 namespace Assets.Scripts
 {
     public class Curve : MonoBehaviour
     {
+        public static int currentFile = 13;
+        public static Vector3 displacement = new Vector3(0, 0, 5);
+        public static int scale = 3;
+        public List<Color> colorSpace;
+        public AnimationCurve colorWidth;
         public GameObject go;
         public float splineRes = 2f;
-        public static int currentFile = 13;
         private Material baseMaterial;
         private string chrtype = "sen";
         private List<GameObject> cylinders = new List<GameObject>();
@@ -19,18 +21,14 @@ namespace Assets.Scripts
         private string fileName;
         private string[] files = { "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "X" };
         private List<Point> points;
-        public static int scale = 3;
         private float sphereWidth = 0.01f;
-        public static Vector3 displacement = new Vector3(0, 0, 5);
-        public List<Color> colorSpace;
-        public AnimationCurve colorWidth;
 
-        public Curve(string filen, int skips, int redCount)
+        public Curve(string filen, int skips, int redCount, bool triple = false)
         {
             go = new GameObject();
             List<Point> allPoints = ReadInFile(filen);
             points = new List<Point>();
-            Color color = Color.black;
+            Color color = Design.GetClosestColor(0.5f);
             List<float> colorsIn = new List<float>();
             float maxColor = 0.0f;
             System.Random rnd = new System.Random(0);
@@ -39,7 +37,47 @@ namespace Assets.Scripts
             {
                 points.Add(allPoints[i]);
             }
+            if (triple)
+            {
+                MutateCurveTriples(redCount, rnd);
+            }
+            else
+            {
+                MutateCurveTouchingPoints(redCount, rnd);
 
+
+                foreach (Point point in points)
+                {
+                    colorsIn.Add(point.Color);
+                    if (point.Color > maxColor)
+                        maxColor = point.Color;
+                }
+                colorSpace = BuildColorMap(colorsIn);
+                colorWidth = BuildColorCurve(colorsIn);
+                int stepsize = colorSpace.Count / points.Count;
+                for (int i = 0; i < points.Count; i++)
+                {
+                    int idx = (int)Math.Floor((points[i].Color / maxColor) * (colorSpace.Count - 1));
+                    points[i].ColorRGB = colorSpace[idx];
+                }
+            }
+            cylinders = new List<GameObject>();
+            List<Connector> connectors = new List<Connector>();
+            Point[] splinePoints = MakeSplines(points.ToArray());
+            Point lastPoint = splinePoints[0];
+            for (int i = 0; i < splinePoints.Length; i++)
+            {
+                connectors.Add(
+                    new Connector(lastPoint.Displaced(displacement),
+                    splinePoints[i].Displaced(displacement))
+                    );
+                cylinders.Add(BuildConnector(connectors[connectors.Count - 1]));
+                lastPoint = splinePoints[i];
+            }
+        }
+
+        private void MutateCurveTouchingPoints(int redCount, System.Random rnd)
+        {
             int currentReds = 0;
             splineRes *= 2;
             while (currentReds < redCount)
@@ -59,46 +97,68 @@ namespace Assets.Scripts
                     }
                 }
             }
+        }
 
-            foreach (Point point in points)
-            {
-                colorsIn.Add(point.Color);
-                if (point.Color > maxColor)
-                    maxColor = point.Color;
-            }
-            colorSpace = BuildColorMap(colorsIn);
-            colorWidth = BuildColorCurve(colorsIn);
-            int stepsize = colorSpace.Count / points.Count;
+        private void MutateCurveTriples(int redCount, System.Random rnd)
+        {
             for (int i = 0; i < points.Count; i++)
             {
-                int idx = (int)Math.Floor((points[i].Color / maxColor) * (colorSpace.Count - 1));
-                points[i].ColorRGB = colorSpace[idx];
+                points[i].ColorRGB = Design.GetClosestColor(0.5f);
             }
-            cylinders = new List<GameObject>();
-            List<Connector> connectors = new List<Connector>();
-            Point[] splinePoints = MakeSplines(points.ToArray());
-            Point lastPoint = splinePoints[0];
-            for (int i = 0; i < splinePoints.Length; i++)
+            int currentReds = 0;
+            splineRes *= 2;
+            while (currentReds < redCount)
             {
-                connectors.Add(
-                    new Connector(lastPoint.Displaced(displacement),
-                    splinePoints[i].Displaced(displacement))
-                    );
-                cylinders.Add(BuildConnector(connectors[connectors.Count - 1]));
-                lastPoint = splinePoints[i];
+                for (int i = 0; i < points.Count; i++)
+                {
+                    int r = rnd.Next(25);
+                    if (r == 2)
+                    {
+                        if (
+                            !points[i].HasColor() &&
+                            i > 0 &&
+                            i < points.Count - 2 &&
+                            !points[i - 1].HasColor() &&
+                            !points[i + 1].HasColor()
+                            )
+                        {
+                            Point startPoint = points[i];
+                            Point leftPoint = points[i - 1];
+                            Point rightPoint = points[i + 1];
+                            Point displacePoint = startPoint.Displaced(new Vector3(rnd.Next(10) / 10f, rnd.Next(10) / 10f, rnd.Next(10) / 10f));
+                            Point leftInterpolated = leftPoint.Interpolate(displacePoint);
+                            Point rightInterpolated = rightPoint.Interpolate(displacePoint);
+                            Point leftBegin = startPoint.Displaced(new Vector3(rnd.Next(10) / 100f, rnd.Next(10) / 100f, rnd.Next(10) / 100f));
+                            Point rightBegin = startPoint.Displaced(new Vector3(rnd.Next(10) / 100f, rnd.Next(10) / 100f, rnd.Next(10) / 100f));
+
+                            points.Insert(i, leftInterpolated);
+                            points.Insert(i + 2, rightInterpolated);
+                            points.Insert(i - 1, leftBegin);
+                            points.Insert(i + 5, rightBegin);
+
+                            points[i - 1].MakeBlue();
+                            points[i - 1].ColorRGB = Design.GetClosestColor(0f);
+                            points[i + 2].MakeYellow();
+                            points[i + 5].MakeRed();
+                            points[i + 5].ColorRGB = Design.GetClosestColor(1f);
+
+                            currentReds++;
+                        }
+                    }
+                }
             }
         }
 
-        public Curve(string filen = "", Boolean grayscale = false, Boolean projection = true, int colorID = 0, bool fast = false)
+        public Curve(string filen = "", Boolean grayscale = false, Boolean projection = true, int colorID = 0, bool fast = false, bool tad = false)
         {
             if (filen == "")
                 filen = "chr" + files[currentFile] + "_" + chrtype + ".cpoints";
             go = new GameObject();
             points = ReadInFile(filen);
             Debug.Log("Loaded " + filen);
-            Color color = Color.black;
+            Color color = Design.GetClosestColor(0.5f);
             Vector3 shift = new Vector3(0, 0, 0);
-            if (!grayscale)
+            if (!grayscale && !tad)
             {
                 List<float> colorsIn = new List<float>();
                 float maxColor = 0.0f;
@@ -118,13 +178,22 @@ namespace Assets.Scripts
                     points[i].ColorRGB = colorSpace[idx];
                 }
             }
+            else if (tad)
+            {
+                for (int i = 1; i < points.Count - 1; i++)
+                {
+                    points[i].ColorRGB = Design.GetClosestColor(0.5f);
+                }
+                points[0].ColorRGB = Design.GetClosestColor(0f);
+                points[points.Count - 1].ColorRGB = Design.GetClosestColor(1f);
+            }
             else
             {
                 switch (colorID)
                 {
-                    case 0: color = Color.white; break;
-                    case 1: color = Color.red; shift = new Vector3(-1.5f, 0, 0); break;
-                    case 2: color = Color.blue; shift = new Vector3(1.5f, 0, 0); break;
+                    case 0: color = Design.GetClosestColor(0.5f); break;
+                    case 1: color = Design.GetClosestColor(0f); shift = new Vector3(-1.5f, 0, 0); break;
+                    case 2: color = Design.GetClosestColor(1f); shift = new Vector3(1.5f, 0, 0); break;
                 }
             }
             List<Connector> connectors = new List<Connector>();
@@ -144,12 +213,22 @@ namespace Assets.Scripts
                     pointarray[i] = (points[i].Position / scale) + shift + (projection ? new Vector3(0, 0, 2) : new Vector3(0, 0, 0));
                 }
                 Vector3[] splinePoints = MakeSplines(pointarray);
-                if (!grayscale)
+                if (tad)
                 {
                     float alpha = 1.0f;
                     Gradient gradient = new Gradient();
                     gradient.SetKeys(
-                        new GradientColorKey[] { new GradientColorKey(Color.yellow, 0.0f), new GradientColorKey(Color.red, 1.0f) },
+                        new GradientColorKey[] { new GradientColorKey(Design.GetClosestColor(0f), 0.0f), new GradientColorKey(Design.GetClosestColor(1f), 1.0f) },
+                        new GradientAlphaKey[] { new GradientAlphaKey(alpha, 1.0f), new GradientAlphaKey(alpha, 1.0f) }
+                        );
+                    lineRenderer.colorGradient = gradient;
+                }
+                else if (!grayscale)
+                {
+                    float alpha = 1.0f;
+                    Gradient gradient = new Gradient();
+                    gradient.SetKeys(
+                        new GradientColorKey[] { new GradientColorKey(Design.GetClosestColor(0f), 0.0f), new GradientColorKey(Design.GetClosestColor(1f), 1.0f) },
                         new GradientAlphaKey[] { new GradientAlphaKey(alpha, 1.0f), new GradientAlphaKey(alpha, 1.0f) }
                         );
                     lineRenderer.colorGradient = gradient;
@@ -172,6 +251,11 @@ namespace Assets.Scripts
             {
                 cylinders = new List<GameObject>();
                 Point[] splinePoints = MakeSplines(points.ToArray());
+                //if (triple)
+                //{
+                //    splinePoints[0].MakeRed();
+                //    splinePoints[splinePoints.Count() - 1].MakeBlue();
+                //}
                 Point lastPoint = splinePoints[0];
                 for (int i = 0; i < splinePoints.Length; i++)
                 {
@@ -185,94 +269,6 @@ namespace Assets.Scripts
             }
         }
 
-        //Based on http://www.habrador.com/tutorials/interpolation/1-catmull-rom-splines//
-        private Vector3[] MakeSplines(Vector3[] pointarray)
-        {
-            int loops = (int)splineRes;//Mathf.FloorToInt(1f / res);
-            float res = 1f / splineRes;
-            int l = pointarray.Length;
-            Vector3[] output = new Vector3[l * loops];
-            int nextPoint = 0;
-            for (int i = 0; i < l; i++)
-            {
-                Vector3 p0 = pointarray[ClampPos(i - 1, l)];
-                Vector3 p1 = pointarray[i];
-                Vector3 p2 = pointarray[ClampPos(i + 1, l)];
-                Vector3 p3 = pointarray[ClampPos(i + 2, l)];
-
-                for (int j = 0; j < loops; j++)
-                {
-                    float t = j * res;
-                    Vector3 newPos = GetCatmullRomPosition(t, p0, p1, p2, p3);
-                    output[nextPoint] = newPos;
-                    nextPoint++;
-                }
-            }
-            return output;
-        }
-
-        private Point[] MakeSplines(Point[] pointArray)
-        {
-            int loops = (int)splineRes;//Mathf.FloorToInt(1f / res);
-            float res = 1f / splineRes;
-            int l = pointArray.Length;
-            Point[] output = new Point[l * loops];
-            int nextPoint = 0;
-            for (int i = 0; i < l; i++)
-            {
-                Vector3 p0 = pointArray[ClampPos(i - 1, l)].Position;
-                Vector3 p1 = pointArray[i].Position;
-                Vector3 p2 = pointArray[ClampPos(i + 1, l)].Position;
-                Vector3 p3 = pointArray[ClampPos(i + 2, l)].Position;
-
-                for (int j = 0; j < loops; j++)
-                {
-                    float t = j * res;
-                    Vector3 newPos = GetCatmullRomPosition(t, p0, p1, p2, p3);
-                    output[nextPoint] = new Point(
-                        newPos.x,
-                        newPos.y,
-                        newPos.z,
-                        pointArray[i].Name,
-                        pointArray[i].Color,
-                        pointArray[i].ColorRGB
-                        );
-                    nextPoint++;
-                }
-            }
-            return output;
-        }
-
-        //http://www.iquilezles.org/www/articles/minispline/minispline.htm
-        private Vector3 GetCatmullRomPosition(float t, Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3)
-        {
-            p0 *= 1000;
-            p1 *= 1000;
-            p2 *= 1000;
-            p3 *= 1000;
-            //The coefficients of the cubic polynomial (except the 0.5f * which is added later for performance)
-            Vector3 a = 2f * p1;
-            Vector3 b = p2 - p0;
-            Vector3 c = 2f * p0 - 5f * p1 + 4f * p2 - p3;
-            Vector3 d = -p0 + 3f * p1 - 3f * p2 + p3;
-
-            //The cubic polynomial: a + b * t + c * t^2 + d * t^3
-            Vector3 pos = 0.5f * (a + (b * t) + (c * t * t) + (d * t * t * t));
-
-            return pos / 1000;
-        }
-
-        private int ClampPos(int i, int l)
-        {
-            if (i < 0)
-                return l - 1;
-            if (i > l)
-                return 1;
-            if (i > l - 1)
-                return 0;
-            return i;
-        }
-
         ~Curve()
         {
             foreach (GameObject cyl in cylinders)
@@ -280,14 +276,6 @@ namespace Assets.Scripts
                 UnityEngine.Object.Destroy(cyl);
             }
             cylinders.Clear();
-        }
-
-        internal List<Point> Points
-        {
-            get
-            {
-                return points;
-            }
         }
 
         public int Scale
@@ -303,6 +291,14 @@ namespace Assets.Scripts
             get
             {
                 return sphereWidth;
+            }
+        }
+
+        internal List<Point> Points
+        {
+            get
+            {
+                return points;
             }
         }
 
@@ -377,7 +373,7 @@ namespace Assets.Scripts
             float alpha = 1.0f;
             Gradient gradient = new Gradient();
             gradient.SetKeys(
-                new GradientColorKey[] { new GradientColorKey(red ? Color.red : Color.blue, 1.0f), new GradientColorKey(red ? Color.red : Color.blue, 1.0f) },
+                new GradientColorKey[] { new GradientColorKey(Design.GetClosestColor(red ? 0f : 1f), 1.0f), new GradientColorKey(Design.GetClosestColor(red ? 0f : 1f), 1.0f) },
                 new GradientAlphaKey[] { new GradientAlphaKey(alpha, 1.0f), new GradientAlphaKey(alpha, 1.0f) }
                 );
             renderedLine.colorGradient = gradient;
@@ -415,7 +411,7 @@ namespace Assets.Scripts
             int[] widths = new int[8];
             float i_last = 0f;
             int idx = 0;
-            for (float i = min; i < max; i+=step)
+            for (float i = min; i < max; i += step)
             {
                 foreach (float c in colorsIn)
                 {
@@ -477,8 +473,6 @@ namespace Assets.Scripts
             return outSpace;
         }
 
-        
-
         private GameObject BuildConnector(Connector connector)
         {
             GameObject cylinder = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
@@ -493,6 +487,94 @@ namespace Assets.Scripts
             Vector3 scale = new Vector3(cylinderWidth, offset.magnitude / 2f, cylinderWidth);
             cylinder.transform.localScale = scale;
             return cylinder;
+        }
+
+        private int ClampPos(int i, int l)
+        {
+            if (i < 0)
+                return l - 1;
+            if (i > l)
+                return 1;
+            if (i > l - 1)
+                return 0;
+            return i;
+        }
+
+        //http://www.iquilezles.org/www/articles/minispline/minispline.htm
+        private Vector3 GetCatmullRomPosition(float t, Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3)
+        {
+            p0 *= 1000;
+            p1 *= 1000;
+            p2 *= 1000;
+            p3 *= 1000;
+            //The coefficients of the cubic polynomial (except the 0.5f * which is added later for performance)
+            Vector3 a = 2f * p1;
+            Vector3 b = p2 - p0;
+            Vector3 c = 2f * p0 - 5f * p1 + 4f * p2 - p3;
+            Vector3 d = -p0 + 3f * p1 - 3f * p2 + p3;
+
+            //The cubic polynomial: a + b * t + c * t^2 + d * t^3
+            Vector3 pos = 0.5f * (a + (b * t) + (c * t * t) + (d * t * t * t));
+
+            return pos / 1000;
+        }
+
+        //Based on http://www.habrador.com/tutorials/interpolation/1-catmull-rom-splines//
+        private Vector3[] MakeSplines(Vector3[] pointarray)
+        {
+            int loops = (int)splineRes;//Mathf.FloorToInt(1f / res);
+            float res = 1f / splineRes;
+            int l = pointarray.Length;
+            Vector3[] output = new Vector3[l * loops];
+            int nextPoint = 0;
+            for (int i = 0; i < l; i++)
+            {
+                Vector3 p0 = pointarray[ClampPos(i - 1, l)];
+                Vector3 p1 = pointarray[i];
+                Vector3 p2 = pointarray[ClampPos(i + 1, l)];
+                Vector3 p3 = pointarray[ClampPos(i + 2, l)];
+
+                for (int j = 0; j < loops; j++)
+                {
+                    float t = j * res;
+                    Vector3 newPos = GetCatmullRomPosition(t, p0, p1, p2, p3);
+                    output[nextPoint] = newPos;
+                    nextPoint++;
+                }
+            }
+            return output;
+        }
+
+        private Point[] MakeSplines(Point[] pointArray)
+        {
+            int loops = (int)splineRes;//Mathf.FloorToInt(1f / res);
+            float res = 1f / splineRes;
+            int l = pointArray.Length;
+            Point[] output = new Point[l * loops];
+            int nextPoint = 0;
+            for (int i = 0; i < l; i++)
+            {
+                Vector3 p0 = pointArray[ClampPos(i - 1, l)].Position;
+                Vector3 p1 = pointArray[i].Position;
+                Vector3 p2 = pointArray[ClampPos(i + 1, l)].Position;
+                Vector3 p3 = pointArray[ClampPos(i + 2, l)].Position;
+
+                for (int j = 0; j < loops; j++)
+                {
+                    float t = j * res;
+                    Vector3 newPos = GetCatmullRomPosition(t, p0, p1, p2, p3);
+                    output[nextPoint] = new Point(
+                        newPos.x,
+                        newPos.y,
+                        newPos.z,
+                        pointArray[i].Name,
+                        pointArray[i].Color,
+                        pointArray[i].ColorRGB
+                        );
+                    nextPoint++;
+                }
+            }
+            return output;
         }
     }
 }

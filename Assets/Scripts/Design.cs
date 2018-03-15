@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
-
-
 public enum Formats
 {
     HoloLens, Projection, Heatmap, Vive
@@ -13,7 +10,7 @@ public enum Formats
 public enum Tasks
 {
     PointDistance, SegmentDistance, CurveComparison, AttributeUnderstanding, TouchingSegments,
-    LargerTad
+    LargerTad, Triple
 }
 
 public class Design
@@ -40,24 +37,30 @@ public class Design
 
     public static Color GetClosestColor(float c)
     {
-        if(c > 1f)
+        if (c > 1f)
         {
             Debug.LogWarning(c + " is >1 in Design.GetClosestColor()! Defaulting to 1...");
             return standardColors[standardColors.Count - 1];
         }
-        int idx = (int)Math.Floor(c * (standardColors.Count-1));
+        int idx = (int)Math.Floor(c * (standardColors.Count - 1));
         return standardColors[idx];
     }
 
+    public static string TASK_DESCRIPTION_TRIPLE =
+        @"NEW TASK: Touching Triples
 
-    public static string TASK_LARGER_TAD =
+...
+
+Call the instructor before continuing.";
+
+    public static string TASK_DESCRIPTION_LARGER_TAD =
         @"NEW TASK: Larger TAD
 
 ...
 
 Call the instructor before continuing.";
 
-    public static string TASK_TOUCHING_SEGMENTS =
+    public static string TASK_DESCRIPTION_TOUCHING_SEGMENTS =
         @"NEW TASK: Touching Segments
 ...
 

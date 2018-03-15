@@ -1,8 +1,7 @@
 ﻿using Assets.Scripts;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
-
 
 public class ObjectManager3D : MonoBehaviour, IObjectManager
 {
@@ -120,12 +119,12 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
 
     private GameObject BuildSphere()
     {
-        return BuildSphere(Color.blue, new Vector3(0, 0, 0));
+        return BuildSphere(Design.GetClosestColor(1f), new Vector3(0, 0, 0));
     }
 
     private GameObject BuildSphere(Vector3 position)
     {
-        return BuildSphere(Color.blue, position);
+        return BuildSphere(Design.GetClosestColor(1f), position);
     }
 
     public void SetupPointDistanceTrial(PointDistanceTrial pdt, string chrfn)
@@ -137,11 +136,11 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
         {
             if (point.Name == pdt.BlueA || point.Name == pdt.BlueB)
             {
-                spheres.Add(BuildSphere(Color.blue, point.Position));
+                spheres.Add(BuildSphere(Design.GetClosestColor(1f), point.Position));
             }
             else if (point.Name == pdt.RedA || point.Name == pdt.RedB)
             {
-                spheres.Add(BuildSphere(Color.red, point.Position));
+                spheres.Add(BuildSphere(Design.GetClosestColor(0f), point.Position));
             }
         }
     }
@@ -196,7 +195,6 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
     {
         for (int c = 0; c < 7; c++)
         {
-            
             GameObject go = new GameObject("SpectrumRenderer" + c);
             go.transform.parent = GameObject.Find("Main Camera").transform;
             LineRenderer spectrumRenderer = go.AddComponent<LineRenderer>();
@@ -205,17 +203,17 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
             spectrumRenderer.widthMultiplier = 0.1f / Curve.scale;
             spectrumRenderer.positionCount = 2;
             spectrumRenderer.useWorldSpace = false;
-            Vector3[] spectrumPoints = { new Vector3(((3f / 7) * (c)) - 1.5f, 1, 4), new Vector3(((3f/7)*(c+1))-1.5f, 1, 4) };
+            Vector3[] spectrumPoints = { new Vector3(((3f / 7) * (c)) - 1.5f, 1, 4), new Vector3(((3f / 7) * (c + 1)) - 1.5f, 1, 4) };
             spectrumRenderer.SetPositions(spectrumPoints);
             List<GradientColorKey> gradientColorKeys = new List<GradientColorKey>();
             List<GradientAlphaKey> gradientAlphaKeys = new List<GradientAlphaKey>();
             int increment = (int)Math.Floor(outSpace.Count / 8f);
             float alpha = 1.0f;
-            for (float i = c; i < (c+1); i+=(1/8f))
+            for (float i = c; i < (c + 1); i += (1 / 8f))
             {
                 int idx = (int)Math.Floor(i * increment);
-                gradientColorKeys.Add(new GradientColorKey(outSpace[idx], i-c));
-                gradientAlphaKeys.Add(new GradientAlphaKey(alpha, i-c));
+                gradientColorKeys.Add(new GradientColorKey(outSpace[idx], i - c));
+                gradientAlphaKeys.Add(new GradientAlphaKey(alpha, i - c));
             }
             Gradient gradient = new Gradient();
             gradient.SetKeys(
@@ -237,7 +235,7 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
         //    Vector3[] spectrumPoints = { p + new Vector3(-1, -1, 4), p + new Vector3(1, -1, 4) };
         //    spectrumRenderer.SetPositions(spectrumPoints);
         //}
-        
+    
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Destroy(gameObject.GetComponent<LineRenderer>());
@@ -348,16 +346,16 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
     {
         bool isFast = (tst.StudyFormat == Formats.HoloLens);
 
-        mainCurve = new Curve(tst.Chrom, tst.Count, tst.Count);
+        mainCurve = new Curve(tst.Chrom, tst.Skip, tst.Count);
         foreach (Point point in mainCurve.Points)
         {
             if (point.IsBlue)
             {
-                spheres.Add(BuildSphere(Color.blue, point.Position + Curve.displacement, true));
+                spheres.Add(BuildSphere(Design.GetClosestColor(1f), point.Position + Curve.displacement, true));
             }
             else if (point.IsRed)
             {
-                spheres.Add(BuildSphere(Color.red, point.Position + Curve.displacement, true));
+                spheres.Add(BuildSphere(Design.GetClosestColor(0f), point.Position + Curve.displacement, true));
             }
         }
     }
@@ -367,5 +365,12 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
         bool isFast = (ltt.StudyFormat == Formats.HoloLens);
 
         mainCurve = new Curve(ltt.Chrom, false, fast: isFast);
+    }
+
+    public void SetupTripleTrial(TripleTrial tt)
+    {
+        bool isFast = (tt.StudyFormat == Formats.HoloLens);
+
+        mainCurve = new Curve(tt.Chrom, tt.Skip, tt.Count, triple: true);
     }
 }

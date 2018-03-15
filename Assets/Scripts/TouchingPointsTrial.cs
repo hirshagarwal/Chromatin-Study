@@ -5,12 +5,14 @@ namespace Assets.Scripts
     public class TouchingPointsTrial : IGenericTrial
     {
         private string chrom;
+        private int skip;
         private int count;
         private Formats studyFormat;
 
-        public TouchingPointsTrial(string chrom, string count, Formats studyFormat)
+        public TouchingPointsTrial(string chrom, string skip, string count, Formats studyFormat)
         {
             this.chrom = chrom;
+            this.skip = Int32.Parse(skip);
             this.count = Int32.Parse(count);
             this.studyFormat = studyFormat;
         }
@@ -36,6 +38,14 @@ namespace Assets.Scripts
             get
             {
                 return studyFormat;
+            }
+        }
+
+        public int Skip
+        {
+            get
+            {
+                return skip;
             }
         }
 

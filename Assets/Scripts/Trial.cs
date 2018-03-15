@@ -73,6 +73,7 @@ namespace Assets.Scripts
                 trialDetails = new TouchingPointsTrial(
                     trialConditions[6],
                     trialConditions[7],
+                    trialConditions[8],
                     format
                     );
             }
@@ -82,6 +83,16 @@ namespace Assets.Scripts
                 trialDetails = new LargerTadTrial(
                     trialConditions[6],
                     trialConditions[7],
+                    format
+                    );
+            }
+            else if (Tasks.Triple.ToString() == trialConditions[3])
+            {
+                task = Tasks.Triple;
+                trialDetails = new TripleTrial(
+                    trialConditions[6],
+                    trialConditions[7],
+                    trialConditions[8],
                     format
                     );
             }

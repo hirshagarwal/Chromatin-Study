@@ -204,7 +204,8 @@ Please, call the instructor.";
         {
             panelCanvas.SetActive(true);
             choicePanelTad.SetActive(true);
-        }else
+        }
+        else
         {
             throw new Exception("Recording for " + currentTrial.Task.ToString() + " not implemented");
         }
@@ -329,11 +330,15 @@ Please, call the instructor.";
         }
         else if (task == Tasks.TouchingSegments)
         {
-            infoMessage.text = Design.TASK_TOUCHING_SEGMENTS;
+            infoMessage.text = Design.TASK_DESCRIPTION_TOUCHING_SEGMENTS;
         }
         else if (task == Tasks.LargerTad)
         {
-            infoMessage.text = Design.TASK_LARGER_TAD;
+            infoMessage.text = Design.TASK_DESCRIPTION_LARGER_TAD;
+        }
+        else if (task == Tasks.Triple)
+        {
+            infoMessage.text = Design.TASK_DESCRIPTION_TRIPLE;
         }
         else
         {
@@ -499,6 +504,10 @@ Please, call the instructor.";
         else if (currentTrial.Task == Tasks.LargerTad)
         {
             objectManager.SetupLargerTadTrial(currentTrial.TrialDetails as LargerTadTrial);
+        }
+        else if (currentTrial.Task == Tasks.Triple)
+        {
+            objectManager.SetupTripleTrial(currentTrial.TrialDetails as TripleTrial);
         }
         else
         {

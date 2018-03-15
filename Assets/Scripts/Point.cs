@@ -15,6 +15,7 @@ namespace Assets.Scripts
         private float color;
         private bool isRed = false;
         private bool isBlue = false;
+        private bool isYellow = false;
         private Color colorRGB = Design.GetClosestColor(0.5f);
         private Vector3 position;
 
@@ -61,6 +62,17 @@ namespace Assets.Scripts
             start = Int32.Parse(nameparts[1]);
             end = Int32.Parse(nameparts[2]);
             color = float.Parse(parameters[4]);
+        }
+
+        public Point Interpolate(Point other)
+        {
+            return new Point(
+                (x + other.X) / 2f,
+                (y + other.Y) / 2f,
+                (z + other.Z) / 2f,
+                name,
+                (color + other.Color) / 2f
+                );
         }
 
         public Point Displaced(Vector3 displacement)
@@ -191,6 +203,16 @@ namespace Assets.Scripts
             get { return y; }
         }
 
+        public float Z
+        {
+            get { return z; }
+        }
+
+        public void MakeYellow()
+        {
+            isYellow = true;
+        }
+
         public void MakeRed()
         {
             isRed = true;
@@ -206,6 +228,11 @@ namespace Assets.Scripts
             get { return name; }
         }
 
+        public bool HasColor()
+        {
+            return isRed || isBlue || isYellow;
+        }
+
         public bool IsRed
         {
             get
@@ -219,6 +246,14 @@ namespace Assets.Scripts
             get
             {
                 return isBlue;
+            }
+        }
+
+        public bool IsYellow
+        {
+            get
+            {
+                return isYellow;
             }
         }
     }
