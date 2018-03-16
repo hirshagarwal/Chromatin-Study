@@ -110,7 +110,7 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
         }
     }
 
-    private Texture2D ReadInFile(string filename, float red = 1.0f, float green = 0.0f, float blue = 0.0f, Range redA = null, Range redB = null, Range blueA = null, Range blueB = null, bool isRange = false, bool attributeUnderstanding = false)
+    private Texture2D ReadInFile(string filename, Range redA = null, Range redB = null, Range blueA = null, Range blueB = null, bool isRange = false, bool attributeUnderstanding = false)
     {
         TextAsset file = Resources.Load(filename) as TextAsset;
         int counter = 0;
@@ -149,6 +149,7 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
                 if (interactions.ContainsKey(uniqueRanges[itrcx]) && interactions[uniqueRanges[itrcx]].ContainsKey(uniqueRanges[itrcy]))
                     col += interactions[uniqueRanges[itrcx]][uniqueRanges[itrcy]];
                 Color color = Design.GetClosestColor(0.5f);
+                float colval = threshold * (1 - threshold * (col / maxCol));
                 if (studyTask == Tasks.PointDistance || studyTask == Tasks.SegmentDistance)
                 {
                     if (isRange)
@@ -163,7 +164,7 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
                         }
                         else if (col > 0)
                         {
-                            color = Design.GetClosestColor(threshold * (1 - threshold * (col / maxCol)));
+                            color = Design.GetClosestColor(colval);
                         }
                     }
                     else
@@ -178,18 +179,40 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
                         }
                         else if (col > 0)
                         {
-                            color = Design.GetClosestColor(threshold * (1 - threshold * (col / maxCol)));
+                            color = Design.GetClosestColor(colval);
                         }
                     }
                 }
-                else if (attributeUnderstanding || studyTask == Tasks.LargerTad)
+                else if (attributeUnderstanding)
                 {
                     if (col > 0)
-                        color = Design.GetClosestColor(threshold * (1 - threshold * (col / maxCol)));
+                        color = Design.GetClosestColor(colval);
+                }
+                else if (studyTask == Tasks.LargerTad)
+                {
+                    if (col > 0)
+                    {
+                        if (itrcx < buckets / 10 &&
+                            itrcy < buckets / 10)
+                        {
+                            color = Design.GetClosestColor(1f - colval);
+                        }
+                        else if (itrcx > (buckets - (buckets / 10)) &&
+                          itrcy > (buckets - (buckets / 10)))
+                        {
+                            color = Design.GetClosestColor(colval);
+                        } else
+                        {
+                            color = Design.GetClosestColor(0.5f);
+                        }
+                    } else
+                    {
+                        color = Color.white;
+                    }
                 }
                 else if (col > 0)
                 {
-                    color = Design.GetClosestColor(threshold * (1 - threshold * (col / maxCol)));
+                    color = Design.GetClosestColor(colval);
                 }
                 tex.SetPixel(x, y, color);
                 y--;
@@ -249,14 +272,15 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
             filename = files[current_file] + "_formatted.bed." + chrtype;
         Debug.Log("Loading file: " + filename);
         mainTexture = CreateTexture(filename);
+        mainSpriteRenderer.enabled = true;
         mainSpriteRenderer = DisplayTexture(mainTexture, mainSprite, mainSpriteRenderer, 1);
     }
 
-    private Texture2D CreateTexture(string filename = "", float red = 1.0f, float green = 0.0f, float blue = 0.0f, Range redA = null, Range redB = null, Range blueA = null, Range blueB = null, bool isRange = false, bool attributeUnderstanding = false)
+    private Texture2D CreateTexture(string filename = "", Range redA = null, Range redB = null, Range blueA = null, Range blueB = null, bool isRange = false, bool attributeUnderstanding = false)
     {
         if ("" == filename)
             filename = files[current_file] + "_formatted.bed." + chrtype;
-        return ReadInFile(filename, red, green, blue, redA, redB, blueA, blueB, isRange, attributeUnderstanding);
+        return ReadInFile(filename, redA, redB, blueA, blueB, isRange, attributeUnderstanding);
     }
 
     private SpriteRenderer DisplayTexture(Texture2D tex, Sprite sprite, SpriteRenderer spriteRenderer, int scale)
@@ -335,6 +359,11 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
             }
             LoadNextFile();
         }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            mainSpriteRenderer.enabled = false;
+        }
     }
 
     //void LateUpdate()
@@ -353,9 +382,9 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
     public void SetupCurveComparisonTrial(CurveComparisonTrial curveComparisonTrial)
     {
         studyTask = Tasks.CurveComparison;
-        mainTexture = CreateTexture(curveComparisonTrial.ReferenceChromosome, 0.0f, 0.0f, 0.0f);
-        redTexture = CreateTexture(curveComparisonTrial.RedChromosome, 1.0f, 0.0f, 0.0f);
-        blueTexture = CreateTexture(curveComparisonTrial.BlueChromosome, 0.0f, 0.0f, 1.0f);
+        mainTexture = CreateTexture(curveComparisonTrial.ReferenceChromosome);
+        redTexture = CreateTexture(curveComparisonTrial.RedChromosome);
+        blueTexture = CreateTexture(curveComparisonTrial.BlueChromosome);
 
         mainSpriteRenderer = DisplayTexture(mainTexture, mainSprite, mainSpriteRenderer, 3);
         redSpriteRenderer = DisplayTexture(redTexture, redSprite, redSpriteRenderer, 3);
@@ -369,7 +398,7 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
         Range redB = new Range(pdt.RedB);
         Range blueA = new Range(pdt.BlueA);
         Range blueB = new Range(pdt.BlueB);
-        mainTexture = CreateTexture(pdt.Chromosome, 0.0f, 0.0f, 0.0f, redA, redB, blueA, blueB);
+        mainTexture = CreateTexture(pdt.Chromosome, redA, redB, blueA, blueB);
         mainSpriteRenderer = DisplayTexture(mainTexture, mainSprite, mainSpriteRenderer, 1);
     }
 
@@ -390,7 +419,7 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
         Range redB = new Range(sdt.RedB);
         Range blueA = new Range(sdt.BlueA);
         Range blueB = new Range(sdt.BlueB);
-        mainTexture = CreateTexture(sdt.Chromosome, 0.0f, 0.0f, 0.0f, redA, redB, blueA, blueB, true);
+        mainTexture = CreateTexture(sdt.Chromosome, redA, redB, blueA, blueB, true);
         mainSpriteRenderer = DisplayTexture(mainTexture, mainSprite, mainSpriteRenderer, 1);
     }
 
@@ -401,6 +430,7 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
 
     public void SetupLargerTadTrial(LargerTadTrial ltt)
     {
+        mainSpriteRenderer.enabled = true;
         studyTask = Tasks.LargerTad;
         mainTexture = CreateTexture(ltt.Chrom);
         mainSpriteRenderer = DisplayTexture(mainTexture, mainSprite, mainSpriteRenderer, 1);
