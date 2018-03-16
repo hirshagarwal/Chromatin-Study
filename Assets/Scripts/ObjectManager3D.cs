@@ -136,11 +136,11 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
         {
             if (point.Name == pdt.BlueA || point.Name == pdt.BlueB)
             {
-                spheres.Add(BuildSphere(Design.GetClosestColor(1f), point.Position));
+                spheres.Add(BuildSphere(Design.GetClosestColor(1f), point.Position + Curve.displacement, force: true));
             }
             else if (point.Name == pdt.RedA || point.Name == pdt.RedB)
             {
-                spheres.Add(BuildSphere(Design.GetClosestColor(0f), point.Position));
+                spheres.Add(BuildSphere(Design.GetClosestColor(0f), point.Position + Curve.displacement, force: true));
             }
         }
     }
@@ -235,7 +235,7 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
         //    Vector3[] spectrumPoints = { p + new Vector3(-1, -1, 4), p + new Vector3(1, -1, 4) };
         //    spectrumRenderer.SetPositions(spectrumPoints);
         //}
-    
+
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Destroy(gameObject.GetComponent<LineRenderer>());
@@ -347,24 +347,13 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
         bool isFast = (tst.StudyFormat == Formats.HoloLens);
 
         mainCurve = new Curve(tst.Chrom, tst.Skip, tst.Count);
-        foreach (Point point in mainCurve.Points)
-        {
-            if (point.IsBlue)
-            {
-                spheres.Add(BuildSphere(Design.GetClosestColor(1f), point.Position + Curve.displacement, true));
-            }
-            else if (point.IsRed)
-            {
-                spheres.Add(BuildSphere(Design.GetClosestColor(0f), point.Position + Curve.displacement, true));
-            }
-        }
     }
 
     public void SetupLargerTadTrial(LargerTadTrial ltt)
     {
         bool isFast = (ltt.StudyFormat == Formats.HoloLens);
 
-        mainCurve = new Curve(ltt.Chrom, false, fast: isFast);
+        mainCurve = new Curve(ltt.Chrom, false, fast: isFast, tad: true);
     }
 
     public void SetupTripleTrial(TripleTrial tt)

@@ -13,6 +13,7 @@ public class StudyManager : MonoBehaviour
     public static GameObject choicePanelUnderstanding;
     public static GameObject choicePanelTouching;
     public static GameObject choicePanelTad;
+    public static GameObject choicePanelTriple;
     public static TimeSpan duration;
     public static GameObject feedbackPanel;
     public static string FILE_SEPARATOR = "\\";
@@ -134,6 +135,14 @@ Please, call the instructor.";
             if (rawAnswer.Contains("AnswerButton_Blue"))
                 correct = ((LargerTadTrial)currentTrial.TrialDetails).Correct(1).ToString();
         }
+        else if (currentTrial.Task == Tasks.Triple)
+        {
+            print(">>> TRIPLE ANSWER: " + rawAnswer);
+            if (rawAnswer.Contains("AnswerButton_Red"))
+                correct = ((TripleTrial)currentTrial.TrialDetails).Correct(true).ToString();
+            if (rawAnswer.Contains("AnswerButton_Blue"))
+                correct = ((TripleTrial)currentTrial.TrialDetails).Correct(false).ToString();
+        }
         else
         {
             throw new Exception("Result test for " + currentTrial.Task.ToString() + " not implemented");
@@ -158,6 +167,7 @@ Please, call the instructor.";
         choicePanelTouching.SetActive(false);
         choicePanelUnderstanding.SetActive(false);
         choicePanelTad.SetActive(false);
+        choicePanelTriple.SetActive(false);
         infoPanel.SetActive(false);
         feedbackPanel.SetActive(true);
         panelCanvas.SetActive(true);
@@ -204,6 +214,11 @@ Please, call the instructor.";
         {
             panelCanvas.SetActive(true);
             choicePanelTad.SetActive(true);
+        }
+        else if (currentTrial.Task == Tasks.Triple)
+        {
+            panelCanvas.SetActive(true);
+            choicePanelTriple.SetActive(true);
         }
         else
         {
@@ -432,6 +447,10 @@ Please, call the instructor.";
         GameObject.Find("AnswerButton_RedTad").GetComponent<GenericButton>().value = "red";
         GameObject.Find("AnswerButton_BlueTad").AddComponent<GenericButton>();
         GameObject.Find("AnswerButton_BlueTad").GetComponent<GenericButton>().value = "blue";
+        GameObject.Find("AnswerButton_RedTriple").AddComponent<GenericButton>();
+        GameObject.Find("AnswerButton_RedTriple").GetComponent<GenericButton>().value = "red";
+        GameObject.Find("AnswerButton_BlueTriple").AddComponent<GenericButton>();
+        GameObject.Find("AnswerButton_BlueTriple").GetComponent<GenericButton>().value = "blue";
         GameObject.Find("AnswerButton_3").AddComponent<GenericButton>();
         GameObject.Find("AnswerButton_4").AddComponent<GenericButton>();
         GameObject.Find("AnswerButton_5").AddComponent<GenericButton>();
@@ -463,6 +482,9 @@ Please, call the instructor.";
 
         choicePanelTad = GameObject.Find("ChoicePanelTad");
         choicePanelTad.SetActive(false);
+
+        choicePanelTriple = GameObject.Find("ChoicePanelTriple");
+        choicePanelTriple.SetActive(false);
 
         choicePanelUnderstanding = GameObject.Find("ChoicePanelUnderstanding");
         choicePanelUnderstanding.SetActive(false);

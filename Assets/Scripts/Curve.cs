@@ -45,26 +45,26 @@ namespace Assets.Scripts
             {
                 MutateCurveTouchingPoints(redCount, rnd);
 
-
-                foreach (Point point in points)
-                {
-                    colorsIn.Add(point.Color);
-                    if (point.Color > maxColor)
-                        maxColor = point.Color;
-                }
-                colorSpace = BuildColorMap(colorsIn);
-                colorWidth = BuildColorCurve(colorsIn);
-                int stepsize = colorSpace.Count / points.Count;
-                for (int i = 0; i < points.Count; i++)
-                {
-                    int idx = (int)Math.Floor((points[i].Color / maxColor) * (colorSpace.Count - 1));
-                    points[i].ColorRGB = colorSpace[idx];
-                }
+                //foreach (Point point in points)
+                //{
+                //    colorsIn.Add(point.Color);
+                //    if (point.Color > maxColor)
+                //        maxColor = point.Color;
+                //}
+                //colorSpace = BuildColorMap(colorsIn);
+                //colorWidth = BuildColorCurve(colorsIn);
+                //int stepsize = colorSpace.Count / points.Count;
+                //for (int i = 0; i < points.Count; i++)
+                //{
+                //    int idx = (int)Math.Floor((points[i].Color / maxColor) * (colorSpace.Count - 1));
+                //    points[i].ColorRGB = colorSpace[idx];
+                //}
             }
             cylinders = new List<GameObject>();
             List<Connector> connectors = new List<Connector>();
             Point[] splinePoints = MakeSplines(points.ToArray());
             Point lastPoint = splinePoints[0];
+            
             for (int i = 0; i < splinePoints.Length; i++)
             {
                 connectors.Add(
@@ -78,6 +78,10 @@ namespace Assets.Scripts
 
         private void MutateCurveTouchingPoints(int redCount, System.Random rnd)
         {
+            for (int i = 0; i < points.Count; i++)
+            {
+                points[i].ColorRGB = Design.GetClosestColor(0.5f);
+            }
             int currentReds = 0;
             splineRes *= 2;
             while (currentReds < redCount)
@@ -87,11 +91,22 @@ namespace Assets.Scripts
                     int r = rnd.Next(25);
                     if (r == 2)
                     {
-                        if (!points[i].IsRed && !points[i].IsBlue)
+                        if (
+                            !points[i].HasColor() &&
+                            i > 0 &&
+                            i < points.Count - 2 &&
+                            !points[i - 1].HasColor() &&
+                            !points[i + 1].HasColor()
+                            )
                         {
-                            points[i] = points[i].Displaced(new Vector3(rnd.Next(10) / 10f, rnd.Next(10) / 10f, rnd.Next(10) / 10f));
-                            points[ClampPos(i - 1, points.Count)].MakeRed();
-                            points[ClampPos(i + 1, points.Count)].MakeBlue();
+                            if (currentReds < redCount)
+                            {
+                                points[i] = points[i].Displaced(new Vector3(rnd.Next(10) / 10f, rnd.Next(10) / 10f, rnd.Next(10) / 10f));
+                            }
+                            points[i - 1].MakeRed();
+                            points[i - 1].ColorRGB = Design.GetClosestColor(0f);
+                            points[i + 1].MakeBlue();
+                            points[i + 1].ColorRGB = Design.GetClosestColor(1f);
                             currentReds++;
                         }
                     }
@@ -131,17 +146,27 @@ namespace Assets.Scripts
                             Point leftBegin = startPoint.Displaced(new Vector3(rnd.Next(10) / 100f, rnd.Next(10) / 100f, rnd.Next(10) / 100f));
                             Point rightBegin = startPoint.Displaced(new Vector3(rnd.Next(10) / 100f, rnd.Next(10) / 100f, rnd.Next(10) / 100f));
 
-                            points.Insert(i, leftInterpolated);
-                            points.Insert(i + 2, rightInterpolated);
-                            points.Insert(i - 1, leftBegin);
-                            points.Insert(i + 5, rightBegin);
+                            if (currentReds < redCount)
+                            {
+                                points.Insert(i, leftInterpolated);
+                                points.Insert(i + 2, rightInterpolated);
+                                points.Insert(i - 1, leftBegin);
+                                points.Insert(i + 5, rightBegin);
 
-                            points[i - 1].MakeBlue();
-                            points[i - 1].ColorRGB = Design.GetClosestColor(0f);
-                            points[i + 2].MakeYellow();
-                            points[i + 5].MakeRed();
-                            points[i + 5].ColorRGB = Design.GetClosestColor(1f);
-
+                                points[i - 1].MakeBlue();
+                                points[i - 1].ColorRGB = Design.GetClosestColor(0f);
+                                points[i + 2].MakeYellow();
+                                points[i + 5].MakeRed();
+                                points[i + 5].ColorRGB = Design.GetClosestColor(1f);
+                            }
+                            else
+                            {
+                                points[i - 1].MakeBlue();
+                                points[i - 1].ColorRGB = Design.GetClosestColor(0f);
+                                points[i].MakeYellow();
+                                points[i + 1].MakeRed();
+                                points[i + 1].ColorRGB = Design.GetClosestColor(1f);
+                            }
                             currentReds++;
                         }
                     }
@@ -251,11 +276,13 @@ namespace Assets.Scripts
             {
                 cylinders = new List<GameObject>();
                 Point[] splinePoints = MakeSplines(points.ToArray());
-                //if (triple)
-                //{
-                //    splinePoints[0].MakeRed();
-                //    splinePoints[splinePoints.Count() - 1].MakeBlue();
-                //}
+                if (grayscale)
+                {
+                    for (int i = 0; i < splinePoints.Length; i++)
+                    {
+                        splinePoints[i].ColorRGB = color;
+                    }
+                }
                 Point lastPoint = splinePoints[0];
                 for (int i = 0; i < splinePoints.Length; i++)
                 {
