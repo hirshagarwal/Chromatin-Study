@@ -110,7 +110,7 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
         }
     }
 
-    private Texture2D ReadInFile(string filename, Range redA = null, Range redB = null, Range blueA = null, Range blueB = null, bool isRange = false, bool attributeUnderstanding = false)
+    private Texture2D ReadInFile(string filename, Range redA = null, Range redB = null, Range blueA = null, Range blueB = null, bool isRange = false, bool attributeUnderstanding = false, int redCount = -1, int skip = 1)
     {
         TextAsset file = Resources.Load(filename) as TextAsset;
         int counter = 0;
@@ -136,14 +136,13 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
         Resources.UnloadAsset(file);
         List<Range> uniqueRanges = new HashSet<Range>(ranges).ToList();
         uniqueRanges.Sort();
-        int items_per_bucket = 1;
-        int buckets = uniqueRanges.Count / items_per_bucket;
+        int buckets = uniqueRanges.Count / skip;
         Texture2D tex = new Texture2D(buckets, buckets);
         int x = 0;
         int y = uniqueRanges.Count;
-        for (int itrcx = 0; itrcx < buckets; itrcx++)
+        for (int itrcx = 0; itrcx < buckets; itrcx+=skip)
         {
-            for (int itrcy = 0; itrcy < buckets; itrcy++)
+            for (int itrcy = 0; itrcy < buckets; itrcy+=skip)
             {
                 float col = 0f;
                 if (interactions.ContainsKey(uniqueRanges[itrcx]) && interactions[uniqueRanges[itrcx]].ContainsKey(uniqueRanges[itrcy]))
@@ -201,11 +200,13 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
                           itrcy > (buckets - (buckets / 10)))
                         {
                             color = Design.GetClosestColor(colval);
-                        } else
+                        }
+                        else
                         {
                             color = Design.GetClosestColor(0.5f);
                         }
-                    } else
+                    }
+                    else
                     {
                         color = Color.white;
                     }
@@ -219,9 +220,68 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
             }
             x++;
         }
+        if (redCount > -1)
+            tex = MutateTexture(tex, buckets, redCount, skip);
         tex.Apply();
         sortedRanges = uniqueRanges;
         return tex;
+    }
+
+    private Texture2D MutateTexture(Texture2D tex, int buckets, int redCount, int skip)
+    {
+        int currentReds = 0;
+        System.Random rnd = new System.Random(0);
+        List<Tuple<int, int>> modifiedLocations = new List<Tuple<int,int>>();
+        while (currentReds < redCount)
+        {
+            for (int itrcx = 0; itrcx < buckets; itrcx+=skip)
+            {
+                for (int itrcy = 0; itrcy < buckets; itrcy+=skip)
+                {
+                    int r = rnd.Next(25000);
+                    if (r == 2)
+                    {
+                        if (
+                            !modifiedLocations.Contains(new Tuple<int, int>(itrcx, itrcy)) &&
+                            itrcx > 0 &&
+                            itrcx < buckets - 2 &&
+                            !modifiedLocations.Contains(new Tuple<int, int>(itrcx - 1, itrcy)) &&
+                            !modifiedLocations.Contains(new Tuple<int, int>(itrcx + 1, itrcy))
+                            )
+                        {
+                            if (currentReds < redCount)
+                            {
+                                Debug.Log("Setting non-decoy point");
+                                tex.SetPixel(itrcx - 1, itrcy, tex.GetPixel(itrcx - 1, itrcy + 1));
+                                tex.SetPixel(itrcx, itrcy + 1, tex.GetPixel(itrcx - 1, itrcy + 1));
+                                for (int i = itrcx - 1; i <= itrcx + 1; i++)
+                                {
+                                    for (int j = itrcy - 1; j <= itrcy + 1; j++)
+                                    {
+                                        tex.SetPixel(i, j, GetRecolored(i, j, tex));
+                                    }
+                                }
+                                currentReds++;
+                            }
+                            else
+                            {
+                                Debug.Log("Setting decoy point");
+                                tex.SetPixel(itrcx, itrcy, GetRecolored(itrcx, itrcy, tex));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        tex.Apply();
+        return tex;
+    }
+
+    Color GetRecolored(int a, int b, Texture2D tex) => Recolor(tex.GetPixel(a, b));
+
+    private Color Recolor(Color oldColor)
+    {
+        return new Color(0f, 1f, 0f, oldColor.a);
     }
 
     private static void SafelyAdd2D(ref Dictionary<Range, Dictionary<Range, float>> interactions, Square x)
@@ -423,9 +483,12 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
         mainSpriteRenderer = DisplayTexture(mainTexture, mainSprite, mainSpriteRenderer, 1);
     }
 
-    public void SetupTouchingSegments(TouchingPointsTrial touchingSegmentsTrial)
+    public void SetupTouchingSegments(TouchingPointsTrial tst)
     {
-        throw new NotImplementedException();
+        mainSpriteRenderer.enabled = true;
+        studyTask = Tasks.TouchingSegments;
+        mainTexture = ReadInFile(tst.Chrom, redCount: tst.Count, skip:1);
+        mainSpriteRenderer = DisplayTexture(mainTexture, mainSprite, mainSpriteRenderer, 1);
     }
 
     public void SetupLargerTadTrial(LargerTadTrial ltt)

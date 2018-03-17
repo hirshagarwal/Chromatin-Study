@@ -15,9 +15,9 @@ first line is left blank
 1,0,Projection,Triple,0,R,chr16_sen,10,1
 1,0,Projection,TouchingSegments,0,T,chr16_sen,10,1
 1,0,Projection,TouchingSegments,0,R,chr16_sen,10,1
+1,0,Heatmap,TouchingSegments,0,T,16_formatted.bed.sen,10,5
+1,0,Heatmap,TouchingSegments,0,R,16_formatted.bed.sen,10,1
 1,0,Heatmap,LargerTad,0,T,16_formatted.bed.sen,1
 1,0,Heatmap,LargerTad,0,R,16_formatted.bed.sen,1
 1,0,Heatmap,Triple,0,T,16_formatted.bed.sen,10,1
 1,0,Heatmap,Triple,0,R,16_formatted.bed.sen,10,1
-1,0,Heatmap,TouchingSegments,0,T,16_formatted.bed.sen,10,1
-1,0,Heatmap,TouchingSegments,0,R,16_formatted.bed.sen,10,1
