@@ -110,7 +110,7 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
         }
     }
 
-    private Texture2D ReadInFile(string filename, Range redA = null, Range redB = null, Range blueA = null, Range blueB = null, bool isRange = false, bool attributeUnderstanding = false, int redCount = -1, int skip = 1)
+    private Texture2D ReadInFile(string filename, Range redA = null, Range redB = null, Range blueA = null, Range blueB = null, bool isRange = false, bool attributeUnderstanding = false, int redCount = -1, int skip = 1, bool triple = false)
     {
         TextAsset file = Resources.Load(filename) as TextAsset;
         int counter = 0;
@@ -221,7 +221,16 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
             x++;
         }
         if (redCount > -1)
-            tex = MutateTexture(tex, buckets, redCount, skip);
+        {
+            if (triple)
+            {
+                tex = MutateTextureTriple(tex, buckets, redCount, skip);
+            } else
+            {
+                tex = MutateTexture(tex, buckets, redCount, skip);
+            }
+        }
+            
         tex.Apply();
         sortedRanges = uniqueRanges;
         return tex;
@@ -259,9 +268,98 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
                                     for (int j = itrcy - 1; j <= itrcy + 1; j++)
                                     {
                                         tex.SetPixel(i, j, GetRecolored(i, j, tex));
+                                        modifiedLocations.Add(new Tuple<int, int>(i, j));
+
                                     }
                                 }
                                 currentReds++;
+                            }
+                            else
+                            {
+                                Debug.Log("Setting decoy point");
+                                tex.SetPixel(itrcx, itrcy, GetRecolored(itrcx, itrcy, tex));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        tex.Apply();
+        return tex;
+    }
+
+    private Texture2D MutateTextureTriple(Texture2D tex, int buckets, int redCount, int skip)
+    {
+        int currentReds = 0;
+        System.Random rnd = new System.Random(0);
+        List<Tuple<int, int>> modifiedLocations = new List<Tuple<int, int>>();
+        while (currentReds < redCount)
+        {
+            for (int itrcx = 0; itrcx < buckets; itrcx += skip)
+            {
+                for (int itrcy = 0; itrcy < buckets; itrcy += skip)
+                {
+                    int r = rnd.Next(25000);
+                    if (r == 2)
+                    {
+                        bool modifiedBefore = false;
+                        for (int i = itrcx - 3; i <= itrcx + 3; i++)
+                        {
+                            for (int j = itrcy - 3; j <= itrcy + 3; j++)
+                            {
+                                if (modifiedLocations.Contains(new Tuple<int, int>(i, j)))
+                                {
+                                    modifiedBefore = true;
+                                }
+                            }
+                        }
+                        if (
+                            !modifiedBefore &&
+                            itrcx > 2 &&
+                            itrcx < buckets - 4
+                            )
+                        {
+                            if (currentReds < redCount)
+                            {
+                                Debug.Log("Setting non-decoy point");
+                                tex.SetPixel(itrcx - 2, itrcy - 3, GetRecolored(itrcx - 2, itrcy - 3, tex, 1.5f));
+                                tex.SetPixel(itrcx, itrcy - 3, GetRecolored(itrcx, itrcy - 3, tex, 0.5f));
+                                tex.SetPixel(itrcx + 1, itrcy - 3, GetRecolored(itrcx + 1, itrcy - 3, tex, 0.8f));
+                                tex.SetPixel(itrcx + 2, itrcy - 3, GetRecolored(itrcx + 2, itrcy - 3, tex, 0.8f));
+                                tex.SetPixel(itrcx + 3, itrcy - 3, GetRecolored(itrcx + 3, itrcy - 3, tex, 0.3f));
+                                tex.SetPixel(itrcx - 3, itrcy - 2, GetRecolored(itrcx - 3, itrcy - 2, tex, 1.5f));
+                                tex.SetPixel(itrcx - 1, itrcy - 2, GetRecolored(itrcx - 1, itrcy - 2, tex, 1.5f));
+                                tex.SetPixel(itrcx + 1, itrcy - 2, GetRecolored(itrcx + 1, itrcy - 2, tex, 1.3f));
+                                tex.SetPixel(itrcx + 2, itrcy - 2, GetRecolored(itrcx + 2, itrcy - 2, tex, 1.2f));
+                                tex.SetPixel(itrcx + 3, itrcy - 2, GetRecolored(itrcx + 3, itrcy - 2, tex, 0.5f));
+                                tex.SetPixel(itrcx - 2, itrcy - 1, GetRecolored(itrcx - 2, itrcy - 1, tex, 1.5f));
+                                tex.SetPixel(itrcx, itrcy - 1, GetRecolored(itrcx, itrcy - 1, tex, 1.5f));
+                                tex.SetPixel(itrcx + 3, itrcy - 1, GetRecolored(itrcx + 3, itrcy - 1, tex, 0.6f));
+                                tex.SetPixel(itrcx - 3, itrcy, GetRecolored(itrcx - 3, itrcy, tex, 0.5f));
+                                tex.SetPixel(itrcx - 1, itrcy, GetRecolored(itrcx - 1, itrcy, tex, 1.5f));
+                                tex.SetPixel(itrcx + 1, itrcy, GetRecolored(itrcx + 1, itrcy, tex, 1.5f));
+                                tex.SetPixel(itrcx + 3, itrcy, GetRecolored(itrcx + 3, itrcy, tex, 0.5f));
+                                tex.SetPixel(itrcx - 3, itrcy + 1, GetRecolored(itrcx - 3, itrcy + 1, tex, 0.8f));
+                                tex.SetPixel(itrcx - 2, itrcy + 1, GetRecolored(itrcx - 2, itrcy + 1, tex, 1.3f));
+                                tex.SetPixel(itrcx, itrcy + 1, GetRecolored(itrcx, itrcy + 1, tex, 1.5f));
+                                tex.SetPixel(itrcx + 2, itrcy + 1, GetRecolored(itrcx + 2, itrcy + 1, tex, 1.5f));
+                                tex.SetPixel(itrcx - 3, itrcy + 2, GetRecolored(itrcx - 3, itrcy + 2, tex, 0.8f));
+                                tex.SetPixel(itrcx - 2, itrcy + 2, GetRecolored(itrcx - 2, itrcy + 2, tex, 1.2f));
+                                tex.SetPixel(itrcx + 1, itrcy + 2, GetRecolored(itrcx + 1, itrcy + 2, tex, 1.5f));
+                                tex.SetPixel(itrcx + 3, itrcy + 2, GetRecolored(itrcx + 3, itrcy + 2, tex, 1.5f));
+                                tex.SetPixel(itrcx - 3, itrcy + 3, GetRecolored(itrcx - 3, itrcy + 3, tex, 0.3f));
+                                tex.SetPixel(itrcx - 2, itrcy + 3, GetRecolored(itrcx - 2, itrcy + 3, tex, 0.5f));
+                                tex.SetPixel(itrcx - 1, itrcy + 3, GetRecolored(itrcx - 1, itrcy + 3, tex, 0.6f));
+                                tex.SetPixel(itrcx, itrcy + 3, GetRecolored(itrcx, itrcy + 3, tex, 0.5f));
+                                tex.SetPixel(itrcx + 2, itrcy + 3, GetRecolored(itrcx + 2, itrcy + 3, tex, 1.5f));
+                                currentReds++;
+                                for (int i = itrcx - 3; i <= itrcx + 3; i++)
+                                {
+                                    for (int j = itrcy - 3; j <= itrcy + 3; j++)
+                                    {
+                                        modifiedLocations.Add(new Tuple<int, int>(i, j));
+                                    }
+                                }
                             }
                             else
                             {
@@ -281,7 +379,18 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
 
     private Color Recolor(Color oldColor)
     {
-        return new Color(0f, 1f, 0f, oldColor.a);
+        Color c = Design.GetClosestColor(1f);
+        c.a = oldColor.a;
+        return c;
+    }
+
+    Color GetRecolored(int a, int b, Texture2D tex, float factor) => Recolor(tex.GetPixel(a, b), factor);
+
+    private Color Recolor(Color oldColor, float factor)
+    {
+        Color c = Design.GetClosestColor(1f);
+        c.a = oldColor.a * factor;
+        return c;
     }
 
     private static void SafelyAdd2D(ref Dictionary<Range, Dictionary<Range, float>> interactions, Square x)
@@ -441,6 +550,7 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
 
     public void SetupCurveComparisonTrial(CurveComparisonTrial curveComparisonTrial)
     {
+        mainSpriteRenderer.enabled = true;
         studyTask = Tasks.CurveComparison;
         mainTexture = CreateTexture(curveComparisonTrial.ReferenceChromosome);
         redTexture = CreateTexture(curveComparisonTrial.RedChromosome);
@@ -453,6 +563,7 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
 
     public void SetupPointDistanceTrial(PointDistanceTrial pdt, string chrfn)
     {
+        mainSpriteRenderer.enabled = true;
         studyTask = Tasks.PointDistance;
         Range redA = new Range(pdt.RedA);
         Range redB = new Range(pdt.RedB);
@@ -464,6 +575,7 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
 
     public void SetupAttributeUnderstandingTrial(AttributeUnderstandingTrial adt)
     {
+        mainSpriteRenderer.enabled = true;
         studyTask = Tasks.AttributeUnderstanding;
         //mainCurve = new Curve(adt.Chromosome, false, true);
         mainTexture = CreateTexture(adt.Chromosome, attributeUnderstanding: true);
@@ -474,6 +586,7 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
 
     public void SetupSegmentDistanceTrial(SegmentDistanceTrial sdt, string chrfn)
     {
+        mainSpriteRenderer.enabled = true;
         studyTask = Tasks.SegmentDistance;
         Range redA = new Range(sdt.RedA);
         Range redB = new Range(sdt.RedB);
@@ -499,8 +612,11 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
         mainSpriteRenderer = DisplayTexture(mainTexture, mainSprite, mainSpriteRenderer, 1);
     }
 
-    public void SetupTripleTrial(TripleTrial tripleTrial)
+    public void SetupTripleTrial(TripleTrial tt)
     {
-        throw new NotImplementedException();
+        mainSpriteRenderer.enabled = true;
+        studyTask = Tasks.Triple;
+        mainTexture = ReadInFile(tt.Chrom, redCount: tt.Count, skip: 1, triple: true);
+        mainSpriteRenderer = DisplayTexture(mainTexture, mainSprite, mainSpriteRenderer, 1);
     }
 }
