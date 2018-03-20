@@ -119,6 +119,38 @@ namespace Assets.Scripts
             return 0;
         }
 
+        public static Point operator /(Point p, float i)
+        {
+            return new Point(
+                p.x / i,
+                p.y / i,
+                p.z / i,
+                p.name,
+                p.color,
+                p.colorRGB);
+        }
+
+        public static Point operator /(Point p, int i)
+        {
+            return p / (float)i;
+        }
+
+        public static Point operator *(Point p, float i)
+        {
+            return new Point(
+                p.x * i,
+                p.y * i,
+                p.z * i,
+                p.name,
+                p.color,
+                p.colorRGB);
+        }
+
+        public static Point operator *(Point p, int i)
+        {
+            return p * (float)i;
+        }
+
         public static bool operator <(Point p1, Point p2)
         {
             return p1.End < p2.Start;

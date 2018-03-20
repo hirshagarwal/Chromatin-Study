@@ -109,7 +109,7 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
         if (force)
         {
             sphere.transform.position = position;
-            sphere.transform.localScale = new Vector3(mainCurve.SphereWidth * 10, mainCurve.SphereWidth * 10, mainCurve.SphereWidth * 10);
+            sphere.transform.localScale = new Vector3(mainCurve.SphereWidth * 5, mainCurve.SphereWidth * 5, mainCurve.SphereWidth * 5);
             return sphere;
         }
         sphere.transform.position = (position / mainCurve.Scale) + new Vector3(0, 0, 2);
@@ -136,11 +136,11 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
         {
             if (point.Name == pdt.BlueA || point.Name == pdt.BlueB)
             {
-                spheres.Add(BuildSphere(Design.GetClosestColor(1f), point.Position + Curve.displacement, force: true));
+                spheres.Add(BuildSphere(Design.GetClosestColor(1f), (point.Position + Curve.displacement)/Curve.scale, force: true));
             }
             else if (point.Name == pdt.RedA || point.Name == pdt.RedB)
             {
-                spheres.Add(BuildSphere(Design.GetClosestColor(0f), point.Position + Curve.displacement, force: true));
+                spheres.Add(BuildSphere(Design.GetClosestColor(0f), (point.Position + Curve.displacement)/Curve.scale, force: true));
             }
         }
     }

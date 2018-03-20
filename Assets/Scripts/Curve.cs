@@ -8,8 +8,8 @@ namespace Assets.Scripts
     public class Curve : MonoBehaviour
     {
         public static int currentFile = 13;
-        public static Vector3 displacement = new Vector3(0, 0, 5);
-        public static int scale = 3;
+        public static Vector3 displacement = new Vector3(0, 0, 4);
+        public static int scale = 2;
         public List<Color> colorSpace;
         public AnimationCurve colorWidth;
         public GameObject go;
@@ -68,8 +68,8 @@ namespace Assets.Scripts
             for (int i = 0; i < splinePoints.Length; i++)
             {
                 connectors.Add(
-                    new Connector(lastPoint.Displaced(displacement),
-                    splinePoints[i].Displaced(displacement))
+                    new Connector(lastPoint.Displaced(displacement) / scale,
+                    splinePoints[i].Displaced(displacement) / scale)
                     );
                 cylinders.Add(BuildConnector(connectors[connectors.Count - 1]));
                 lastPoint = splinePoints[i];
@@ -176,6 +176,8 @@ namespace Assets.Scripts
 
         public Curve(string filen = "", Boolean grayscale = false, Boolean projection = true, int colorID = 0, bool fast = false, bool tad = false)
         {
+            fast = false; //remove if we want to pay attention to the fast flag again
+            projection = false;
             if (filen == "")
                 filen = "chr" + files[currentFile] + "_" + chrtype + ".cpoints";
             go = new GameObject();
@@ -287,8 +289,8 @@ namespace Assets.Scripts
                 for (int i = 0; i < splinePoints.Length; i++)
                 {
                     connectors.Add(
-                        new Connector(lastPoint.Displaced(displacement),
-                        splinePoints[i].Displaced(displacement))
+                        new Connector(lastPoint.Displaced(displacement) / scale,
+                        splinePoints[i].Displaced(displacement) / scale)
                         );
                     cylinders.Add(BuildConnector(connectors[connectors.Count - 1]));
                     lastPoint = splinePoints[i];
