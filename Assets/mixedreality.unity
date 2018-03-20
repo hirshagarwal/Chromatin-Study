@@ -1096,7 +1096,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Over 10
+  m_Text: 10 Or More
 --- !u!222 &333284397
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2932,7 +2932,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Over 2
+  m_Text: 2 Or More
 --- !u!222 &752382405
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5904,7 +5904,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1169954186}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

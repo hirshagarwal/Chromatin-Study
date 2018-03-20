@@ -1,0 +1,25 @@
+first line is left blank
+2,0,HoloLens,PointDistance,0,T,chr16_sen,chr16-66600000-66700000,chr16-51100000-51200000,chr16-0-100000,chr16-67700000-67800000,false
+2,0,HoloLens,PointDistance,0,R,chr19_pro,chr19-300000-400000,chr19-1600000-1700000,chr19-1200000-1300000,chr19-2100000-2200000,true
+2,0,HoloLens,LargerTad,0,T,chr16_sen,1
+2,0,HoloLens,LargerTad,0,R,chr16_pro,1
+2,0,HoloLens,Triple,0,T,chr13_sen,10,3
+2,0,HoloLens,Triple,0,R,chr18_sen,10,2
+2,0,HoloLens,TouchingSegments,0,T,chr11_sen,10,11
+2,0,HoloLens,TouchingSegments,0,R,chr10_sen,10,6
+2,0,Projection,PointDistance,0,T,chr16_sen,chr16-66600000-66700000,chr16-51100000-51200000,chr16-0-100000,chr16-67700000-67800000,true
+2,0,Projection,PointDistance,0,R,chr16_sen,chr16-66600000-66700000,chr16-51100000-51200000,chr16-0-100000,chr16-67700000-67800000,true
+2,0,Projection,LargerTad,0,T,chr16_sen,1
+2,0,Projection,LargerTad,0,R,chr16_sen,1
+2,0,Projection,Triple,0,T,chr16_sen,10,1
+2,0,Projection,Triple,0,R,chr16_sen,10,1
+2,0,Projection,TouchingSegments,0,T,chr16_sen,10,1
+2,0,Projection,TouchingSegments,0,R,chr16_sen,10,1
+2,0,Heatmap,Triple,0,T,16_formatted.bed.sen,10,1
+2,0,Heatmap,Triple,0,R,16_formatted.bed.sen,10,1
+2,0,Heatmap,PointDistance,0,T,16_formatted.bed.sen,chr16-66600000-66700000,chr16-51100000-51200000,chr16-0-100000,chr16-67700000-67800000,true
+2,0,Heatmap,PointDistance,0,R,16_formatted.bed.sen,chr16-66600000-66700000,chr16-51100000-51200000,chr16-0-100000,chr16-67700000-67800000,true
+2,0,Heatmap,TouchingSegments,0,T,16_formatted.bed.sen,10,5
+2,0,Heatmap,TouchingSegments,0,R,16_formatted.bed.sen,10,1
+2,0,Heatmap,LargerTad,0,T,16_formatted.bed.sen,1
+2,0,Heatmap,LargerTad,0,R,16_formatted.bed.sen,1
