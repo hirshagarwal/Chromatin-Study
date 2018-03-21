@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/mixedreality.unity
+- path: Assets/threedimensional.unity
   isLoaded: 1
   isActive: 1

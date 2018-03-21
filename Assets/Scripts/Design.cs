@@ -50,7 +50,7 @@ public class Design
         @"NEW TASK: Touching Triples
 
 You will be shown a white curve, where some segments have been coloured red or blue.
-Your task is to identify sections where the curve is red, loops back on itself, loops back on itself a second time, and then is blue.
+Your task is to count the number of double loops in the curve, where the start and the end of the structure are coloured red and blue.
 Not every red or blue section will belong to one of these structures.
 
 Call the instructor before continuing.";
@@ -59,7 +59,7 @@ Call the instructor before continuing.";
         @"NEW TASK: Larger TAD
 
 You will be shown a curve which is segmented into multiple distinct sections.
-One section will have a blue end, and one section will have a red end.
+One section will start with a blue tip, and one section will start with a red tip.
 Of these two sections, your task is to identify the larger one.
 
 Call the instructor before continuing.";
@@ -68,7 +68,7 @@ Call the instructor before continuing.";
         @"NEW TASK: Touching Segments
 
 You will be shown a white curve, where some segments have been coloured red or blue.
-Your task is to identify sections where the curve is red, loops back on itself, and then is blue.
+Your task is to count the number of sections where the curve loops, and the start and end of the structure are coloured red and blue.
 Not every red or blue section will belong to one of these structures.
 
 Call the instructor before continuing.";
