@@ -32,6 +32,10 @@ public class OrbitScript2D : MonoBehaviour
             {
                 x += Input.GetAxis("Mouse X") * 0.2f;// * xSpeed * 0.02f;
                 y += Input.GetAxis("Mouse Y") * 0.2f;// * ySpeed * 0.02f;
+            }else if (Input.GetKeyDown(KeyCode.Space))
+            {
+                x = 0;
+                y = 0;
             }
 
             Vector3 negDistance = new Vector3(-x, -y, -distance);

@@ -147,7 +147,7 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
                 float col = 0f;
                 if (interactions.ContainsKey(uniqueRanges[itrcx]) && interactions[uniqueRanges[itrcx]].ContainsKey(uniqueRanges[itrcy]))
                     col += interactions[uniqueRanges[itrcx]][uniqueRanges[itrcy]];
-                Color color = Design.GetClosestColor(0.5f);
+                Color color = Design.GetClosestColor(0f);
                 float colval = threshold * (1 - threshold * (col / maxCol));
                 if (studyTask == Tasks.PointDistance || studyTask == Tasks.SegmentDistance)
                 {
@@ -168,11 +168,25 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
                     }
                     else
                     {
-                        if (uniqueRanges[itrcx] == redA || uniqueRanges[itrcx] == redB)
+                        if (uniqueRanges[Clamp(itrcx + 1, uniqueRanges.Count)] == redA ||
+                            uniqueRanges[Clamp(itrcx + 1, uniqueRanges.Count)] == redB ||
+                            uniqueRanges[Clamp( itrcx-1, uniqueRanges.Count)] == redA ||
+                            uniqueRanges[Clamp(itrcx-1, uniqueRanges.Count)] == redB ||
+                            uniqueRanges[Clamp(itrcy + 1, uniqueRanges.Count)] == redA ||
+                            uniqueRanges[Clamp(itrcy + 1, uniqueRanges.Count)] == redB ||
+                            uniqueRanges[Clamp(itrcy - 1, uniqueRanges.Count)] == redA ||
+                            uniqueRanges[Clamp(itrcy - 1, uniqueRanges.Count)] == redB)
                         {
                             color = Design.GetClosestColor(0f);
                         }
-                        else if (uniqueRanges[itrcx] == blueA || uniqueRanges[itrcx] == blueB)
+                        else if (uniqueRanges[Clamp(itrcx+1, uniqueRanges.Count)] == blueA ||
+                                uniqueRanges[Clamp(itrcx+1, uniqueRanges.Count)] == blueB ||
+                                uniqueRanges[Clamp(itrcx-1, uniqueRanges.Count)] == blueA ||
+                                uniqueRanges[Clamp(itrcx-1, uniqueRanges.Count)] == blueB ||
+                                uniqueRanges[Clamp(itrcy + 1, uniqueRanges.Count)] == blueA ||
+                                uniqueRanges[Clamp(itrcy + 1, uniqueRanges.Count)] == blueB ||
+                                uniqueRanges[Clamp(itrcy - 1, uniqueRanges.Count)] == blueA ||
+                                uniqueRanges[Clamp(itrcy - 1, uniqueRanges.Count)] == blueB)
                         {
                             color = Design.GetClosestColor(1f);
                         }
@@ -214,6 +228,9 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
                 else if (col > 0)
                 {
                     color = Design.GetClosestColor(colval);
+                } else
+                {
+                    color = Design.GetClosestColor(0f);
                 }
                 tex.SetPixel(x, y, color);
                 y--;
@@ -234,6 +251,19 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
         tex.Apply();
         sortedRanges = uniqueRanges;
         return tex;
+    }
+
+    private int Clamp(int i, int l)
+    {
+        if (i < 0)
+        {
+            return 0;
+        }
+        if (i >= l)
+        {
+            return l - 1;
+        }
+        return i;
     }
 
     private Texture2D MutateTexture(Texture2D tex, int buckets, int redCount, int skip)
@@ -535,12 +565,6 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
         }
     }
 
-    //void LateUpdate()
-    //{
-    //    scale = Mathf.Clamp(scale - Input.GetAxis("Mouse ScrollWheel") * 5, scaleMin, scaleMax);
-    //    transform.lossyScale.Set(scale, scale, scale);
-    //}
-
     private void OnGUI()
     {
         if (showUnderstanding)
@@ -561,7 +585,7 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
         blueSpriteRenderer = DisplayTexture(blueTexture, blueSprite, blueSpriteRenderer, 3);
     }
 
-    public void SetupPointDistanceTrial(PointDistanceTrial pdt, string chrfn)
+    public void SetupPointDistanceTrial(PointDistanceTrial pdt)
     {
         mainSpriteRenderer.enabled = true;
         studyTask = Tasks.PointDistance;
@@ -569,7 +593,7 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
         Range redB = new Range(pdt.RedB);
         Range blueA = new Range(pdt.BlueA);
         Range blueB = new Range(pdt.BlueB);
-        mainTexture = CreateTexture(pdt.Chromosome, redA, redB, blueA, blueB);
+        mainTexture = CreateTexture(pdt.Filenametwodim, redA, redB, blueA, blueB);
         mainSpriteRenderer = DisplayTexture(mainTexture, mainSprite, mainSpriteRenderer, 1);
     }
 
@@ -577,14 +601,13 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
     {
         mainSpriteRenderer.enabled = true;
         studyTask = Tasks.AttributeUnderstanding;
-        //mainCurve = new Curve(adt.Chromosome, false, true);
-        mainTexture = CreateTexture(adt.Chromosome, attributeUnderstanding: true);
+        mainTexture = CreateTexture(adt.Filenametwodim, attributeUnderstanding: true);
         mainSpriteRenderer = DisplayTexture(mainTexture, mainSprite, mainSpriteRenderer, 1);
         understandingString = adt.Question;
         showUnderstanding = true;
     }
 
-    public void SetupSegmentDistanceTrial(SegmentDistanceTrial sdt, string chrfn)
+    public void SetupSegmentDistanceTrial(SegmentDistanceTrial sdt)
     {
         mainSpriteRenderer.enabled = true;
         studyTask = Tasks.SegmentDistance;
@@ -592,7 +615,7 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
         Range redB = new Range(sdt.RedB);
         Range blueA = new Range(sdt.BlueA);
         Range blueB = new Range(sdt.BlueB);
-        mainTexture = CreateTexture(sdt.Chromosome, redA, redB, blueA, blueB, true);
+        mainTexture = CreateTexture(sdt.Filenametwodim, redA, redB, blueA, blueB, true);
         mainSpriteRenderer = DisplayTexture(mainTexture, mainSprite, mainSpriteRenderer, 1);
     }
 
@@ -600,7 +623,7 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
     {
         mainSpriteRenderer.enabled = true;
         studyTask = Tasks.TouchingSegments;
-        mainTexture = ReadInFile(tst.Chrom, redCount: tst.Count, skip:1);
+        mainTexture = ReadInFile(tst.Filenametwodim, redCount: tst.Count, skip:1);
         mainSpriteRenderer = DisplayTexture(mainTexture, mainSprite, mainSpriteRenderer, 1);
     }
 
@@ -608,7 +631,7 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
     {
         mainSpriteRenderer.enabled = true;
         studyTask = Tasks.LargerTad;
-        mainTexture = CreateTexture(ltt.Chrom);
+        mainTexture = CreateTexture(ltt.Filenametwodim);
         mainSpriteRenderer = DisplayTexture(mainTexture, mainSprite, mainSpriteRenderer, 1);
     }
 
@@ -616,7 +639,7 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
     {
         mainSpriteRenderer.enabled = true;
         studyTask = Tasks.Triple;
-        mainTexture = ReadInFile(tt.Chrom, redCount: tt.Count, skip: 1, triple: true);
+        mainTexture = ReadInFile(tt.Filenametwodim, redCount: tt.Count, skip: 1, triple: true);
         mainSpriteRenderer = DisplayTexture(mainTexture, mainSprite, mainSpriteRenderer, 1);
     }
 }

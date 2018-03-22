@@ -7,9 +7,10 @@ namespace Assets.Scripts
 {
     public class Curve : MonoBehaviour
     {
+        private const int randomness = 5;
         public static int currentFile = 13;
-        public static Vector3 displacement = new Vector3(0, 0, 4);
-        public static int scale = 2;
+        public static Vector3 displacement = new Vector3(0, 0, 2);
+        public static int scale = 4;
         public List<Color> colorSpace;
         public AnimationCurve colorWidth;
         public GameObject go;
@@ -101,7 +102,7 @@ namespace Assets.Scripts
                         {
                             if (currentReds < redCount)
                             {
-                                points[i] = points[i].Displaced(new Vector3(rnd.Next(10) / 10f, rnd.Next(10) / 10f, rnd.Next(10) / 10f));
+                                points[i] = points[i].Displaced(new Vector3(rnd.Next(randomness) / 10f, rnd.Next(randomness) / 10f, rnd.Next(randomness) / 10f));
                             }
                             points[i - 1].MakeRed();
                             points[i - 1].ColorRGB = Design.GetClosestColor(0f);
@@ -140,11 +141,11 @@ namespace Assets.Scripts
                             Point startPoint = points[i];
                             Point leftPoint = points[i - 1];
                             Point rightPoint = points[i + 1];
-                            Point displacePoint = startPoint.Displaced(new Vector3(rnd.Next(10) / 10f, rnd.Next(10) / 10f, rnd.Next(10) / 10f));
+                            Point displacePoint = startPoint.Displaced(new Vector3(rnd.Next(randomness) / 10f, rnd.Next(randomness) / 10f, rnd.Next(randomness) / 10f));
                             Point leftInterpolated = leftPoint.Interpolate(displacePoint);
                             Point rightInterpolated = rightPoint.Interpolate(displacePoint);
-                            Point leftBegin = startPoint.Displaced(new Vector3(rnd.Next(10) / 100f, rnd.Next(10) / 100f, rnd.Next(10) / 100f));
-                            Point rightBegin = startPoint.Displaced(new Vector3(rnd.Next(10) / 100f, rnd.Next(10) / 100f, rnd.Next(10) / 100f));
+                            Point leftBegin = startPoint.Displaced(new Vector3(rnd.Next(randomness) / 100f, rnd.Next(randomness) / 100f, rnd.Next(randomness) / 100f));
+                            Point rightBegin = startPoint.Displaced(new Vector3(rnd.Next(randomness) / 100f, rnd.Next(randomness) / 100f, rnd.Next(randomness) / 100f));
 
                             if (currentReds < redCount)
                             {

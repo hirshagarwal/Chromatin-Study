@@ -21,28 +21,33 @@ namespace Assets.Scripts
             if (Tasks.PointDistance.ToString() == trialConditions[3])
             {
                 task = Tasks.PointDistance;
+                int trialID = Int32.Parse(trialConditions[6]);
+                String[] trialValues = PointDistance.data[trialID].Split(',');
                 trialDetails = new PointDistanceTrial(
-                    trialConditions[6],
-                    trialConditions[7],
-                    trialConditions[8],
-                    trialConditions[9],
-                    trialConditions[10],
-                    Boolean.Parse(trialConditions[11]),
+                    trialValues[0],
+                    trialValues[1],
+                    trialValues[2],
+                    trialValues[3],
+                    trialValues[4],
+                    trialValues[5],
+                    Boolean.Parse(trialValues[6]),
                     format
                     );
             }
             else if (Tasks.SegmentDistance.ToString() == trialConditions[3])
             {
-                task = Tasks.SegmentDistance;
-                trialDetails = new SegmentDistanceTrial(
-                    trialConditions[6],
-                    trialConditions[7],
-                    trialConditions[8],
-                    trialConditions[9],
-                    trialConditions[10],
-                    Boolean.Parse(trialConditions[11]),
-                    format
-                    );
+                throw new NotImplementedException("Need to rewrite where this error is thrown");
+                //task = Tasks.SegmentDistance;
+
+                //trialDetails = new SegmentDistanceTrial(
+                //    trialConditions[6],
+                //    trialConditions[7],
+                //    trialConditions[8],
+                //    trialConditions[9],
+                //    trialConditions[10],
+                //    Boolean.Parse(trialConditions[11]),
+                //    format
+                //    );
             }
             else if (Tasks.CurveComparison.ToString() == trialConditions[3])
             {
@@ -57,42 +62,52 @@ namespace Assets.Scripts
             }
             else if (Tasks.AttributeUnderstanding.ToString() == trialConditions[3])
             {
-                task = Tasks.AttributeUnderstanding;
-                trialDetails = new AttributeUnderstandingTrial(
-                    trialConditions[6],
-                    trialConditions[7],
-                    trialConditions[8],
-                    trialConditions[9],
-                    Boolean.Parse(trialConditions[10]),
-                    format
-                    );
+                throw new NotImplementedException("Need to rewrite where this error is thrown");
+                //task = Tasks.AttributeUnderstanding;
+                //trialDetails = new AttributeUnderstandingTrial(
+                //    trialConditions[6],
+                //    trialConditions[7],
+                //    trialConditions[8],
+                //    trialConditions[9],
+                //    Boolean.Parse(trialConditions[10]),
+                //    format
+                //    );
             }
             else if (Tasks.TouchingSegments.ToString() == trialConditions[3])
             {
+                int trialID = Int32.Parse(trialConditions[6]);
+                String[] trialValues = TouchingSegments.data[trialID].Split(',');
                 task = Tasks.TouchingSegments;
                 trialDetails = new TouchingPointsTrial(
-                    trialConditions[6],
-                    trialConditions[7],
-                    trialConditions[8],
+                    trialConditions[0],
+                    trialConditions[1],
+                    trialConditions[2],
+                    trialConditions[3],
                     format
                     );
             }
             else if (Tasks.LargerTad.ToString() == trialConditions[3])
             {
+                int trialID = Int32.Parse(trialConditions[6]);
+                String[] trialValues = LargerTad.data[trialID].Split(',');
                 task = Tasks.LargerTad;
                 trialDetails = new LargerTadTrial(
-                    trialConditions[6],
-                    trialConditions[7],
+                    trialConditions[0],
+                    trialConditions[1],
+                    trialConditions[2],
                     format
                     );
             }
             else if (Tasks.Triple.ToString() == trialConditions[3])
             {
+                int trialID = Int32.Parse(trialConditions[6]);
+                String[] trialValues = Triple.data[trialID].Split(',');
                 task = Tasks.Triple;
                 trialDetails = new TripleTrial(
-                    trialConditions[6],
-                    trialConditions[7],
-                    trialConditions[8],
+                    trialConditions[0],
+                    trialConditions[1],
+                    trialConditions[2],
+                    trialConditions[3],
                     format
                     );
             }

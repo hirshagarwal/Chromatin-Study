@@ -4,7 +4,8 @@ namespace Assets.Scripts
 {
     public class SegmentDistanceTrial : IGenericTrial
     {
-        private string chromosome;
+        private string filenamethreedim;
+        private string filenametwodim;
         private string redA;
         private string redB;
         private string blueA;
@@ -12,23 +13,16 @@ namespace Assets.Scripts
         private Formats studyFormat;
         private Boolean redIsShorter;
 
-        public SegmentDistanceTrial(string chromosome, string redA, string redB, string blueA, string blueB, bool redIsShorter, Formats studyFormat)
+        public SegmentDistanceTrial(string chrom_num, string chrom_type, string redA, string redB, string blueA, string blueB, bool redIsShorter, Formats studyFormat)
         {
-            this.chromosome = chromosome;
+            filenamethreedim = "chr" + chrom_num + "_" + chrom_type;
+            filenametwodim = chrom_num + "_formatted.bed." + chrom_type;
             this.redA = redA;
             this.redB = redB;
             this.blueA = blueA;
             this.blueB = blueB;
             this.redIsShorter = redIsShorter;
             this.studyFormat = studyFormat;
-        }
-
-        public string Chromosome
-        {
-            get
-            {
-                return chromosome;
-            }
         }
 
         public string RedA
@@ -71,6 +65,22 @@ namespace Assets.Scripts
             }
         }
 
+        public string Filenamethreedim
+        {
+            get
+            {
+                return filenamethreedim;
+            }
+        }
+
+        public string Filenametwodim
+        {
+            get
+            {
+                return filenametwodim;
+            }
+        }
+
         public Boolean Correct(object subjectChoseRed)
         {
             return (Boolean)subjectChoseRed == redIsShorter;
@@ -78,7 +88,7 @@ namespace Assets.Scripts
 
         public String ToCSV()
         {
-            return chromosome.ToString() + ", " +
+            return filenametwodim + ", " +
                 redA + ", " +
                 redB + ", " +
                 blueA + ", " +

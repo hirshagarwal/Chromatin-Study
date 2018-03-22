@@ -4,6 +4,8 @@ namespace Assets.Scripts
 {
     public class CurveComparisonTrial : IGenericTrial
     {
+        private string filenamethreedim = "null";
+        private string filenametwodim = "null";
         private string referenceChromosome;
         private string blueChromosome;
         private string redChromosome;
@@ -56,6 +58,32 @@ namespace Assets.Scripts
             get
             {
                 return studyFormat;
+            }
+        }
+
+        public string Filenamethreedim
+        {
+            get
+            {
+                return filenamethreedim;
+            }
+
+            set
+            {
+                filenamethreedim = value;
+            }
+        }
+
+        public string Filenametwodim
+        {
+            get
+            {
+                return filenametwodim;
+            }
+
+            set
+            {
+                filenametwodim = value;
             }
         }
 

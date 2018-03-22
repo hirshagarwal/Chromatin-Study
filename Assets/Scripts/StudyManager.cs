@@ -7,13 +7,13 @@ using UnityEngine.UI;
 public class StudyManager : MonoBehaviour
 {
     public static GameObject choicePanelClusters;
-    public static GameObject choicePanelSegment;
     public static GameObject choicePanelCurve;
     public static GameObject choicePanelDistance;
-    public static GameObject choicePanelUnderstanding;
-    public static GameObject choicePanelTouching;
+    public static GameObject choicePanelSegment;
     public static GameObject choicePanelTad;
+    public static GameObject choicePanelTouching;
     public static GameObject choicePanelTriple;
+    public static GameObject choicePanelUnderstanding;
     public static TimeSpan duration;
     public static GameObject feedbackPanel;
     public static string FILE_SEPARATOR = "\\";
@@ -24,22 +24,24 @@ public class StudyManager : MonoBehaviour
     public static GameObject viewImageTarget;
     public Trial currentTrial;
     public DateTime dateStart;
-    public int numberOfParticipants;
+    public bool exploratory = false;
+    public OrbitScript lightScript;
+    //public int numberOfParticipants;
     public IObjectManager objectManager;
     public ObjectManager2D objectManager2D;
     public ObjectManager3D objectManager3D;
-    public Formats studyFormat;
     public OrbitScript orbitScript;
-    public OrbitScript lightScript;
+    public int participantNumber;
+    public int startingTrial = 0;
+    public Formats studyFormat;
     public int totalTrials = 208;
+    public bool twodim = true;
     internal int clickCount;
     internal string cursorTracking = "TIME, C_X, C_Y, C_Z";
     internal string cuttingplaneTracking = "TIME, P_X, P_Y, P_, P_A, P_B, P _C";
     internal string mainTracking = "TIME, VIS_X, VIS_Y, VIS_Z,  VIS_A, VIS_B, VIS_C,  CAM_A, CAM_B, CAM_C";
     internal bool running = false;
     internal bool shiftDown = false;
-    public bool exploratory = false;
-    public bool twodim = true;
     internal int trialNumber = 0;
     private List<GameObject> activePoints = new List<GameObject>();
     private Participant currentParticipant;
@@ -71,17 +73,27 @@ You have completed this condition.
 Please, call the instructor.";
             GameObject.Find("ContinueButton").SetActive(false);
 
-            //using (System.IO.StreamWriter sw = new System.IO.StreamWriter(saveFileName, true))
-            //{
+            using (System.IO.StreamWriter sw = new System.IO.StreamWriter(saveFileName, true))
+            {
             foreach (string line in results.Split(System.Environment.NewLine.ToCharArray()))
             {
                 Debug.Log(line);
-                //sw.WriteLine(line);
+                sw.WriteLine(line);
             }
-            //sw.Dispose();
-            //}
+            sw.Dispose();
+            }
         }
         trialNumber++;
+    }
+
+    public void ParseSubjectIDAndInitialiseStudy()
+    {
+        saveFileName = "results_" + participantNumber + "_" + studyFormat.ToString() + ".csv";
+
+        currentParticipant = new Participant(participantNumber, studyFormat, startingTrial);
+
+        participantPanel.SetActive(false);
+        FinishTrial();
     }
 
     public void RecordResults(string rawAnswer)
@@ -122,10 +134,11 @@ Please, call the instructor.";
         else if (currentTrial.Task == Tasks.TouchingSegments)
         {
             print(">>> TOUCHING SEGMENTS ANSWER: " + rawAnswer);
-            if (rawAnswer.Contains("AnswerButton_Red"))
-                correct = ((TouchingPointsTrial)currentTrial.TrialDetails).Correct(true).ToString();
-            if (rawAnswer.Contains("AnswerButton_Blue"))
-                correct = ((TouchingPointsTrial)currentTrial.TrialDetails).Correct(false).ToString();
+            for (int i = 3; i < 7; i++)
+            {
+                if (rawAnswer.Contains(i.ToString()))
+                    correct = ((TouchingPointsTrial)currentTrial.TrialDetails).Correct(i).ToString();
+            }
         }
         else if (currentTrial.Task == Tasks.LargerTad)
         {
@@ -138,6 +151,11 @@ Please, call the instructor.";
         else if (currentTrial.Task == Tasks.Triple)
         {
             print(">>> TRIPLE ANSWER: " + rawAnswer);
+            for (int i = 3; i < 7; i++)
+            {
+                if (rawAnswer.Contains(i.ToString()))
+                    correct = ((TripleTrial)currentTrial.TrialDetails).Correct(i).ToString();
+            }
             if (rawAnswer.Contains("AnswerButton_Red"))
                 correct = ((TripleTrial)currentTrial.TrialDetails).Correct(true).ToString();
             if (rawAnswer.Contains("AnswerButton_Blue"))
@@ -225,18 +243,6 @@ Please, call the instructor.";
             throw new Exception("Recording for " + currentTrial.Task.ToString() + " not implemented");
         }
     }
-
-    public void ParseSubjectIDAndInitialiseStudy()
-    {
-        int subjectID = GameObject.Find("Dropdown").GetComponent<Dropdown>().value;
-        saveFileName = "results_" + subjectID + "_" + studyFormat.ToString() + ".csv";
-
-        currentParticipant = new Participant(subjectID, studyFormat);
-
-        participantPanel.SetActive(false);
-        FinishTrial();
-    }
-
     public void StartTrial()
     {
         panelCanvas.SetActive(false);
@@ -311,16 +317,16 @@ Please, call the instructor.";
         }
     }
 
-    private void PopulateParticipantSelectionDialog(int participantCount)
-    {
-        Dropdown dd = GameObject.Find("Dropdown").GetComponent<Dropdown>();
-        dd.options.Clear();
-        GameObject prefab = GameObject.Find("DropdownLabel");
-        for (int i = 0; i < participantCount + 1; i++)
-        {
-            dd.options.Add(new Dropdown.OptionData() { text = i + "" });
-        }
-    }
+    //private void PopulateParticipantSelectionDialog(int participantCount)
+    //{
+    //    Dropdown dd = GameObject.Find("Dropdown").GetComponent<Dropdown>();
+    //    dd.options.Clear();
+    //    GameObject prefab = GameObject.Find("DropdownLabel");
+    //    for (int i = 0; i < participantCount + 1; i++)
+    //    {
+    //        dd.options.Add(new Dropdown.OptionData() { text = i + "" });
+    //    }
+    //}
 
     private void ShowNewTaskPanel(Tasks task)
     {
@@ -390,17 +396,17 @@ Please, call the instructor.";
             }
             if (studyFormat != Formats.HoloLens)
             {
-                GameObject.Find("ObjectManager").transform.localPosition = new Vector3(0, 0, 5);
-                if (orbitScript != null)
-                {
-                    orbitScript.distanceMax = 4f;
-                    orbitScript.distance = 3.5f;
-                }
-                if (lightScript != null)
-                {
-                    lightScript.distanceMax = 4f;
-                    lightScript.distance = 3.5f;
-                }
+                GameObject.Find("ObjectManager").transform.localPosition = new Vector3(0, 0, 0.5f);
+                //if (orbitScript != null)
+                //{
+                //    orbitScript.distanceMax = 4f;
+                //    orbitScript.distance = 3.5f;
+                //}
+                //if (lightScript != null)
+                //{
+                //    lightScript.distanceMax = 4f;
+                //    lightScript.distance = 3.5f;
+                //}
             }
             objectManager = objectManager3D;
         }
@@ -439,22 +445,21 @@ Please, call the instructor.";
         GameObject.Find("AnswerButton_RedUnderstanding").GetComponent<GenericButton>().value = "red";
         GameObject.Find("AnswerButton_BlueUnderstanding").AddComponent<GenericButton>();
         GameObject.Find("AnswerButton_BlueUnderstanding").GetComponent<GenericButton>().value = "blue";
-        GameObject.Find("AnswerButton_RedTouching").AddComponent<GenericButton>();
-        GameObject.Find("AnswerButton_RedTouching").GetComponent<GenericButton>().value = "red";
-        GameObject.Find("AnswerButton_BlueTouching").AddComponent<GenericButton>();
-        GameObject.Find("AnswerButton_BlueTouching").GetComponent<GenericButton>().value = "blue";
         GameObject.Find("AnswerButton_RedTad").AddComponent<GenericButton>();
         GameObject.Find("AnswerButton_RedTad").GetComponent<GenericButton>().value = "red";
         GameObject.Find("AnswerButton_BlueTad").AddComponent<GenericButton>();
         GameObject.Find("AnswerButton_BlueTad").GetComponent<GenericButton>().value = "blue";
-        GameObject.Find("AnswerButton_RedTriple").AddComponent<GenericButton>();
-        GameObject.Find("AnswerButton_RedTriple").GetComponent<GenericButton>().value = "red";
-        GameObject.Find("AnswerButton_BlueTriple").AddComponent<GenericButton>();
-        GameObject.Find("AnswerButton_BlueTriple").GetComponent<GenericButton>().value = "blue";
         GameObject.Find("AnswerButton_3").AddComponent<GenericButton>();
         GameObject.Find("AnswerButton_4").AddComponent<GenericButton>();
         GameObject.Find("AnswerButton_5").AddComponent<GenericButton>();
         GameObject.Find("AnswerButton_6").AddComponent<GenericButton>();
+        for (int i = 3; i < 7; i++)
+        {
+            GameObject.Find("AnswerButton_" + i + "Touching").AddComponent<GenericButton>();
+            GameObject.Find("AnswerButton_" + i + "Touching").GetComponent<GenericButton>().value = i.ToString();
+            GameObject.Find("AnswerButton_" + i + "Triple").AddComponent<GenericButton>();
+            GameObject.Find("AnswerButton_" + i + "Triple").GetComponent<GenericButton>().value = i.ToString();
+        }
 
         panel = GameObject.Find("Panel");
         panelCanvas = GameObject.Find("PanelCanvas");
@@ -491,7 +496,7 @@ Please, call the instructor.";
 
         infoPanel.SetActive(false);
         feedbackPanel.SetActive(false);
-        PopulateParticipantSelectionDialog(numberOfParticipants);
+        //PopulateParticipantSelectionDialog(numberOfParticipants);
         if (exploratory)
         {
             participantPanel.SetActive(false);
@@ -505,11 +510,11 @@ Please, call the instructor.";
     {
         if (currentTrial.Task == Tasks.PointDistance)
         {
-            objectManager.SetupPointDistanceTrial(currentTrial.TrialDetails as PointDistanceTrial, ((PointDistanceTrial)currentTrial.TrialDetails).Chromosome.ToString());
+            objectManager.SetupPointDistanceTrial(currentTrial.TrialDetails as PointDistanceTrial);
         }
         else if (currentTrial.Task == Tasks.SegmentDistance)
         {
-            objectManager.SetupSegmentDistanceTrial(currentTrial.TrialDetails as SegmentDistanceTrial, ((SegmentDistanceTrial)currentTrial.TrialDetails).Chromosome.ToString());
+            objectManager.SetupSegmentDistanceTrial(currentTrial.TrialDetails as SegmentDistanceTrial);
         }
         else if (currentTrial.Task == Tasks.CurveComparison)
         {
@@ -553,9 +558,19 @@ Please, call the instructor.";
             RecordTimeAndCollectUserAnswer();
         }
     }
-
+    int last_interim;
     private void WriteToFile(string answer)
     {
         results = results + System.Environment.NewLine + answer;
+
+        using (System.IO.StreamWriter sw = new System.IO.StreamWriter(last_interim.ToString() + "interim_"+saveFileName, true))
+        {
+            foreach (string line in results.Split(System.Environment.NewLine.ToCharArray()))
+            {
+                Debug.Log(line);
+                sw.WriteLine(line);
+            }
+            sw.Dispose();
+        }
     }
 }

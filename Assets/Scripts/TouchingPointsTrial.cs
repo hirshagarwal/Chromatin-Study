@@ -4,26 +4,21 @@ namespace Assets.Scripts
 {
     public class TouchingPointsTrial : IGenericTrial
     {
-        private string chrom;
+        private string filenamethreedim;
+        private string filenametwodim;
         private int skip;
         private int count;
         private Formats studyFormat;
 
-        public TouchingPointsTrial(string chrom, string skip, string count, Formats studyFormat)
+        public TouchingPointsTrial(string chrom_num, string chrom_type, string skip, string count, Formats studyFormat)
         {
-            this.chrom = chrom;
+            filenamethreedim = "chr" + chrom_num + "_" + chrom_type;
+            filenametwodim = chrom_num + "_formatted.bed." + chrom_type;
             this.skip = Int32.Parse(skip);
             this.count = Int32.Parse(count);
             this.studyFormat = studyFormat;
         }
-
-        public string Chrom
-        {
-            get
-            {
-                return chrom;
-            }
-        }
+        
 
         public int Count
         {
@@ -49,14 +44,30 @@ namespace Assets.Scripts
             }
         }
 
+        public string Filenamethreedim
+        {
+            get
+            {
+                return filenamethreedim;
+            }
+        }
+
+        public string Filenametwodim
+        {
+            get
+            {
+                return filenametwodim;
+            }
+        }
+
         public bool Correct(object lessThanTen)
         {
-            return (Boolean)lessThanTen == (count < 10);
+            return (int)lessThanTen == count;
         }
 
         public string ToCSV()
         {
-            return chrom + ", " +
+            return filenametwodim + ", " +
                 count.ToString();
         }
     }

@@ -16,11 +16,11 @@ namespace Assets.Scripts
 
         void SetupCurveComparisonTrial(CurveComparisonTrial curveComparisonTrial);
 
-        void SetupPointDistanceTrial(PointDistanceTrial pdt, string chrfn);
+        void SetupPointDistanceTrial(PointDistanceTrial pdt);
 
         void SetupAttributeUnderstandingTrial(AttributeUnderstandingTrial adt);
 
-        void SetupSegmentDistanceTrial(SegmentDistanceTrial sdt, string chrfn);
+        void SetupSegmentDistanceTrial(SegmentDistanceTrial sdt);
 
         void SetupTouchingSegments(TouchingPointsTrial tst);
 

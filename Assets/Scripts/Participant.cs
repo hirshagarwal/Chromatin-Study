@@ -7,15 +7,16 @@ namespace Assets.Scripts
     {
         private int participantID;
         private List<string> trials = new List<string>();
-        private int nextTrialLocation = 0;
+        private int nextTrialLocation;
         private Formats format;
 
-        public Participant(int participantID, Formats trialFormat)
+        public Participant(int participantID, Formats trialFormat, int firstTrial)
         {
             Debug.Log("Trial format is " + trialFormat.ToString());
             format = trialFormat;
-            TextAsset file = Resources.Load(participantID.ToString()) as TextAsset;
+            TextAsset file = Resources.Load("designfile") as TextAsset;
             this.participantID = participantID;
+            nextTrialLocation = firstTrial;
             string[] blocks = file.text.Split(StudyManager.LINE_BREAK);
             string[] line;
             //            int participantCount = int.Parse(blocks[blocks.Length - 1].Split(',')[0]);

@@ -1,4 +1,13 @@
 first line is left blank
+1,0,Projection,LargerTad,0,T,chr11_sen,1
+1,0,Projection,LargerTad,0,T,chr16_sen,1
+1,0,Projection,LargerTad,0,R,chr20_sen,1
+1,0,Projection,LargerTad,0,R,chr16_pro,1
+1,0,Projection,LargerTad,0,T,chr15_pro,1
+1,0,Projection,LargerTad,0,T,chr12_pro,1
+1,0,Projection,LargerTad,0,R,chr11_pro,1
+1,0,Projection,LargerTad,0,R,chr17_sen,1
+1,0,Projection,LargerTad,0,R,chr18_sen,1
 1,0,HoloLens,PointDistance,0,T,chr16_sen,chr16-66600000-66700000,chr16-51100000-51200000,chr16-0-100000,chr16-67700000-67800000,true
 1,0,HoloLens,PointDistance,0,R,chr16_sen,chr16-66600000-66700000,chr16-51100000-51200000,chr16-0-100000,chr16-67700000-67800000,true
 1,0,HoloLens,LargerTad,0,T,chr16_sen,1

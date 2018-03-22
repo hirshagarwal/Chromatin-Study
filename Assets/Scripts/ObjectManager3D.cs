@@ -127,20 +127,20 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
         return BuildSphere(Design.GetClosestColor(1f), position);
     }
 
-    public void SetupPointDistanceTrial(PointDistanceTrial pdt, string chrfn)
+    public void SetupPointDistanceTrial(PointDistanceTrial pdt)
     {
         bool isFast = (pdt.StudyFormat == Formats.HoloLens);
 
-        mainCurve = new Curve(chrfn, true, fast: isFast);
+        mainCurve = new Curve(pdt.Filenamethreedim, true, fast: isFast);
         foreach (Point point in mainCurve.Points)
         {
             if (point.Name == pdt.BlueA || point.Name == pdt.BlueB)
             {
-                spheres.Add(BuildSphere(Design.GetClosestColor(1f), (point.Position + Curve.displacement)/Curve.scale, force: true));
+                spheres.Add(BuildSphere(Design.GetClosestColor(1f), (point.Position + Curve.displacement) / Curve.scale, force: true));
             }
             else if (point.Name == pdt.RedA || point.Name == pdt.RedB)
             {
-                spheres.Add(BuildSphere(Design.GetClosestColor(0f), (point.Position + Curve.displacement)/Curve.scale, force: true));
+                spheres.Add(BuildSphere(Design.GetClosestColor(0f), (point.Position + Curve.displacement) / Curve.scale, force: true));
             }
         }
     }
@@ -149,16 +149,16 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
     {
         bool isFast = (adt.StudyFormat == Formats.HoloLens);
 
-        mainCurve = new Curve(adt.Chromosome, false, true, fast: isFast);
+        mainCurve = new Curve(adt.Filenamethreedim, false, true, fast: isFast);
         understandingString = adt.Question;
         showUnderstanding = true;
     }
 
-    public void SetupSegmentDistanceTrial(SegmentDistanceTrial sdt, string chrfn)
+    public void SetupSegmentDistanceTrial(SegmentDistanceTrial sdt)
     {
         bool isFast = (sdt.StudyFormat == Formats.HoloLens);
 
-        mainCurve = new Curve(chrfn, true, true, fast: isFast);
+        mainCurve = new Curve(sdt.Filenamethreedim, true, true, fast: isFast);
         redObject = mainCurve.GenerateLineSegment(sdt, true);
         blueObject = mainCurve.GenerateLineSegment(sdt, false);
     }
@@ -196,7 +196,14 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
         for (int c = 0; c < 7; c++)
         {
             GameObject go = new GameObject("SpectrumRenderer" + c);
-            go.transform.parent = GameObject.Find("Main Camera").transform;
+            try
+            {
+                go.transform.parent = GameObject.Find("Main Camera").transform;
+            }
+            catch
+            {
+                go.transform.parent = GameObject.Find("MixedRealityCamera").transform;
+            }
             LineRenderer spectrumRenderer = go.AddComponent<LineRenderer>();
             spectrumRenderer.material = new Material(Shader.Find("Particles/Alpha Blended Premultiply"));
 
@@ -229,13 +236,6 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
     // Update is called once per frame
     private void Update()
     {
-        //if (spectrumRenderer != null)
-        //{
-        //    Vector3 p = GameObject.Find("Main Camera").transform.position;
-        //    Vector3[] spectrumPoints = { p + new Vector3(-1, -1, 4), p + new Vector3(1, -1, 4) };
-        //    spectrumRenderer.SetPositions(spectrumPoints);
-        //}
-
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Destroy(gameObject.GetComponent<LineRenderer>());
@@ -346,20 +346,20 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
     {
         bool isFast = (tst.StudyFormat == Formats.HoloLens);
 
-        mainCurve = new Curve(tst.Chrom, tst.Skip, tst.Count);
+        mainCurve = new Curve(tst.Filenamethreedim, tst.Skip, tst.Count);
     }
 
     public void SetupLargerTadTrial(LargerTadTrial ltt)
     {
         bool isFast = (ltt.StudyFormat == Formats.HoloLens);
 
-        mainCurve = new Curve(ltt.Chrom, false, fast: isFast, tad: true);
+        mainCurve = new Curve(ltt.Filenamethreedim, false, fast: isFast, tad: true);
     }
 
     public void SetupTripleTrial(TripleTrial tt)
     {
         bool isFast = (tt.StudyFormat == Formats.HoloLens);
 
-        mainCurve = new Curve(tt.Chrom, tt.Skip, tt.Count, triple: true);
+        mainCurve = new Curve(tt.Filenamethreedim, tt.Skip, tt.Count, triple: true);
     }
 }
