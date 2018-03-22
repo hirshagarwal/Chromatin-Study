@@ -16,17 +16,15 @@ public enum Tasks
 public class Design
 {
     public static List<Color> standardColors = new List<Color>{
-        new Color(165/255f,0/255f,38/255f),
-        new Color(215/255f,48/255f,39/255f),
-        new Color(244/255f,109/255f,67/255f),
-        new Color(253/255f,174/255f,97/255f),
-        new Color(254/255f,224/255f,144/255f),
-        new Color(255/255f,255/255f,191/255f),
-        new Color(224/255f,243/255f,248/255f),
-        new Color(171/255f,217/255f,233/255f),
-        new Color(116/255f,173/255f,209/255f),
-        new Color(69/255f,117/255f,180/255f),
-        new Color(49/255f,54/255f,149/255f)
+        new Color(255/255f,255/255f,229/255f),
+        new Color(255/255f,247/255f,188/255f),
+        new Color(254/255f,227/255f,145/255f),
+        new Color(254/255f,196/255f,79/255f),
+        new Color(254/255f,153/255f,41/255f),
+        new Color(236/255f,112/255f,20/255f),
+        new Color(204/255f,76/255f,2/255f),
+        new Color(153/255f,52/255f,4/255f),
+        new Color(102/255f,37/255f,6/255f),
     };
 
     public static Color GetClosestColor(int c)
