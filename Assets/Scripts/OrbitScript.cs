@@ -93,7 +93,7 @@ public class OrbitScript : MonoBehaviour
                 y = ClampAngle(y, yMinLimit, yMaxLimit);
 
                 Quaternion rotation = Quaternion.Euler(y, x, 0);
-
+                Debug.Log("..." + Input.GetAxis("Mouse ScrollWheel"));
                 distance = Mathf.Clamp(distance - Input.GetAxis("Mouse ScrollWheel") * 5, distanceMin, distanceMax);
                 //Debug.Log(distance + "," + Input.GetAxis("Mouse ScrollWheel"));
                 RaycastHit hit;
