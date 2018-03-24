@@ -1374,7 +1374,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c9ecbe8ca71b2b4f9f0324a13d03d90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menu: 1
   target: {fileID: 394334866}
   shift: {x: 0, y: 0, z: 0}
   distance: 5
@@ -6551,6 +6550,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b184e78b6d0c78d4392dd681add8280b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scale: 1
+  scaleMin: 0.5
+  scaleMax: 7
 --- !u!4 &2030969603
 Transform:
   m_ObjectHideFlags: 0
@@ -6575,7 +6577,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4b6f5cdc0068c5409ccdff721fe3a74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  exploratory: 1
+  exploratory: 0
   lightScript: {fileID: 0}
   objectManager2D: {fileID: 0}
   objectManager3D: {fileID: 2030969602}
