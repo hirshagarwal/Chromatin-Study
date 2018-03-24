@@ -14,6 +14,9 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
     private GameObject redObject;
     private bool showUnderstanding = false;
     private string understandingString = "";
+    public float scale = 1;
+    public float scaleMin = 0.5f;
+    public int scaleMax = 7;
     private string guiText = "";
     private string[] files = { "1", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "X" };
     private string chrtype = "sen";
@@ -110,10 +113,12 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
         {
             sphere.transform.position = position;
             sphere.transform.localScale = new Vector3(mainCurve.SphereWidth * 2, mainCurve.SphereWidth * 2, mainCurve.SphereWidth * 2);
+            sphere.transform.parent = transform;
             return sphere;
         }
         sphere.transform.position = (position / mainCurve.Scale) + new Vector3(0, 0, 2);
         sphere.transform.localScale = new Vector3(mainCurve.SphereWidth, mainCurve.SphereWidth, mainCurve.SphereWidth);
+        sphere.transform.parent = transform;
         return sphere;
     }
 
@@ -236,6 +241,13 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
     // Update is called once per frame
     private void Update()
     {
+        scale = Mathf.Clamp(scale - Input.GetAxis("Mouse ScrollWheel") * 5, scaleMin, scaleMax);
+        Vector3 old_scale = transform.localScale;
+
+        old_scale.Set(scale, scale, scale);
+        //old_scale.x = scale;
+        //old_scale.z = scale;
+        transform.localScale = old_scale;
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Destroy(gameObject.GetComponent<LineRenderer>());

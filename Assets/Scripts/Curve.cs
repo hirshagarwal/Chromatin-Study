@@ -10,7 +10,7 @@ namespace Assets.Scripts
         private const int randomness = 5;
         public static int currentFile = 13;
         public static Vector3 displacement = new Vector3(0, 0, 2);
-        public static int scale = 4;
+        public static float scale = 4f;
         public List<Color> colorSpace;
         public AnimationCurve colorWidth;
         public GameObject go;
@@ -308,7 +308,7 @@ namespace Assets.Scripts
             cylinders.Clear();
         }
 
-        public int Scale
+        public float Scale
         {
             get
             {
@@ -501,6 +501,7 @@ namespace Assets.Scripts
             //  pos = pos + new Vector3 (0, 0, 7);
             cylinder.transform.position = pos;
             cylinder.transform.up = connector.EndPoint - connector.StartPoint;
+            cylinder.transform.parent = GameObject.Find("ObjectManager").transform;
             Vector3 offset = connector.EndPoint - connector.StartPoint;
             Vector3 scale = new Vector3(cylinderWidth, offset.magnitude / 2f, cylinderWidth);
             cylinder.transform.localScale = scale;
