@@ -79,10 +79,10 @@ namespace Assets.Scripts
                 String[] trialValues = TouchingSegments.data[trialID].Split(',');
                 task = Tasks.TouchingSegments;
                 trialDetails = new TouchingPointsTrial(
-                    trialConditions[0],
-                    trialConditions[1],
-                    trialConditions[2],
-                    trialConditions[3],
+                    trialValues[0],
+                    trialValues[1],
+                    trialValues[2],
+                    trialValues[3],
                     format
                     );
             }
@@ -92,9 +92,9 @@ namespace Assets.Scripts
                 String[] trialValues = LargerTad.data[trialID].Split(',');
                 task = Tasks.LargerTad;
                 trialDetails = new LargerTadTrial(
-                    trialConditions[0],
-                    trialConditions[1],
-                    trialConditions[2],
+                    trialValues[0],
+                    trialValues[1],
+                    trialValues[2],
                     format
                     );
             }
@@ -104,10 +104,10 @@ namespace Assets.Scripts
                 String[] trialValues = Triple.data[trialID].Split(',');
                 task = Tasks.Triple;
                 trialDetails = new TripleTrial(
-                    trialConditions[0],
-                    trialConditions[1],
-                    trialConditions[2],
-                    trialConditions[3],
+                    trialValues[0],
+                    trialValues[1],
+                    trialValues[2],
+                    trialValues[3],
                     format
                     );
             }

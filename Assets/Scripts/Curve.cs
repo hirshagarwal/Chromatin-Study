@@ -463,35 +463,23 @@ namespace Assets.Scripts
             colorsIn.Sort();
             float pointcount = colorsIn.Count;
             int tbucket = 0;
-            float first = 0f;
+            float last = 0f;
             List<float> buckets = new List<float>();
             for (int i = 0; i < pointcount; i++)
             {
                 float value = colorsIn[i];
-                if (tbucket == 0)
-                {
-                    first = value;
-                }
-                if (tbucket == 1)
-                {
-                    buckets.Add(value - first);
-                    tbucket = 0;
-                }
-                else
-                {
-                    tbucket++;
-                }
+                buckets.Add(value - last);
+                last = value;
             }
 
             var colorSpace = new List<Color>();
-            int halfcount = (int)Math.Floor(pointcount / 2);
-            for (float i = 0; i < (halfcount); i++)
+            for (float i = 0; i < (buckets.Max()); i++)
             {
-                colorSpace.Add(Design.GetClosestColor((i / (pointcount / 2f))));
+                colorSpace.Add(Design.GetClosestColor(((float)i / buckets.Max())));
             }
             int next = 0;
             var outSpace = new List<Color>();
-            for (int i = 0; i < halfcount; i++)
+            for (int i = 0; i < buckets.Count; i++)
             {
                 for (int k = next; k < next + buckets[i] * 10000; k++)
                 {
