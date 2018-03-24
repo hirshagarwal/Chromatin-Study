@@ -212,8 +212,8 @@ namespace Assets.Scripts
                 {
                     points[i].ColorRGB = Design.GetClosestColor(0.5f);
                 }
-                points[0].ColorRGB = Design.GetClosestColor(0f);
-                points[points.Count - 1].ColorRGB = Design.GetClosestColor(1f);
+                points[0].ColorRGB = Color.red;
+                points[points.Count - 1].ColorRGB = Color.blue;
             }
             else
             {

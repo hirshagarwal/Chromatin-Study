@@ -241,15 +241,10 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
     // Update is called once per frame
     private void Update()
     {
-        scale = Mathf.Clamp(scale - Input.GetAxis("Mouse ScrollWheel") * 5, scaleMin, scaleMax);
-        Vector3 old_scale = transform.localScale;
-
-        old_scale.Set(scale, scale, scale);
-        //old_scale.x = scale;
-        //old_scale.z = scale;
-        transform.localScale = old_scale;
+        UpdateScale();
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            UpdateScale(true);
             Destroy(gameObject.GetComponent<LineRenderer>());
             Destroy(redObject);
             Destroy(blueObject);
@@ -271,6 +266,7 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
 
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
+            UpdateScale(true);
             current_file--;
             current_file = ((current_file %= files.Length) < 0) ? current_file + files.Length : current_file;
             Destroy(gameObject.GetComponent<LineRenderer>());
@@ -297,6 +293,7 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
         }
         else if (Input.GetKeyDown(KeyCode.RightArrow))
         {
+            UpdateScale(true);
             current_file = (current_file + 1) % files.Length;
             Destroy(gameObject.GetComponent<LineRenderer>());
             Destroy(redObject);
@@ -322,6 +319,7 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
         }
         else if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
         {
+            UpdateScale(true);
             if (chrtype == "sen")
             {
                 chrtype = "pro";
@@ -352,6 +350,17 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
             }
             LoadNextFile();
         }
+    }
+
+    private void UpdateScale(bool reset = false)
+    {
+        if (!reset)
+            scale = Mathf.Clamp(scale - Input.GetAxis("Mouse ScrollWheel") * 5, scaleMin, scaleMax);
+        else
+            scale = 1;
+        Vector3 old_scale = transform.localScale;
+        old_scale.Set(scale, scale, scale);
+        transform.localScale = old_scale;
     }
 
     public void SetupTouchingSegments(TouchingPointsTrial tst)

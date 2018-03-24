@@ -6430,7 +6430,7 @@ MonoBehaviour:
   objectManager2D: {fileID: 0}
   objectManager3D: {fileID: 2030969602}
   orbitScript: {fileID: 1435786253}
-  participantNumber: 1
+  participantNumber: 0
   startingTrial: 0
   studyFormat: 1
   totalTrials: 208
