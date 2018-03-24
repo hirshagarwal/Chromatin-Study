@@ -109,7 +109,7 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
         if (force)
         {
             sphere.transform.position = position;
-            sphere.transform.localScale = new Vector3(mainCurve.SphereWidth * 5, mainCurve.SphereWidth * 5, mainCurve.SphereWidth * 5);
+            sphere.transform.localScale = new Vector3(mainCurve.SphereWidth * 2, mainCurve.SphereWidth * 2, mainCurve.SphereWidth * 2);
             return sphere;
         }
         sphere.transform.position = (position / mainCurve.Scale) + new Vector3(0, 0, 2);

@@ -3,7 +3,7 @@
 [AddComponentMenu("Camera-Control/Mouse Orbit with zoom")]
 public class OrbitScript : MonoBehaviour
 {
-    public bool menu = true;
+    private bool menu = true;
     public Transform target;
     public Vector3 shift = new Vector3(0, 0, 0);
     public float distance = 50.0f;
@@ -20,6 +20,31 @@ public class OrbitScript : MonoBehaviour
 
     private float x = 0.0f;
     private float y = 0.0f;
+
+    public bool Menu
+    {
+        get
+        {
+            return menu;
+        }
+
+        set
+        {
+            x = 0;
+            y = 0;
+
+            Quaternion rotation = Quaternion.Euler(y, x, 0);
+
+            distance = Mathf.Clamp(distance - Input.GetAxis("Mouse ScrollWheel") * 5, distanceMin, distanceMax);
+
+            Vector3 negDistance = new Vector3(0.0f, 0.0f, -distance);
+            Vector3 position = rotation * negDistance + (target.position + shift);
+
+            transform.rotation = rotation;
+            transform.position = position;
+            menu = value;
+        }
+    }
 
     // Use this for initialization
     private void Start()
@@ -39,7 +64,7 @@ public class OrbitScript : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (!menu && target)
+        if (!Menu && target)
         {
             if (Input.GetMouseButton(0))
             {

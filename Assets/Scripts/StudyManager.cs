@@ -390,9 +390,9 @@ Please, call the instructor.";
             if (exploratory)
             {
                 if (orbitScript != null)
-                    orbitScript.menu = false;
+                    orbitScript.Menu = false;
                 if (lightScript != null)
-                    lightScript.menu = false;
+                    lightScript.Menu = false;
             }
             if (studyFormat != Formats.HoloLens)
             {
@@ -541,7 +541,7 @@ Please, call the instructor.";
             throw new Exception("Configuration for " + currentTrial.Task.ToString() + " not implemented");
         }
         if (Formats.Projection == studyFormat)
-            orbitScript.menu = false;
+            orbitScript.Menu = false;
         mainTracking = "TIME, VIS_X, VIS_Y, VIS_Z,  VIS_A, VIS_B, VIS_C,  CAM_A, CAM_B, CAM_C";
         cursorTracking = "TIME, C_X, C_Y, C_Z";
         cuttingplaneTracking = "TIME, P_X, P_Y, P_, P_A, P_B, P _C";
@@ -554,7 +554,7 @@ Please, call the instructor.";
         if (Input.GetKeyDown(KeyCode.Space))
         {
             if (Formats.Projection == studyFormat)
-                orbitScript.menu = true;
+                orbitScript.Menu = true;
             RecordTimeAndCollectUserAnswer();
         }
     }

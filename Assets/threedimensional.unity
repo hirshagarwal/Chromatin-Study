@@ -1014,7 +1014,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c9ecbe8ca71b2b4f9f0324a13d03d90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menu: 1
   target: {fileID: 2030969603}
   shift: {x: 0, y: 0, z: 0}
   distance: 1
@@ -4780,7 +4779,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c9ecbe8ca71b2b4f9f0324a13d03d90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menu: 1
   target: {fileID: 2030969603}
   shift: {x: 0, y: 0, z: 0}
   distance: 1
