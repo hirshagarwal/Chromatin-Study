@@ -111,6 +111,7 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
 
     private Texture2D ReadInFile(string filename, Range redA = null, Range redB = null, Range blueA = null, Range blueB = null, bool isRange = false, bool attributeUnderstanding = false, int redCount = -1, int skip = 1, bool triple = false)
     {
+        Debug.Log("loading " + filename);
         TextAsset file = Resources.Load(filename) as TextAsset;
         int counter = 0;
 
