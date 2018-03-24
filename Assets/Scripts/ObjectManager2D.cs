@@ -161,7 +161,7 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
                     col = interactions[uniqueRanges[itrcx]][uniqueRanges[itrcy]];
                 Color color = Design.GetClosestColor(0f);
 
-                float threshold = 0.1f;
+                float threshold = 0.2f;
                 // float colval = threshold * (1 - threshold * (col / maxCol));
                 // float colval = threshold + ((1 - threshold) * (minCol + col / (maxCol - maxCol)));
                 float colval = (col - minCol) / (maxCol - minCol);

@@ -16,15 +16,25 @@ public enum Tasks
 public class Design
 {
     public static List<Color> standardColors = new List<Color>{
-        //        new Color(255/255f,255/255f,229/255f),
-        //        new Color(255/255f,247/255f,188/255f),
-        //        new Color(254/255f,227/255f,145/255f),
-        //        new Color(254/255f,196/255f,79/255f),
-        //        new Color(254/255f,153/255f,41/255f),
-        //        new Color(236/255f,112/255f,20/255f),
-        //        new Color(204/255f,76/255f,2/255f),
-        //        new Color(153/255f,52/255f,4/255f),
-        //        new Color(102/255f,37/255f,6/255f),
+        //   new Color(255/255f,255/255f,229/255f),
+        //   new Color(255/255f,247/255f,188/255f),
+        //   new Color(254/255f,227/255f,145/255f),
+        //   new Color(254/255f,196/255f,79/255f),
+        //   new Color(254/255f,153/255f,41/255f),
+        //   new Color(236/255f,112/255f,20/255f),
+        //   new Color(204/255f,76/255f,2/255f),
+        //   new Color(153/255f,52/255f,4/255f),
+        //   new Color(102/255f,37/255f,6/255f),
+        //new Color(250/255f,233/255f,205/255f),
+        new Color(1f,1f,1f),
+        //new Color(244/255f,212/255f,154/255f),
+        new Color(2405f,191/255f,111/255f),
+        new Color(225/255f,142/255f,60/255f),
+        new Color(209/255f,87/255f,49/255f),
+        new Color(194/255f,45/255f,40/255f),
+        new Color(153/255f,30/255f,30/255f),
+        new Color(87/255f,13/255f,16/255f),
+        new Color(0f,0f,0f),
     };
 
     public static Color GetClosestColor(int c)
@@ -41,9 +51,10 @@ public class Design
             return standardColors[standardColors.Count - 1];
         }
         int idx = (int)Math.Floor(c * (standardColors.Count - 1));
-        //        return standardColors[idx];
-        return new Color(0f, 0f, 0f, c);
+        return standardColors[idx];
+        // return new Color(0f, 0f, 0f, c);
     }
+   
 
     public static string TASK_DESCRIPTION_TRIPLE =
         @"NEW TASK: Touching Triples

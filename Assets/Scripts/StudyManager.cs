@@ -200,7 +200,6 @@ Please, call the instructor.";
         feedbackPanel.SetActive(false);
         duration = DateTime.Now - dateStart;
         running = false;
-
         // show answer screen and wait for user answer.
         // set answer choices
         if (currentTrial.Task == Tasks.PointDistance)
