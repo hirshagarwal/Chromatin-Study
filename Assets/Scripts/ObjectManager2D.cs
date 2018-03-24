@@ -17,7 +17,6 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
     private bool showUnderstanding = false;
     private string understandingString = "";
 
-    public float threshold = 0.7f;
     private Texture2D mainTexture;
     private Texture2D redTexture;
     private Texture2D blueTexture;
@@ -119,20 +118,33 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
         interactions = new Dictionary<Range, Dictionary<Range, float>>();
         List<float> colorsIn = new List<float>();
         float maxCol = 0.0f;
+        float minCol = 1.0f;
         foreach (string line in file.text.Split('\n'))
         {
             if (line != "")
             {
                 Square sq = new Square(line);
+                if (sq.Strength > 0.1  ) {
+                    sq.Strength = 0.1f;
+                }
+                sq.Strength = (float) Math.Log(1+sq.Strength,1000);
                 SafelyAdd2D(ref interactions, sq);
                 ranges.Add(sq.A);
                 ranges.Add(sq.B);
                 if (sq.Strength > maxCol)
                     maxCol = sq.Strength;
+                if (sq.Strength < minCol)
+                    minCol = sq.Strength;
+
                 colorsIn.Add(sq.Strength);
                 counter++;
             }
         }
+//        if (maxCol > 0.1f) {
+//           maxCol = 0.1f;
+//        }
+        Debug.Log("MaxCol=" + maxCol);
+        Debug.Log("MaxCol=" + minCol);
         Resources.UnloadAsset(file);
         List<Range> uniqueRanges = new HashSet<Range>(ranges).ToList();
         uniqueRanges.Sort();
@@ -146,9 +158,14 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
             {
                 float col = 0f;
                 if (interactions.ContainsKey(uniqueRanges[itrcx]) && interactions[uniqueRanges[itrcx]].ContainsKey(uniqueRanges[itrcy]))
-                    col += interactions[uniqueRanges[itrcx]][uniqueRanges[itrcy]];
+                    col = interactions[uniqueRanges[itrcx]][uniqueRanges[itrcy]];
                 Color color = Design.GetClosestColor(0f);
-                float colval = threshold * (1 - threshold * (col / maxCol));
+
+                float threshold = 0.1f;
+                // float colval = threshold * (1 - threshold * (col / maxCol));
+                // float colval = threshold + ((1 - threshold) * (minCol + col / (maxCol - maxCol)));
+                float colval = (col - minCol) / (maxCol - minCol);
+                colval = threshold + ((1 - threshold) * colval);
                 if (studyTask == Tasks.PointDistance || studyTask == Tasks.SegmentDistance)
                 {
                     if (isRange)
@@ -170,7 +187,7 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
                     {
                         if (uniqueRanges[Clamp(itrcx + 1, uniqueRanges.Count)] == redA ||
                             uniqueRanges[Clamp(itrcx + 1, uniqueRanges.Count)] == redB ||
-                            uniqueRanges[Clamp( itrcx-1, uniqueRanges.Count)] == redA ||
+                            uniqueRanges[Clamp(itrcx-1, uniqueRanges.Count)] == redA ||
                             uniqueRanges[Clamp(itrcx-1, uniqueRanges.Count)] == redB ||
                             uniqueRanges[Clamp(itrcy + 1, uniqueRanges.Count)] == redA ||
                             uniqueRanges[Clamp(itrcy + 1, uniqueRanges.Count)] == redB ||

@@ -34,6 +34,10 @@ namespace Assets.Scripts
             {
                 return strength;
             }
+            set
+            {
+                strength = value;
+            }
         }
     }
 }
