@@ -7,8 +7,8 @@ public class OrbitScript : MonoBehaviour
     public Transform target;
     public Vector3 shift = new Vector3(0, 0, 0);
     public float distance = 50.0f;
-    public float xSpeed = 240.0f;
-    public float ySpeed = 480.0f;
+    public float xSpeed = 120.0f;
+    public float ySpeed = 120.0f;
 
     public float yMinLimit = -20f;
     public float yMaxLimit = 80f;
@@ -50,16 +50,16 @@ public class OrbitScript : MonoBehaviour
     private void Start()
     {
         Vector3 angles = transform.eulerAngles;
-        x = angles.y;
-        y = angles.x;
+       x = angles.y;
+       y = angles.x;
 
-        rigidbody = GetComponent<Rigidbody>();
+       rigidbody = GetComponent<Rigidbody>();
 
-        // Make the rigid body not change rotation
-        if (rigidbody != null)
-        {
-            rigidbody.freezeRotation = true;
-        }
+       // Make the rigid body not change rotation
+       if (rigidbody != null)
+       {
+           rigidbody.freezeRotation = true;
+       }
     }
 
     private void LateUpdate()
@@ -68,16 +68,41 @@ public class OrbitScript : MonoBehaviour
         {
             if (Input.GetMouseButton(0))
             {
-                var mx = Input.mousePosition.x;//Input.GetAxis("Mouse X");
-                var my = Input.mousePosition.y;//Input.GetAxis("Mouse Y");
+                //var mx = Input.mousePosition.x;//Input.GetAxis("Mouse X");
+                //var my = Input.mousePosition.y;//Input.GetAxis("Mouse Y");
+                //x += mx * xSpeed * distance * 0.02f;
+                //y -= my * ySpeed * 0.02f;
+
+                //Quaternion rotation = Quaternion.Euler(y, x, 0);
+
+                //distance = Mathf.Clamp(distance - Input.GetAxis("Mouse ScrollWheel") * 5, distanceMin, distanceMax);
+                //Vector3 negDistance = new Vector3(0.0f, 0.0f, -distance);
+                //Vector3 position = rotation * negDistance + (target.position + shift);
+
+                //transform.rotation = rotation;
+                //transform.position = position;
+
+                var mx = Input.mousePosition.x - Screen.width/2;//Input.GetAxis("Mouse X") ;
+                var my = Input.mousePosition.y - Screen.height / 2;//Input.GetAxis("Mouse Y");
+               
                 x += mx * xSpeed * distance * 0.02f;
                 y -= my * ySpeed * 0.02f;
+              //  Debug.Log("x " + x + "," + my);
+
+  
+                y = ClampAngle(y, yMinLimit, yMaxLimit);
 
                 Quaternion rotation = Quaternion.Euler(y, x, 0);
 
                 distance = Mathf.Clamp(distance - Input.GetAxis("Mouse ScrollWheel") * 5, distanceMin, distanceMax);
+                //Debug.Log(distance + "," + Input.GetAxis("Mouse ScrollWheel"));
+                RaycastHit hit;
+                if (Physics.Linecast(target.position, transform.position, out hit))
+                {
+                    distance -= hit.distance;
+                }
                 Vector3 negDistance = new Vector3(0.0f, 0.0f, -distance);
-                Vector3 position = rotation * negDistance + (target.position + shift);
+                Vector3 position = rotation * negDistance + target.position;
 
                 transform.rotation = rotation;
                 transform.position = position;
