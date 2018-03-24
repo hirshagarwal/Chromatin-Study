@@ -57,6 +57,12 @@ new Color(37/255f, 0/255f, 5/255f),
 new Color(17/255f, 0/255f, 2/255f),
     };
 
+    public static List<Color> taskColors = new List<Color>
+    {
+        new Color(1f,0f,0f),
+        new Color(1f, 0f, 1f)
+    };
+
     public static Color GetClosestColor(int c)
     {
         int idx = (int)Math.Floor(c / 255f);

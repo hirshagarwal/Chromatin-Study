@@ -22,7 +22,7 @@ namespace Assets.Scripts
         private string fileName;
         private string[] files = { "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "X" };
         private List<Point> points;
-        private float sphereWidth = 0.002f;
+        private float sphereWidth = 0.005f;
 
         public Curve(string filen, int skips, int redCount, bool triple = false)
         {
