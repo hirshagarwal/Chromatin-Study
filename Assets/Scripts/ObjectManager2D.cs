@@ -160,7 +160,7 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
                 float col = 0f;
                 if (interactions.ContainsKey(uniqueRanges[itrcx]) && interactions[uniqueRanges[itrcx]].ContainsKey(uniqueRanges[itrcy]))
                     col = interactions[uniqueRanges[itrcx]][uniqueRanges[itrcy]];
-                Color color = Design.GetClosestColor(0f);
+                Color color = Design.GetClosestColor(0f,false);
 
                 float threshold = 0.2f;
                 // float colval = threshold * (1 - threshold * (col / maxCol));
@@ -173,15 +173,15 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
                     {
                         if (uniqueRanges[itrcx] >= redA && uniqueRanges[itrcx] <= redB)
                         {
-                            color = Design.GetClosestColor(0f);
+                            color = Design.GetClosestColor(0f,true);
                         }
                         else if (uniqueRanges[itrcx] >= blueA && uniqueRanges[itrcx] <= blueB)
                         {
-                            color = Design.GetClosestColor(1f);
+                            color = Design.GetClosestColor(1f,true);
                         }
                         else if (col > 0)
                         {
-                            color = Design.GetClosestColor(colval);
+                            color = Design.GetClosestColor(colval,false);
                         }
                     }
                     else
@@ -195,7 +195,7 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
                             uniqueRanges[Clamp(itrcy - 1, uniqueRanges.Count)] == redA ||
                             uniqueRanges[Clamp(itrcy - 1, uniqueRanges.Count)] == redB)
                         {
-                            color = Design.GetClosestColor(0f);
+                            color = Design.GetClosestColor(0f,true);
                         }
                         else if (uniqueRanges[Clamp(itrcx+1, uniqueRanges.Count)] == blueA ||
                                 uniqueRanges[Clamp(itrcx+1, uniqueRanges.Count)] == blueB ||
@@ -206,18 +206,18 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
                                 uniqueRanges[Clamp(itrcy - 1, uniqueRanges.Count)] == blueA ||
                                 uniqueRanges[Clamp(itrcy - 1, uniqueRanges.Count)] == blueB)
                         {
-                            color = Design.GetClosestColor(1f);
+                            color = Design.GetClosestColor(1f,true);
                         }
                         else if (col > 0)
                         {
-                            color = Design.GetClosestColor(colval);
+                            color = Design.GetClosestColor(colval,false);
                         }
                     }
                 }
                 else if (attributeUnderstanding)
                 {
                     if (col > 0)
-                        color = Design.GetClosestColor(colval);
+                        color = Design.GetClosestColor(colval,false);
                 }
                 else if (studyTask == Tasks.LargerTad)
                 {
@@ -226,16 +226,16 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
                         if (itrcx < buckets / 10 &&
                             itrcy < buckets / 10)
                         {
-                            color = Design.GetClosestColor(1f - colval);
+                            color = Design.GetClosestColor(1f - colval,true);
                         }
                         else if (itrcx > (buckets - (buckets / 10)) &&
                           itrcy > (buckets - (buckets / 10)))
                         {
-                            color = Design.GetClosestColor(colval);
+                            color = Design.GetClosestColor(colval,true);
                         }
                         else
                         {
-                            color = Design.GetClosestColor(0.5f);
+                            color = Design.GetClosestColor(0.5f,false);
                         }
                     }
                     else
@@ -245,10 +245,10 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
                 }
                 else if (col > 0)
                 {
-                    color = Design.GetClosestColor(colval);
+                    color = Design.GetClosestColor(colval,false);
                 } else
                 {
-                    color = Design.GetClosestColor(0f);
+                    color = Design.GetClosestColor(0f,false);
                 }
                 tex.SetPixel(x, y, color);
                 y--;
@@ -427,7 +427,7 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
 
     private Color Recolor(Color oldColor)
     {
-        Color c = Design.GetClosestColor(1f);
+        Color c = Design.GetClosestColor(1f,false);
         c.a = oldColor.a;
         return c;
     }
@@ -436,7 +436,7 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
 
     private Color Recolor(Color oldColor, float factor)
     {
-        Color c = Design.GetClosestColor(1f);
+        Color c = Design.GetClosestColor(1f,false);
         c.a = oldColor.a * factor;
         return c;
     }

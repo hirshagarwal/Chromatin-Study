@@ -125,12 +125,12 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
 
     private GameObject BuildSphere()
     {
-        return BuildSphere(Design.GetClosestColor(1f), new Vector3(0, 0, 0));
+        return BuildSphere(Design.GetClosestColor(1f,true), new Vector3(0, 0, 0));
     }
 
     private GameObject BuildSphere(Vector3 position)
     {
-        return BuildSphere(Design.GetClosestColor(1f), position);
+        return BuildSphere(Design.GetClosestColor(1f,true), position);
     }
 
     public void SetupPointDistanceTrial(PointDistanceTrial pdt)
@@ -142,11 +142,11 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
         {
             if (point.Name == pdt.BlueA || point.Name == pdt.BlueB)
             {
-                spheres.Add(BuildSphere(Design.GetClosestColor(1f), (point.Position + Curve.displacement) / Curve.scale, force: true));
+                spheres.Add(BuildSphere(Design.GetClosestColor(1f,true), (point.Position + Curve.displacement) / Curve.scale, force: true));
             }
             else if (point.Name == pdt.RedA || point.Name == pdt.RedB)
             {
-                spheres.Add(BuildSphere(Design.GetClosestColor(0f), (point.Position + Curve.displacement) / Curve.scale, force: true));
+                spheres.Add(BuildSphere(Design.GetClosestColor(0f,true), (point.Position + Curve.displacement) / Curve.scale, force: true));
             }
         }
     }

@@ -16,7 +16,7 @@ namespace Assets.Scripts
         private bool isRed = false;
         private bool isBlue = false;
         private bool isYellow = false;
-        private Color colorRGB = Design.GetClosestColor(0.5f);
+        private Color colorRGB = Design.GetClosestColor(0.5f, false);
         private Vector3 position;
 
         public Point(float x, float y, float z, string name, float color)
@@ -95,7 +95,7 @@ namespace Assets.Scripts
 
         public void InitialiseRGBValue(int current, int total)
         {
-            colorRGB = Design.GetClosestColor(color);
+            colorRGB = Design.GetClosestColor(color, false);
         }
 
         int IComparable<Point>.CompareTo(Point other)

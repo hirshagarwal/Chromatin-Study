@@ -29,7 +29,7 @@ namespace Assets.Scripts
             go = new GameObject();
             List<Point> allPoints = ReadInFile(filen);
             points = new List<Point>();
-            Color color = Design.GetClosestColor(0.5f);
+            Color color = Design.GetClosestColor(0.5f,false);
             List<float> colorsIn = new List<float>();
             float maxColor = 0.0f;
             System.Random rnd = new System.Random(0);
@@ -81,7 +81,7 @@ namespace Assets.Scripts
         {
             for (int i = 0; i < points.Count; i++)
             {
-                points[i].ColorRGB = Design.GetClosestColor(0.5f);
+                points[i].ColorRGB = Design.GetClosestColor(0.5f,false);
             }
             int currentReds = 0;
             splineRes *= 2;
@@ -105,9 +105,9 @@ namespace Assets.Scripts
                                 points[i] = points[i].Displaced(new Vector3(rnd.Next(randomness) / 10f, rnd.Next(randomness) / 10f, rnd.Next(randomness) / 10f));
                             }
                             points[i - 1].MakeRed();
-                            points[i - 1].ColorRGB = Design.GetClosestColor(0f);
+                            points[i - 1].ColorRGB = Design.GetClosestColor(0f,true);
                             points[i + 1].MakeBlue();
-                            points[i + 1].ColorRGB = Design.GetClosestColor(1f);
+                            points[i + 1].ColorRGB = Design.GetClosestColor(1f,true);
                             currentReds++;
                         }
                     }
@@ -119,7 +119,7 @@ namespace Assets.Scripts
         {
             for (int i = 0; i < points.Count; i++)
             {
-                points[i].ColorRGB = Design.GetClosestColor(0.5f);
+                points[i].ColorRGB = Design.GetClosestColor(0.5f,false);
             }
             int currentReds = 0;
             splineRes *= 2;
@@ -155,18 +155,18 @@ namespace Assets.Scripts
                                 points.Insert(i + 5, rightBegin);
 
                                 points[i - 1].MakeBlue();
-                                points[i - 1].ColorRGB = Design.GetClosestColor(0f);
+                                points[i - 1].ColorRGB = Design.GetClosestColor(0f,true);
                                 points[i + 2].MakeYellow();
                                 points[i + 5].MakeRed();
-                                points[i + 5].ColorRGB = Design.GetClosestColor(1f);
+                                points[i + 5].ColorRGB = Design.GetClosestColor(1f,true);
                             }
                             else
                             {
                                 points[i - 1].MakeBlue();
-                                points[i - 1].ColorRGB = Design.GetClosestColor(0f);
+                                points[i - 1].ColorRGB = Design.GetClosestColor(0f,true);
                                 points[i].MakeYellow();
                                 points[i + 1].MakeRed();
-                                points[i + 1].ColorRGB = Design.GetClosestColor(1f);
+                                points[i + 1].ColorRGB = Design.GetClosestColor(1f,true);
                             }
                             currentReds++;
                         }
@@ -184,7 +184,7 @@ namespace Assets.Scripts
             go = new GameObject();
             points = ReadInFile(filen);
             Debug.Log("Loaded " + filen);
-            Color color = Design.GetClosestColor(0.5f);
+            Color color = Design.GetClosestColor(0.5f,false);
             Vector3 shift = new Vector3(0, 0, 0);
             if (!grayscale && !tad)
             {
@@ -210,18 +210,18 @@ namespace Assets.Scripts
             {
                 for (int i = 1; i < points.Count - 1; i++)
                 {
-                    points[i].ColorRGB = Design.GetClosestColor(0.5f);
+                    points[i].ColorRGB = Design.GetClosestColor(0.5f,false);
                 }
-                points[0].ColorRGB = Design.GetClosestColor(0f) ;
-                points[points.Count - 1].ColorRGB = Design.GetClosestColor(1f);
+                points[0].ColorRGB = Design.GetClosestColor(0f,true) ;
+                points[points.Count - 1].ColorRGB = Design.GetClosestColor(1f,true);
             }
             else
             {
                 switch (colorID)
                 {
-                    case 0: color = Design.GetClosestColor(0.5f); break;
-                    case 1: color = Design.GetClosestColor(0f); shift = new Vector3(-1.5f, 0, 0); break;
-                    case 2: color = Design.GetClosestColor(1f); shift = new Vector3(1.5f, 0, 0); break;
+                    case 0: color = Design.GetClosestColor(0.5f,false); break;
+                    case 1: color = Design.GetClosestColor(0f,true); shift = new Vector3(-1.5f, 0, 0); break;
+                    case 2: color = Design.GetClosestColor(1f,true); shift = new Vector3(1.5f, 0, 0); break;
                 }
             }
             List<Connector> connectors = new List<Connector>();
@@ -246,7 +246,7 @@ namespace Assets.Scripts
                     float alpha = 1.0f;
                     Gradient gradient = new Gradient();
                     gradient.SetKeys(
-                        new GradientColorKey[] { new GradientColorKey(Design.GetClosestColor(0f), 0.0f), new GradientColorKey(Design.GetClosestColor(1f), 1.0f) },
+                        new GradientColorKey[] { new GradientColorKey(Design.GetClosestColor(0f,true), 0.0f), new GradientColorKey(Design.GetClosestColor(1f,true), 1.0f) },
                         new GradientAlphaKey[] { new GradientAlphaKey(alpha, 1.0f), new GradientAlphaKey(alpha, 1.0f) }
                         );
                     lineRenderer.colorGradient = gradient;
@@ -256,7 +256,7 @@ namespace Assets.Scripts
                     float alpha = 1.0f;
                     Gradient gradient = new Gradient();
                     gradient.SetKeys(
-                        new GradientColorKey[] { new GradientColorKey(Design.GetClosestColor(0f), 0.0f), new GradientColorKey(Design.GetClosestColor(1f), 1.0f) },
+                        new GradientColorKey[] { new GradientColorKey(Design.GetClosestColor(0f,false), 0.0f), new GradientColorKey(Design.GetClosestColor(1f,true), 1.0f) },
                         new GradientAlphaKey[] { new GradientAlphaKey(alpha, 1.0f), new GradientAlphaKey(alpha, 1.0f) }
                         );
                     lineRenderer.colorGradient = gradient;
@@ -403,7 +403,7 @@ namespace Assets.Scripts
             float alpha = 1.0f;
             Gradient gradient = new Gradient();
             gradient.SetKeys(
-                new GradientColorKey[] { new GradientColorKey(Design.GetClosestColor(red ? 0f : 1f), 1.0f), new GradientColorKey(Design.GetClosestColor(red ? 0f : 1f), 1.0f) },
+                new GradientColorKey[] { new GradientColorKey(Design.GetClosestColor(red ? 0f : 1f,true), 1.0f), new GradientColorKey(Design.GetClosestColor(red ? 0f : 1f,true), 1.0f) },
                 new GradientAlphaKey[] { new GradientAlphaKey(alpha, 1.0f), new GradientAlphaKey(alpha, 1.0f) }
                 );
             renderedLine.colorGradient = gradient;
@@ -475,7 +475,7 @@ namespace Assets.Scripts
             var colorSpace = new List<Color>();
             for (float i = 0; i < (buckets.Max()); i++)
             {
-                colorSpace.Add(Design.GetClosestColor(((float)i / buckets.Max())));
+                colorSpace.Add(Design.GetClosestColor(((float)i / buckets.Max()),false));
             }
             int next = 0;
             var outSpace = new List<Color>();

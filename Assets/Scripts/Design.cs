@@ -63,14 +63,13 @@ new Color(17/255f, 0/255f, 2/255f),
         new Color(1f, 0f, 1f)
     };
 
-    public static Color GetClosestColor(int c)
+    public static Color GetClosestColor(float c, bool task)
     {
-        int idx = (int)Math.Floor(c / 255f);
-        return standardColors[idx];
-    }
-
-    public static Color GetClosestColor(float c)
-    {
+        if (task)
+        {
+            int index = (int)Math.Floor(c * (taskColors.Count - 1));
+            return taskColors[index];
+        }
         if (c > 1f)
         {
             Debug.LogWarning(c + " is >1 in Design.GetClosestColor()! Defaulting to 1...");
