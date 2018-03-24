@@ -14,11 +14,11 @@ namespace Assets.Scripts
         public List<Color> colorSpace;
         public AnimationCurve colorWidth;
         public GameObject go;
-        public float splineRes = 2f;
+        public float splineRes = 8f;
         private Material baseMaterial;
         private string chrtype = "sen";
         private List<GameObject> cylinders = new List<GameObject>();
-        private float cylinderWidth = 0.005f;
+        private float cylinderWidth = 0.001f;
         private string fileName;
         private string[] files = { "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "X" };
         private List<Point> points;
