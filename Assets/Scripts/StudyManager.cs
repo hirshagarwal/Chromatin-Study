@@ -557,12 +557,12 @@ Please, call the instructor.";
             RecordTimeAndCollectUserAnswer();
         }
     }
-    int last_interim;
+    int last_interim = 0;
     private void WriteToFile(string answer)
     {
         results = results + System.Environment.NewLine + answer;
 
-        using (System.IO.StreamWriter sw = new System.IO.StreamWriter(last_interim.ToString() + "interim_"+saveFileName, true))
+        using (System.IO.StreamWriter sw = new System.IO.StreamWriter("Participant " + participantNumber.ToString() + "_" + last_interim.ToString() + "interim_"+saveFileName, true))
         {
             foreach (string line in results.Split(System.Environment.NewLine.ToCharArray()))
             {
@@ -571,5 +571,6 @@ Please, call the instructor.";
             }
             sw.Dispose();
         }
+        last_interim++;
     }
 }
