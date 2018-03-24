@@ -4088,7 +4088,7 @@ MonoBehaviour:
   objectManager3D: {fileID: 0}
   orbitScript: {fileID: 0}
   participantNumber: 0
-  startingTrial: 16
+  startingTrial: 9
   studyFormat: 2
   totalTrials: 208
   twodim: 1

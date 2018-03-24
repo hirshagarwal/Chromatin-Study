@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/threedimensional.unity
+- path: C:/Users/vishub/projects/alex2/Assets/mixedreality.unity
   isLoaded: 1
   isActive: 1
