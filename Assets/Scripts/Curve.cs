@@ -18,7 +18,7 @@ namespace Assets.Scripts
         private Material baseMaterial;
         private string chrtype = "sen";
         private List<GameObject> cylinders = new List<GameObject>();
-        private float cylinderWidth = 0.001f;
+        private float cylinderWidth = 0.0015f;
         private string fileName;
         private string[] files = { "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "X" };
         private List<Point> points;

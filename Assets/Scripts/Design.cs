@@ -60,7 +60,7 @@ new Color(17/255f, 0/255f, 2/255f),
     public static List<Color> taskColors = new List<Color>
     {
         new Color(1f,0f,0f),
-        new Color(1f, 0f, 1f)
+        new Color(.2f, .2f, 1f)
     };
 
     public static Color GetClosestColor(float c, bool task)
