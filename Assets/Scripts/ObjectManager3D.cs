@@ -98,6 +98,7 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
 
     public void SetupCurveComparisonTrial(CurveComparisonTrial curveComparisonTrial)
     {
+        UpdateScale(true);
         bool fast = (curveComparisonTrial.StudyFormat == Formats.HoloLens);
         mainCurve = new Curve(curveComparisonTrial.ReferenceChromosome, true, true, 0, fast);
         redCurve = new Curve(curveComparisonTrial.RedChromosome, true, true, 1, fast);
@@ -135,7 +136,7 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
     public void SetupPointDistanceTrial(PointDistanceTrial pdt)
     {
         bool isFast = (pdt.StudyFormat == Formats.HoloLens);
-
+        UpdateScale(true);
         mainCurve = new Curve(pdt.Filenamethreedim, true, fast: isFast);
         foreach (Point point in mainCurve.Points)
         {
@@ -153,7 +154,7 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
     public void SetupAttributeUnderstandingTrial(AttributeUnderstandingTrial adt)
     {
         bool isFast = (adt.StudyFormat == Formats.HoloLens);
-
+        UpdateScale(true);
         mainCurve = new Curve(adt.Filenamethreedim, false, true, fast: isFast);
         understandingString = adt.Question;
         showUnderstanding = true;
@@ -162,7 +163,7 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
     public void SetupSegmentDistanceTrial(SegmentDistanceTrial sdt)
     {
         bool isFast = (sdt.StudyFormat == Formats.HoloLens);
-
+        UpdateScale(true);
         mainCurve = new Curve(sdt.Filenamethreedim, true, true, fast: isFast);
         redObject = mainCurve.GenerateLineSegment(sdt, true);
         blueObject = mainCurve.GenerateLineSegment(sdt, false);
@@ -352,7 +353,7 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
         }
     }
 
-    private void UpdateScale(bool reset = false)
+    public void UpdateScale(bool reset = false)
     {
         if (!reset)
             scale = Mathf.Clamp(scale - Input.GetAxis("Mouse ScrollWheel") * 5, scaleMin, scaleMax);
@@ -366,21 +367,21 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
     public void SetupTouchingSegments(TouchingPointsTrial tst)
     {
         bool isFast = (tst.StudyFormat == Formats.HoloLens);
-
+        UpdateScale(true);
         mainCurve = new Curve(tst.Filenamethreedim, tst.Skip, tst.Count);
     }
 
     public void SetupLargerTadTrial(LargerTadTrial ltt)
     {
         bool isFast = (ltt.StudyFormat == Formats.HoloLens);
-
+        UpdateScale(true);
         mainCurve = new Curve(ltt.Filenamethreedim, false, fast: isFast, tad: true);
     }
 
     public void SetupTripleTrial(TripleTrial tt)
     {
         bool isFast = (tt.StudyFormat == Formats.HoloLens);
-
+        UpdateScale(true);
         mainCurve = new Curve(tt.Filenamethreedim, tt.Skip, tt.Count, triple: true);
     }
 }
