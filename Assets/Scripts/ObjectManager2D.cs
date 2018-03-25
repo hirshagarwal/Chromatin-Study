@@ -641,7 +641,132 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
     {
         mainSpriteRenderer.enabled = true;
         studyTask = Tasks.TouchingSegments;
-        mainTexture = ReadInFile(tst.Filenametwodim, redCount: tst.Count, skip:1);
+
+        mainTexture = ReadInFile(tst.Filenametwodim, redCount: tst.Count, skip: 1);
+
+        int ysize = mainTexture.height;
+        int xsize = mainTexture.width;
+
+        int SEGMENT_LENGTH = 30;
+
+        // CODE FOR FINDING SEGMENTS. ONLY TO GENERATE TASK CONDITIONS.
+        //// FIND SEGMENTS
+        //int NUM_SEGMENTS = 2;
+        //int[] startsRed = new int[NUM_SEGMENTS];
+        //int[] startsBlue = new int[NUM_SEGMENTS];
+        //int pairsFound = 0;
+        //float[] proximities = new float[NUM_SEGMENTS];
+        //int segmentLength = 30;
+        //int SEGMENT_DIST = 10;
+
+
+        //float PROXIMITY_THRESHOLD = .02f;
+        //System.Random rnd = new System.Random();
+
+        //float proxRed = 0f;
+        //float proxBlue = proxRed;
+
+
+        //    int s1 = 0, s2 = 0;
+        //    while (Math.Abs(s1 - s2) < segmentLength + SEGMENT_DIST) {
+        //        s1 = (int) UnityEngine.Random.Range(10f, (xsize / 2) - segmentLength - 10);
+        //        s2 = (int) UnityEngine.Random.Range(10f, (xsize / 2) - segmentLength - 10);
+        //    }
+        //    startsRed[0] = s1;
+        //    startsRed[1] = s2;
+
+        //    for (int i = 0; i < segmentLength - 1; i++)
+        //    {
+        //        for (int j = 0; j < segmentLength - 1; j++)
+        //        {
+        //            proxRed += (1 - mainTexture.GetPixel(s1 + i, s2 + j).grayscale);
+        //        }
+        //    }
+        //    proxRed = proxRed / (segmentLength * segmentLength);
+
+        //    // find 2nd pair
+        //    proxBlue = proxRed;
+        //    while (Math.Abs(proxBlue - proxRed) < PROXIMITY_THRESHOLD) {
+        //        s1 = 0;
+        //        s2 = 0;
+        //        while (Math.Abs(s1 - s2) < segmentLength + SEGMENT_DIST)
+        //        {
+        //            s1 = (int)UnityEngine.Random.Range(xsize / 2 + 10f, xsize - segmentLength - 10);
+        //            s2 = (int)UnityEngine.Random.Range(xsize / 2 + 10f, xsize - segmentLength - 10);
+        //        }
+        //        startsBlue[0] = s1;
+        //        startsBlue[1] = s2;
+
+
+        //        for (int i = 0; i < segmentLength - 1; i++)
+        //        {
+        //            for (int j = 0; j < segmentLength - 1; j++)
+        //            {
+        //                proxBlue += (1 - mainTexture.GetPixel(s1 + i, s2 + j).grayscale);
+        //            }
+        //        }
+        //        proxBlue = proxBlue / (segmentLength * segmentLength);
+        //    }
+        //    Debug.Log("PROX1=" + proxRed + ",PROX2=" + proxBlue + ", DIST=" + Math.Abs(proxBlue - proxRed));
+        //    pairsFound++;
+
+
+        //string color = "red";
+        //if (proxBlue > proxRed) {
+        //    color = "blue";
+        //}
+
+        //string output = 
+        //    startsRed[0] + "," + startsRed[1] + "," + 
+        //    startsBlue[0] + "," + startsBlue[1] + "," +
+        //    proxRed + "," + proxBlue + "," + 
+        //    Math.Abs(proxBlue - proxRed) + "," + 
+        //    color;
+
+        //Debug.Log("OUTPUT=" + output);
+
+
+
+        // RETRIEVE SEGMENTS        
+
+
+        // RENDER SEGMENTS
+        int[] startsRed = tst.startsRed;
+        int[] startsBlue = tst.startsBlue;
+        for (int i = 0; i < startsRed.Length; i++)
+        {
+            for (int j = 0; j < SEGMENT_LENGTH; j++)
+            {
+                mainTexture.SetPixel(1, ysize - (startsRed[i] + j), new Color(1f, 0f, 0f));
+                mainTexture.SetPixel(2, ysize - (startsRed[i] + j), new Color(1f, 0f, 0f));
+                mainTexture.SetPixel(startsRed[i] + j, ysize - 1, new Color(1f, 0f, 0f));
+                mainTexture.SetPixel(startsRed[i] + j, ysize - 2, new Color(1f, 0f, 0f));
+
+                mainTexture.SetPixel(xsize -1, ysize - (startsRed[i] + j), new Color(1f, 0f, 0f));
+                mainTexture.SetPixel(xsize -2, ysize - (startsRed[i] + j), new Color(1f, 0f, 0f));
+                mainTexture.SetPixel(startsRed[i] + j, 1, new Color(1f, 0f, 0f));
+                mainTexture.SetPixel(startsRed[i] + j, 2, new Color(1f, 0f, 0f));
+            }
+        }
+        // render blue segments 
+        for (int i = 0; i < startsBlue.Length; i++)
+        {
+            for (int j = 0; j < SEGMENT_LENGTH; j++)
+            {
+                mainTexture.SetPixel(1, ysize - (startsBlue[i] + j), Design.taskColors[1]);
+                mainTexture.SetPixel(2, ysize - (startsBlue[i] + j), Design.taskColors[1]);
+                mainTexture.SetPixel(startsBlue[i] + j, ysize - 1, Design.taskColors[1]);
+                mainTexture.SetPixel(startsBlue[i] + j, ysize - 2, Design.taskColors[1]);
+
+                mainTexture.SetPixel(xsize -1, ysize - (startsBlue[i] + j), Design.taskColors[1]);
+                mainTexture.SetPixel(xsize -2, ysize - (startsBlue[i] + j), Design.taskColors[1]);
+                mainTexture.SetPixel(startsBlue[i] + j, 1, Design.taskColors[1]);
+                mainTexture.SetPixel(startsBlue[i] + j, 2, Design.taskColors[1]);
+            }
+        }
+
+        mainTexture.Apply();
+        
         mainSpriteRenderer = DisplayTexture(mainTexture, mainSprite, mainSpriteRenderer, 1);
     }
 

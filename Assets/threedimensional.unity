@@ -5249,7 +5249,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
+  m_BackGroundColor: {r: 1, g: 1, b: 1, a: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
@@ -7471,7 +7471,7 @@ MonoBehaviour:
   objectManager3D: {fileID: 2030969602}
   orbitScript: {fileID: 1435786253}
   participantNumber: 0
-  startingTrial: 9
+  startingTrial: 27
   studyFormat: 1
   totalTrials: 208
   twodim: 0
