@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
 public class StudyManager : MonoBehaviour
 {
     public static GameObject choicePanelClusters;
@@ -134,7 +133,7 @@ Please, call the instructor.";
         //}
         else if (currentTrial.Task == Tasks.TouchingSegments)
         {
-            print(">>> TOUCHING SEGMENTS ANSWER: " + rawAnswer);
+            print(">>> TOUCHING SEGMENTS ANSWER: " + rawAnswer + "," + ((TouchingPointsTrial)currentTrial.TrialDetails).correctPair);
             if (rawAnswer.Contains("AnswerButton_Red") && ((TouchingPointsTrial)currentTrial.TrialDetails).correctPair == "red")
             {
                 correct = "True";

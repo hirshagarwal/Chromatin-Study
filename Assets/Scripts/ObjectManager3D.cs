@@ -368,7 +368,8 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
     {
         bool isFast = (tst.StudyFormat == Formats.HoloLens);
         UpdateScale(true);
-        mainCurve = new Curve(tst.Filenamethreedim, tst.Skip, tst.Count);
+        int SEGMENT_LENGTH = 30;
+        mainCurve = new Curve(tst.Filenamethreedim, tst.Skip, tst.Count, tst.startsRed, tst.startsBlue, SEGMENT_LENGTH);
     }
 
     public void SetupLargerTadTrial(LargerTadTrial ltt)

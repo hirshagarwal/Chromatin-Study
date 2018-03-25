@@ -14,7 +14,7 @@ namespace Assets.Scripts
         public List<Color> colorSpace;
         public AnimationCurve colorWidth;
         public GameObject go;
-        public float splineRes = 8f;
+        public float splineRes = 1f;
         private Material baseMaterial;
         private string chrtype = "sen";
         private List<GameObject> cylinders = new List<GameObject>();
@@ -24,7 +24,7 @@ namespace Assets.Scripts
         private List<Point> points;
         private float sphereWidth = 0.009f;
 
-        public Curve(string filen, int skips, int redCount, bool triple = false)
+        public Curve(string filen, int skips, int redCount, int[] redStart = null, int[] blueStart = null, int sequenceLength = 0, bool triple = false)
         {
             go = new GameObject();
             List<Point> allPoints = ReadInFile(filen);
@@ -44,7 +44,7 @@ namespace Assets.Scripts
             }
             else
             {
-                MutateCurveTouchingPoints(redCount, rnd);
+                MutateCurveTouchingPoints(redCount, rnd, redStart, blueStart, sequenceLength);
 
                 //foreach (Point point in points)
                 //{
@@ -77,42 +77,59 @@ namespace Assets.Scripts
             }
         }
 
-        private void MutateCurveTouchingPoints(int redCount, System.Random rnd)
+        private void MutateCurveTouchingPoints(int redCount, System.Random rnd, int[] redStart, int[] blueStart, int sequenceLength)
         {
             for (int i = 0; i < points.Count; i++)
             {
-                points[i].ColorRGB = Design.GetClosestColor(0.5f,false);
+                points[i].ColorRGB = Design.GetClosestColor(0.5f, false);  
             }
-            int currentReds = 0;
-            splineRes *= 2;
-            while (currentReds < redCount)
+            for (int j = 0; j < 2; j++)
             {
-                for (int i = 0; i < points.Count; i++)
+                for (int i = redStart[j]; i < (sequenceLength + redStart[j]); i++)
                 {
-                    int r = rnd.Next(25);
-                    if (r == 2)
-                    {
-                        if (
-                            !points[i].HasColor() &&
-                            i > 0 &&
-                            i < points.Count - 2 &&
-                            !points[i - 1].HasColor() &&
-                            !points[i + 1].HasColor()
-                            )
-                        {
-                            if (currentReds < redCount)
-                            {
-                                points[i] = points[i].Displaced(new Vector3(rnd.Next(randomness) / 10f, rnd.Next(randomness) / 10f, rnd.Next(randomness) / 10f));
-                            }
-                            points[i - 1].MakeRed();
-                            points[i - 1].ColorRGB = Design.GetClosestColor(0f,true);
-                            points[i + 1].MakeBlue();
-                            points[i + 1].ColorRGB = Design.GetClosestColor(1f,true);
-                            currentReds++;
-                        }
-                    }
+                    points[i].MakeRed();
+                    points[i].ColorRGB = Design.GetClosestColor(0f, true);
                 }
             }
+            for (int j = 0; j < 2; j++)
+            {
+                for (int i = blueStart[j]; i < (sequenceLength + blueStart[j]); i++)
+                {
+                    points[i].MakeBlue();
+                    points[i].ColorRGB = Design.GetClosestColor(1f, true);
+                }
+            }
+
+            //int currentReds = 0;
+            //splineRes *= 2;
+            //while (currentReds < redCount)
+            //{
+            //    for (int i = 0; i < points.Count; i++)
+            //    {
+            //        int r = rnd.Next(25);
+            //        if (r == 2)
+            //        {
+            //            if (
+            //                !points[i].HasColor() &&
+            //                i > 0 &&
+            //                i < points.Count - 2 &&
+            //                !points[i - 1].HasColor() &&
+            //                !points[i + 1].HasColor()
+            //                )
+            //            {
+            //                if (currentReds < redCount)
+            //                {
+            //                    points[i] = points[i].Displaced(new Vector3(rnd.Next(randomness) / 10f, rnd.Next(randomness) / 10f, rnd.Next(randomness) / 10f));
+            //                }
+            //                points[i - 1].MakeRed();
+            //                points[i - 1].ColorRGB = Design.GetClosestColor(0f,true);
+            //                points[i + 1].MakeBlue();
+            //                points[i + 1].ColorRGB = Design.GetClosestColor(1f,true);
+            //                currentReds++;
+            //            }
+            //        }
+            //    }
+            //}
         }
 
         private void MutateCurveTriples(int redCount, System.Random rnd)

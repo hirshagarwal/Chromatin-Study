@@ -643,93 +643,104 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
 
         int ysize = mainTexture.height;
         int xsize = mainTexture.width;
+        Debug.Log("xsize" + xsize);
 
         int SEGMENT_LENGTH = 30;
 
-        // CODE FOR FINDING SEGMENTS. ONLY TO GENERATE TASK CONDITIONS.
-        //// FIND SEGMENTS
-        //int NUM_SEGMENTS = 2;
-        //int[] startsRed = new int[NUM_SEGMENTS];
-        //int[] startsBlue = new int[NUM_SEGMENTS];
-        //int pairsFound = 0;
-        //float[] proximities = new float[NUM_SEGMENTS];
-        //int segmentLength = 30;
-        //int SEGMENT_DIST = 10;
+        // set 'false' when in study mode
+        Boolean GENERATE_TRIALS = false; 
+        int NUM_SEGMENTS = 2;
+        int[] startsRed = new int[NUM_SEGMENTS];
+        int[] startsBlue = new int[NUM_SEGMENTS];
 
 
-        //float PROXIMITY_THRESHOLD = .02f;
-        //System.Random rnd = new System.Random();
-
-        //float proxRed = 0f;
-        //float proxBlue = proxRed;
-
-
-        //    int s1 = 0, s2 = 0;
-        //    while (Math.Abs(s1 - s2) < segmentLength + SEGMENT_DIST) {
-        //        s1 = (int) UnityEngine.Random.Range(10f, (xsize / 2) - segmentLength - 10);
-        //        s2 = (int) UnityEngine.Random.Range(10f, (xsize / 2) - segmentLength - 10);
-        //    }
-        //    startsRed[0] = s1;
-        //    startsRed[1] = s2;
-
-        //    for (int i = 0; i < segmentLength - 1; i++)
-        //    {
-        //        for (int j = 0; j < segmentLength - 1; j++)
-        //        {
-        //            proxRed += (1 - mainTexture.GetPixel(s1 + i, s2 + j).grayscale);
-        //        }
-        //    }
-        //    proxRed = proxRed / (segmentLength * segmentLength);
-
-        //    // find 2nd pair
-        //    proxBlue = proxRed;
-        //    while (Math.Abs(proxBlue - proxRed) < PROXIMITY_THRESHOLD) {
-        //        s1 = 0;
-        //        s2 = 0;
-        //        while (Math.Abs(s1 - s2) < segmentLength + SEGMENT_DIST)
-        //        {
-        //            s1 = (int)UnityEngine.Random.Range(xsize / 2 + 10f, xsize - segmentLength - 10);
-        //            s2 = (int)UnityEngine.Random.Range(xsize / 2 + 10f, xsize - segmentLength - 10);
-        //        }
-        //        startsBlue[0] = s1;
-        //        startsBlue[1] = s2;
+        if (GENERATE_TRIALS) {
+            // CODE FOR FINDING SEGMENTS. ONLY TO GENERATE TASK CONDITIONS.
+            // FIND SEGMENTS
+            int pairsFound = 0;
+            float[] proximities = new float[NUM_SEGMENTS];
+            int segmentLength = 30;
+            int SEGMENT_DIST = 10;
 
 
-        //        for (int i = 0; i < segmentLength - 1; i++)
-        //        {
-        //            for (int j = 0; j < segmentLength - 1; j++)
-        //            {
-        //                proxBlue += (1 - mainTexture.GetPixel(s1 + i, s2 + j).grayscale);
-        //            }
-        //        }
-        //        proxBlue = proxBlue / (segmentLength * segmentLength);
-        //    }
-        //    Debug.Log("PROX1=" + proxRed + ",PROX2=" + proxBlue + ", DIST=" + Math.Abs(proxBlue - proxRed));
-        //    pairsFound++;
+            float PROXIMITY_THRESHOLD = .02f;
+            System.Random rnd = new System.Random();
+
+            float proxRed = 0f;
+            float proxBlue = proxRed;
 
 
-        //string color = "red";
-        //if (proxBlue > proxRed) {
-        //    color = "blue";
-        //}
+            int s1 = 0, s2 = 0;
+            while (Math.Abs(s1 - s2) < segmentLength + SEGMENT_DIST)
+            {
+                s1 = (int)UnityEngine.Random.Range(10f, (int)(xsize / 2f) - segmentLength - 10);
+                s2 = (int)UnityEngine.Random.Range(10f, (int)(xsize / 2f) - segmentLength - 10);
+            }
+            startsRed[0] = s1;
+            startsRed[1] = s2;
+            Debug.Log("RED=" + s1 + "," +  s2 + "," + xsize);
 
-        //string output = 
-        //    startsRed[0] + "," + startsRed[1] + "," + 
-        //    startsBlue[0] + "," + startsBlue[1] + "," +
-        //    proxRed + "," + proxBlue + "," + 
-        //    Math.Abs(proxBlue - proxRed) + "," + 
-        //    color;
+            for (int i = 0; i < segmentLength - 1; i++)
+            {
+                for (int j = 0; j < segmentLength - 1; j++)
+                {
+                    proxRed += (1 - mainTexture.GetPixel(s1 + i, s2 + j).grayscale);
+                }
+            }
+            proxRed = proxRed / (segmentLength * segmentLength);
 
-        //Debug.Log("OUTPUT=" + output);
+            // find 2nd pair
+            proxBlue = proxRed;
+            while (Math.Abs(proxBlue - proxRed) < PROXIMITY_THRESHOLD)
+            {
+                s1 = 0;
+                s2 = 0;
+                while (Math.Abs(s1 - s2) < segmentLength + SEGMENT_DIST)
+                {
+                    s1 = (int)UnityEngine.Random.Range((int)(xsize / 2f) + 10f, xsize - segmentLength - 10);
+                    s2 = (int)UnityEngine.Random.Range((int)(xsize / 2f) + 10f, xsize - segmentLength - 10);
+                }
+                startsBlue[0] = s1;
+                startsBlue[1] = s2;
+                Debug.Log("BLUE=" +s1 + "," + s2 + "," + xsize);
 
 
 
-        // RETRIEVE SEGMENTS        
+                for (int i = 0; i < segmentLength - 1; i++)
+                {
+                    for (int j = 0; j < segmentLength - 1; j++)
+                    {
+                        proxBlue += (1 - mainTexture.GetPixel(s1 + i, s2 + j).grayscale);
+                    }
+                }
+                proxBlue = proxBlue / (segmentLength * segmentLength);
+            }
+            //Debug.Log("PROX1=" + proxRed + ",PROX2=" + proxBlue + ", DIST=" + Math.Abs(proxBlue - proxRed));
+            pairsFound++;
 
 
-        // RENDER SEGMENTS
-        int[] startsRed = tst.startsRed;
-        int[] startsBlue = tst.startsBlue;
+            string color = "red";
+            if (proxBlue > proxRed)
+            {
+                color = "blue";
+            }
+
+            string output =
+                startsRed[0] + "," + startsRed[1] + "," +
+                startsBlue[0] + "," + startsBlue[1] + "," +
+                proxRed + "," + proxBlue + "," +
+                Math.Abs(proxBlue - proxRed) + "," +
+                color;
+
+            Debug.Log("OUTPUT=" + tst.Filenametwodim + "," + output);
+        }
+        else { 
+
+            // RETRIEVE SEGMENTS        
+            startsRed = tst.startsRed;
+            startsBlue = tst.startsBlue;
+        }
+
         for (int i = 0; i < startsRed.Length; i++)
         {
             for (int j = 0; j < SEGMENT_LENGTH; j++)
