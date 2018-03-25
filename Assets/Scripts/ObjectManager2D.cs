@@ -226,12 +226,12 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
                         if (itrcx < buckets / 10 &&
                             itrcy < buckets / 10)
                         {
-                            color = Design.GetClosestColor(1f - colval,true);
+                            color = Design.GetClosestColor(0f,true);
                         }
                         else if (itrcx > (buckets - (buckets / 10)) &&
                           itrcy > (buckets - (buckets / 10)))
                         {
-                            color = Design.GetClosestColor(colval,true);
+                            color = Design.GetClosestColor(1f,true);
                         }
                         else
                         {
@@ -311,13 +311,16 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
                                 Debug.Log("Setting non-decoy point");
                                 tex.SetPixel(itrcx - 1, itrcy, tex.GetPixel(itrcx - 1, itrcy + 1));
                                 tex.SetPixel(itrcx, itrcy + 1, tex.GetPixel(itrcx - 1, itrcy + 1));
+                                tex.SetPixel(itrcy + 1, itrcx, tex.GetPixel(itrcy + 1, itrcx - 1));
+                                tex.SetPixel(itrcy, itrcx - 1, tex.GetPixel(itrcy + 1, itrcx - 1));
                                 for (int i = itrcx - 1; i <= itrcx + 1; i++)
                                 {
                                     for (int j = itrcy - 1; j <= itrcy + 1; j++)
                                     {
                                         tex.SetPixel(i, j, GetRecolored(i, j, tex));
+                                        tex.SetPixel(j, i, GetRecolored(j, i, tex));
                                         modifiedLocations.Add(new Tuple<int, int>(i, j));
-
+                                        modifiedLocations.Add(new Tuple<int, int>(j, i));
                                     }
                                 }
                                 currentReds++;
@@ -326,6 +329,7 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
                             {
                                 Debug.Log("Setting decoy point");
                                 tex.SetPixel(itrcx, itrcy, GetRecolored(itrcx, itrcy, tex));
+                                tex.SetPixel(itrcy, itrcx, GetRecolored(itrcy, itrcx, tex));
                             }
                         }
                     }
@@ -370,36 +374,8 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
                             if (currentReds < redCount)
                             {
                                 Debug.Log("Setting non-decoy point");
-                                tex.SetPixel(itrcx - 2, itrcy - 3, GetRecolored(itrcx - 2, itrcy - 3, tex, 1.5f));
-                                tex.SetPixel(itrcx, itrcy - 3, GetRecolored(itrcx, itrcy - 3, tex, 0.5f));
-                                tex.SetPixel(itrcx + 1, itrcy - 3, GetRecolored(itrcx + 1, itrcy - 3, tex, 0.8f));
-                                tex.SetPixel(itrcx + 2, itrcy - 3, GetRecolored(itrcx + 2, itrcy - 3, tex, 0.8f));
-                                tex.SetPixel(itrcx + 3, itrcy - 3, GetRecolored(itrcx + 3, itrcy - 3, tex, 0.3f));
-                                tex.SetPixel(itrcx - 3, itrcy - 2, GetRecolored(itrcx - 3, itrcy - 2, tex, 1.5f));
-                                tex.SetPixel(itrcx - 1, itrcy - 2, GetRecolored(itrcx - 1, itrcy - 2, tex, 1.5f));
-                                tex.SetPixel(itrcx + 1, itrcy - 2, GetRecolored(itrcx + 1, itrcy - 2, tex, 1.3f));
-                                tex.SetPixel(itrcx + 2, itrcy - 2, GetRecolored(itrcx + 2, itrcy - 2, tex, 1.2f));
-                                tex.SetPixel(itrcx + 3, itrcy - 2, GetRecolored(itrcx + 3, itrcy - 2, tex, 0.5f));
-                                tex.SetPixel(itrcx - 2, itrcy - 1, GetRecolored(itrcx - 2, itrcy - 1, tex, 1.5f));
-                                tex.SetPixel(itrcx, itrcy - 1, GetRecolored(itrcx, itrcy - 1, tex, 1.5f));
-                                tex.SetPixel(itrcx + 3, itrcy - 1, GetRecolored(itrcx + 3, itrcy - 1, tex, 0.6f));
-                                tex.SetPixel(itrcx - 3, itrcy, GetRecolored(itrcx - 3, itrcy, tex, 0.5f));
-                                tex.SetPixel(itrcx - 1, itrcy, GetRecolored(itrcx - 1, itrcy, tex, 1.5f));
-                                tex.SetPixel(itrcx + 1, itrcy, GetRecolored(itrcx + 1, itrcy, tex, 1.5f));
-                                tex.SetPixel(itrcx + 3, itrcy, GetRecolored(itrcx + 3, itrcy, tex, 0.5f));
-                                tex.SetPixel(itrcx - 3, itrcy + 1, GetRecolored(itrcx - 3, itrcy + 1, tex, 0.8f));
-                                tex.SetPixel(itrcx - 2, itrcy + 1, GetRecolored(itrcx - 2, itrcy + 1, tex, 1.3f));
-                                tex.SetPixel(itrcx, itrcy + 1, GetRecolored(itrcx, itrcy + 1, tex, 1.5f));
-                                tex.SetPixel(itrcx + 2, itrcy + 1, GetRecolored(itrcx + 2, itrcy + 1, tex, 1.5f));
-                                tex.SetPixel(itrcx - 3, itrcy + 2, GetRecolored(itrcx - 3, itrcy + 2, tex, 0.8f));
-                                tex.SetPixel(itrcx - 2, itrcy + 2, GetRecolored(itrcx - 2, itrcy + 2, tex, 1.2f));
-                                tex.SetPixel(itrcx + 1, itrcy + 2, GetRecolored(itrcx + 1, itrcy + 2, tex, 1.5f));
-                                tex.SetPixel(itrcx + 3, itrcy + 2, GetRecolored(itrcx + 3, itrcy + 2, tex, 1.5f));
-                                tex.SetPixel(itrcx - 3, itrcy + 3, GetRecolored(itrcx - 3, itrcy + 3, tex, 0.3f));
-                                tex.SetPixel(itrcx - 2, itrcy + 3, GetRecolored(itrcx - 2, itrcy + 3, tex, 0.5f));
-                                tex.SetPixel(itrcx - 1, itrcy + 3, GetRecolored(itrcx - 1, itrcy + 3, tex, 0.6f));
-                                tex.SetPixel(itrcx, itrcy + 3, GetRecolored(itrcx, itrcy + 3, tex, 0.5f));
-                                tex.SetPixel(itrcx + 2, itrcy + 3, GetRecolored(itrcx + 2, itrcy + 3, tex, 1.5f));
+                                tex = MakeHardCodedPointChanges(tex, itrcx, itrcy);
+                                tex = MakeHardCodedPointChanges(tex, itrcy, itrcx);
                                 currentReds++;
                                 for (int i = itrcx - 3; i <= itrcx + 3; i++)
                                 {
@@ -423,11 +399,32 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
         return tex;
     }
 
+    private Texture2D MakeHardCodedPointChanges(Texture2D tex, int itrcx, int itrcy)
+    {
+        tex.SetPixel(itrcx - 2, itrcy - 3, GetRecolored(itrcx - 2, itrcy - 3, tex, 1.5f));
+        tex.SetPixel(itrcx - 1, itrcy - 2, GetRecolored(itrcx - 1, itrcy - 2, tex, 1.5f));
+        tex.SetPixel(itrcx - 3, itrcy, GetRecolored(itrcx - 3, itrcy, tex, 0.5f));
+        tex.SetPixel(itrcx - 1, itrcy, GetRecolored(itrcx - 1, itrcy, tex, 1.5f));
+        tex.SetPixel(itrcx - 3, itrcy + 1, GetRecolored(itrcx - 3, itrcy + 1, tex, 0.8f));
+        tex.SetPixel(itrcx - 2, itrcy + 1, GetRecolored(itrcx - 2, itrcy + 1, tex, 1.3f));
+        tex.SetPixel(itrcx, itrcy + 1, GetRecolored(itrcx, itrcy + 1, tex, 1.5f));
+        tex.SetPixel(itrcx - 3, itrcy + 2, GetRecolored(itrcx - 3, itrcy + 2, tex, 0.8f));
+        tex.SetPixel(itrcx - 2, itrcy + 2, GetRecolored(itrcx - 2, itrcy + 2, tex, 1.2f));
+        tex.SetPixel(itrcx + 1, itrcy + 2, GetRecolored(itrcx + 1, itrcy + 2, tex, 1.5f));
+        tex.SetPixel(itrcx - 3, itrcy + 3, GetRecolored(itrcx - 3, itrcy + 3, tex, 0.3f));
+        tex.SetPixel(itrcx - 2, itrcy + 3, GetRecolored(itrcx - 2, itrcy + 3, tex, 0.5f));
+        tex.SetPixel(itrcx - 1, itrcy + 3, GetRecolored(itrcx - 1, itrcy + 3, tex, 0.6f));
+        tex.SetPixel(itrcx, itrcy + 3, GetRecolored(itrcx, itrcy + 3, tex, 0.5f));
+        tex.SetPixel(itrcx + 2, itrcy + 3, GetRecolored(itrcx + 2, itrcy + 3, tex, 1.5f));
+        tex.Apply();
+        return tex;
+    }
+
     Color GetRecolored(int a, int b, Texture2D tex) => Recolor(tex.GetPixel(a, b));
 
     private Color Recolor(Color oldColor)
     {
-        Color c = Design.GetClosestColor(1f,false);
+        Color c = Design.GetClosestColor(0.3f,false);
         c.a = oldColor.a;
         return c;
     }
@@ -436,7 +433,7 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
 
     private Color Recolor(Color oldColor, float factor)
     {
-        Color c = Design.GetClosestColor(1f,false);
+        Color c = Design.GetClosestColor(0.3f,false);
         c.a = oldColor.a * factor;
         return c;
     }
