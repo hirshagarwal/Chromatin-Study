@@ -14,7 +14,7 @@ namespace Assets.Scripts
         public List<Color> colorSpace;
         public AnimationCurve colorWidth;
         public GameObject go;
-        public float splineRes = 1f;
+        public float splineRes = 8f;
         private Material baseMaterial;
         private string chrtype = "sen";
         private List<GameObject> cylinders = new List<GameObject>();
@@ -29,7 +29,7 @@ namespace Assets.Scripts
             go = new GameObject();
             List<Point> allPoints = ReadInFile(filen);
             points = new List<Point>();
-            Color color = Design.GetClosestColor(0.5f,false);
+            Color color = Design.GetClosestColor(0.2f,false);
             List<float> colorsIn = new List<float>();
             float maxColor = 0.0f;
             System.Random rnd = new System.Random(0);
@@ -81,7 +81,7 @@ namespace Assets.Scripts
         {
             for (int i = 0; i < points.Count; i++)
             {
-                points[i].ColorRGB = Design.GetClosestColor(0.5f, false);  
+                points[i].ColorRGB = Design.GetClosestColor(0.2f, false);  
             }
             for (int j = 0; j < 2; j++)
             {
