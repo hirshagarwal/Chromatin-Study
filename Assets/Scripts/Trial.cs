@@ -78,14 +78,12 @@ namespace Assets.Scripts
                 int trialID = Int32.Parse(trialConditions[6]);
                 String[] trialValues = TouchingSegments.data[trialID].Split(',');
                 task = Tasks.TouchingSegments;
-                //UnityEngine.Debug.Log("trialConditions=" + trialConditions[1]);
-                //UnityEngine.Debug.Log(trialValues[0]);
+                UnityEngine.Debug.Log("trialConditions=" + trialConditions[1]);
+                UnityEngine.Debug.Log(trialValues[0] + "," + trialValues[11]);
                 //UnityEngine.Debug.Log(trialValues[1]);
                 //UnityEngine.Debug.Log(trialValues[2]);
                 //UnityEngine.Debug.Log(trialValues[3]);
-                //UnityEngine.Debug.Log(trialValues[4]);
-                //UnityEngine.Debug.Log(trialValues[5]);
-                //UnityEngine.Debug.Log(trialValues[6]);
+                //UnityEngine.Debug.Log(trialValues[4] + ","+ trialValues[5] + "," + trialValues[6] + "," + trialValues[7]);
                 //UnityEngine.Debug.Log(trialValues[11]);
 
                 trialDetails = new TouchingPointsTrial(
