@@ -1627,7 +1627,7 @@ GameObject:
   - component: {fileID: 248108225}
   - component: {fileID: 248108224}
   m_Layer: 5
-  m_Name: AnswerButton_UnknownSegment
+  m_Name: AnswerButton_UnknownTouching
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2941,7 +2941,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Which segments are closer in space?
+  m_Text: Which segments where closer together?
 --- !u!222 &633464209
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3015,7 +3015,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Which TAD was larger?
+  m_Text: Which cluster occupied more volume?
 --- !u!222 &727991868
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6616,7 +6616,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: How many loops were there?
+  m_Text: How many loops could you count?
 --- !u!222 &1998174995
 CanvasRenderer:
   m_ObjectHideFlags: 0

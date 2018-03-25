@@ -108,35 +108,33 @@ Please, call the instructor.";
             if (rawAnswer.Contains("AnswerButton_Blue"))
                 correct = ((PointDistanceTrial)currentTrial.TrialDetails).Correct(false).ToString();
         }
-        else if (currentTrial.Task == Tasks.SegmentDistance)
-        {
-            print(">>> DISTANCE ANWSWER: " + rawAnswer);
-            if (rawAnswer.Contains("AnswerButton_Red"))
-                correct = ((SegmentDistanceTrial)currentTrial.TrialDetails).Correct(true).ToString();
-            if (rawAnswer.Contains("AnswerButton_Blue"))
-                correct = ((SegmentDistanceTrial)currentTrial.TrialDetails).Correct(false).ToString();
-        }
-        else if (currentTrial.Task == Tasks.CurveComparison)
-        {
-            print(">>> CURVE ANSWER: " + rawAnswer);
-            if (rawAnswer.Contains("AnswerButton_Red"))
-                correct = ((CurveComparisonTrial)currentTrial.TrialDetails).Correct(true).ToString();
-            if (rawAnswer.Contains("AnswerButton_Blue"))
-                correct = ((CurveComparisonTrial)currentTrial.TrialDetails).Correct(false).ToString();
-        }
-        else if (currentTrial.Task == Tasks.AttributeUnderstanding)
-        {
-            print(">>> UNDERSTANDING ANSWER: " + rawAnswer);
-            if (rawAnswer.Contains("AnswerButton_Red"))
-                correct = ((AttributeUnderstandingTrial)currentTrial.TrialDetails).Correct(true).ToString();
-            if (rawAnswer.Contains("AnswerButton_Blue"))
-                correct = ((AttributeUnderstandingTrial)currentTrial.TrialDetails).Correct(false).ToString();
-        }
+        //else if (currentTrial.Task == Tasks.SegmentDistance)
+        //{
+        //    print(">>> DISTANCE ANWSWER: " + rawAnswer);
+        //    if (rawAnswer.Contains("AnswerButton_Red"))
+        //        correct = ((SegmentDistanceTrial)currentTrial.TrialDetails).Correct(true).ToString();
+        //    if (rawAnswer.Contains("AnswerButton_Blue"))
+        //        correct = ((SegmentDistanceTrial)currentTrial.TrialDetails).Correct(false).ToString();
+        //}
+        //else if (currentTrial.Task == Tasks.CurveComparison)
+        //{
+        //    print(">>> CURVE ANSWER: " + rawAnswer);
+        //    if (rawAnswer.Contains("AnswerButton_Red"))
+        //        correct = ((CurveComparisonTrial)currentTrial.TrialDetails).Correct(true).ToString();
+        //    if (rawAnswer.Contains("AnswerButton_Blue"))
+        //        correct = ((CurveComparisonTrial)currentTrial.TrialDetails).Correct(false).ToString();
+        //}
+        //else if (currentTrial.Task == Tasks.AttributeUnderstanding)
+        //{
+        //    print(">>> UNDERSTANDING ANSWER: " + rawAnswer);
+        //    if (rawAnswer.Contains("AnswerButton_Red"))
+        //        correct = ((AttributeUnderstandingTrial)currentTrial.TrialDetails).Correct(true).ToString();
+        //    if (rawAnswer.Contains("AnswerButton_Blue"))
+        //        correct = ((AttributeUnderstandingTrial)currentTrial.TrialDetails).Correct(false).ToString();
+        //}
         else if (currentTrial.Task == Tasks.TouchingSegments)
         {
             print(">>> TOUCHING SEGMENTS ANSWER: " + rawAnswer);
-            //UnityEngine.Debug.Log("TRIAL ANSWER=" + ((TouchingPointsTrial)currentTrial.TrialDetails).correctPair);
-            //UnityEngine.Debug.Log(rawAnswer.Contains("AnswerButton_Red"));
             if (rawAnswer.Contains("AnswerButton_Red") && ((TouchingPointsTrial)currentTrial.TrialDetails).correctPair == "red")
             {
                 correct = "True";

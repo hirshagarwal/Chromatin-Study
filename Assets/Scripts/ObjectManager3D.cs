@@ -142,11 +142,11 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
         {
             if (point.Name == pdt.BlueA || point.Name == pdt.BlueB)
             {
-                spheres.Add(BuildSphere(Design.GetClosestColor(1f,true), (point.Position + Curve.displacement) / Curve.scale, force: true));
+                spheres.Add(BuildSphere(Design.GetClosestColor(0f,true), (point.Position + Curve.displacement) / Curve.scale, force: true));
             }
             else if (point.Name == pdt.RedA || point.Name == pdt.RedB)
             {
-                spheres.Add(BuildSphere(Design.GetClosestColor(0f,true), (point.Position + Curve.displacement) / Curve.scale, force: true));
+                spheres.Add(BuildSphere(Design.GetClosestColor(1f,true), (point.Position + Curve.displacement) / Curve.scale, force: true));
             }
         }
     }
