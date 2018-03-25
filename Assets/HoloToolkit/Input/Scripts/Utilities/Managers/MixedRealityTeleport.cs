@@ -78,7 +78,7 @@ namespace HoloToolkit.Unity.InputModule
         {
             FadeManager.AssertIsInitialized();
 
-            fadeControl = FadeManager.Instance;
+            //fadeControl = FadeManager.Instance;
 
             // If our FadeManager is missing, or if we're on the HoloLens
             // Remove this component.

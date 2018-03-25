@@ -14,7 +14,7 @@ namespace Assets.Scripts
         public List<Color> colorSpace;
         public AnimationCurve colorWidth;
         public GameObject go;
-        public float splineRes = 8f;
+        public float splineRes = 3f;
         private Material baseMaterial;
         private string chrtype = "sen";
         private List<GameObject> cylinders = new List<GameObject>();
@@ -138,6 +138,10 @@ namespace Assets.Scripts
             {
                 points[i].ColorRGB = Design.GetClosestColor(0.2f,false);
             }
+
+            float DISPLACE_DISTANCE = .1f;
+            float DISPLACE_DISTANCE_OTHERS = .01f;
+
             int currentReds = 0;
             splineRes *= 2;
             while (currentReds < redCount)
@@ -158,11 +162,19 @@ namespace Assets.Scripts
                             Point startPoint = points[i];
                             Point leftPoint = points[i - 1];
                             Point rightPoint = points[i + 1];
-                            Point displacePoint = startPoint.Displaced(new Vector3(rnd.Next(randomness) / 10f, rnd.Next(randomness) / 10f, rnd.Next(randomness) / 10f));
+                            //Point displacePoint = startPoint.Displaced(new Vector3(rnd.Next(randomness) / DISPLACE_DISTANCE, rnd.Next(randomness) / DISPLACE_DISTANCE, rnd.Next(randomness) / DISPLACE_DISTANCE));
+                            //Point leftInterpolated = leftPoint.Interpolate(displacePoint);
+                            //Point rightInterpolated = rightPoint.Interpolate(displacePoint);
+                            //Point leftBegin = startPoint.Displaced(new Vector3(rnd.Next(randomness) / DISPLACE_DISTANCE_OTHERS, rnd.Next(randomness) / DISPLACE_DISTANCE_OTHERS, rnd.Next(randomness) / DISPLACE_DISTANCE_OTHERS));
+                            //Point rightBegin = startPoint.Displaced(new Vector3(rnd.Next(randomness) / DISPLACE_DISTANCE_OTHERS, rnd.Next(randomness) / DISPLACE_DISTANCE_OTHERS, rnd.Next(randomness) / DISPLACE_DISTANCE_OTHERS));
+                            Vector3 vDisplace = Vector3.ClampMagnitude(new Vector3(rnd.Next(randomness), rnd.Next(randomness), rnd.Next(randomness)),DISPLACE_DISTANCE);
+                            Point displacePoint = startPoint.Displaced(vDisplace.normalized);
                             Point leftInterpolated = leftPoint.Interpolate(displacePoint);
                             Point rightInterpolated = rightPoint.Interpolate(displacePoint);
-                            Point leftBegin = startPoint.Displaced(new Vector3(rnd.Next(randomness) / 100f, rnd.Next(randomness) / 100f, rnd.Next(randomness) / 100f));
-                            Point rightBegin = startPoint.Displaced(new Vector3(rnd.Next(randomness) / 100f, rnd.Next(randomness) / 100f, rnd.Next(randomness) / 100f));
+                            Vector3 vLeft = Vector3.ClampMagnitude(new Vector3(rnd.Next(randomness), rnd.Next(randomness), rnd.Next(randomness)), DISPLACE_DISTANCE_OTHERS);
+                            Point leftBegin = startPoint.Displaced(vLeft);
+                            Vector3 vRight = Vector3.ClampMagnitude(new Vector3(rnd.Next(randomness), rnd.Next(randomness), rnd.Next(randomness)), DISPLACE_DISTANCE_OTHERS);
+                            Point rightBegin = startPoint.Displaced(vRight);
 
                             if (currentReds < redCount)
                             {
@@ -194,6 +206,10 @@ namespace Assets.Scripts
 
         public Curve(string filen = "", Boolean grayscale = false, Boolean projection = true, int colorID = 0, bool fast = false, bool tad = false)
         {
+            //if (fast) {
+            //    this.splineRes = 3f;
+            //}
+
             fast = false; //remove if we want to pay attention to the fast flag again
             projection = false;
             if (filen == "")
@@ -515,7 +531,7 @@ namespace Assets.Scripts
             cylinder.GetComponent<MeshRenderer>().material.color = connector.InterpolatedColor;
             Vector3 pos = Vector3.Lerp(connector.StartPoint, connector.EndPoint, 0.2f);
             //if (fastdraw)
-            //  pos = pos + new Vector3 (0, 0, 7);
+            //pos = pos + new Vector3 (0, 0, 2); //offset into z-directino to 
             cylinder.transform.position = pos;
             cylinder.transform.up = connector.EndPoint - connector.StartPoint;
             cylinder.transform.parent = GameObject.Find("ObjectManager").transform;

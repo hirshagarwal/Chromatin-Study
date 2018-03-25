@@ -125,7 +125,7 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
 
     private GameObject BuildSphere()
     {
-        return BuildSphere(Design.GetClosestColor(1f,true), new Vector3(0, 0, 0));
+        return BuildSphere(Design.GetClosestColor(1f,true), new Vector3(0, 0, 2));
     }
 
     private GameObject BuildSphere(Vector3 position)
@@ -138,6 +138,7 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
         bool isFast = (pdt.StudyFormat == Formats.HoloLens);
         UpdateScale(true);
         mainCurve = new Curve(pdt.Filenamethreedim, true, fast: isFast);
+
         foreach (Point point in mainCurve.Points)
         {
             if (point.Name == pdt.BlueA || point.Name == pdt.BlueB)

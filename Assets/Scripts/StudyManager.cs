@@ -206,9 +206,19 @@ Please, call the instructor.";
 
     public void RecordTimeAndCollectUserAnswer()
     {
+
+
         feedbackPanel.SetActive(false);
         duration = DateTime.Now - dateStart;
         running = false;
+
+        if (studyFormat == Formats.HoloLens)
+        {
+            GameObject hologramContainer = GameObject.Find("HologramContainer");
+            hologramContainer.transform.position = new Vector3(0f, 0f, 1f);
+        }
+
+
         // show answer screen and wait for user answer.
         // set answer choices
         if (currentTrial.Task == Tasks.PointDistance)
@@ -272,6 +282,13 @@ Please, call the instructor.";
 
         running = true;
 
+        if (studyFormat == Formats.HoloLens)
+        {
+            GameObject hologramContainer = GameObject.Find("HologramContainer");
+            hologramContainer.transform.position = new Vector3(0f, 0f, .5f);
+        }
+
+
         //start measuring time
         dateStart = DateTime.Now;
     }
@@ -285,6 +302,8 @@ Please, call the instructor.";
         choicePanelDistance.SetActive(false);
         choicePanelClusters.SetActive(false);
         GUI.FocusControl(null);
+
+  
 
         if (trial == 0)
         {//First time introduction

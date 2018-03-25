@@ -91,20 +91,19 @@ Not every red or blue section will belong to one of these structures.
 Call the instructor before continuing.";
 
     public static string TASK_DESCRIPTION_LARGER_TAD =
-        @"NEW TASK: Larger TAD
+        @"NEW TASK: Larger Cluster
 
-You will be shown a curve which is segmented into multiple distinct sections.
+You will be shown a curve/matrix which is segmented into multiple distinct clusters.
 One section will start with a blue tip, and one section will start with a red tip.
-Of these two sections, your task is to identify the larger one.
+Of these two clusters, which is the larger one - the red-ended or the blue-ended? 
 
 Call the instructor before continuing.";
 
     public static string TASK_DESCRIPTION_TOUCHING_SEGMENTS =
         @"NEW TASK: Touching Segments
 
-You will be shown a white curve, where some segments have been coloured red or blue.
-Your task is to count the number of sections where the curve loops, and the start and end of the structure are coloured red and blue.
-Not every red or blue section will belong to one of these structures.
+You will be shown a curve/matrix, where some segments have been coloured red or blue.
+Your task is to figure out which segments are closer, the red ones or the blue ones? Closeness on the matrix means darkess of the respective cells for the segments.
 
 Call the instructor before continuing.";
 
@@ -149,9 +148,9 @@ Call the instructor before continuing.";
     public static string TASK_DESCRIPTION_DISTANCE =
 @"NEW TASK: Distance
 
-You will see a scatterplot with two pairs of colored nodes; a red pair and a blue pair.
+You will see a curve/matrix with two pairs of points colored; a red pair and a blue pair.
 Your task is to decide which pair of points is coloser together; the red pair or the blue pair.
-Once you know the answer, press the trigger button and a menu will pop up.
+Remember that in the matrix, closeness means darkness of the corresponding cells.
 
 Call the instructor before continuing.";
 

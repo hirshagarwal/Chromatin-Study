@@ -122,7 +122,7 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
         float minCol = 1.0f;
         foreach (string line in file.text.Split('\n'))
         {
-            if (line != "")
+            if (line != "") 
             {
                 Square sq = new Square(line);
                 if (sq.Strength > 0.1  ) {
@@ -792,5 +792,12 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
         studyTask = Tasks.Triple;
         mainTexture = ReadInFile(tt.Filenametwodim, redCount: tt.Count, skip: 1, triple: true);
         mainSpriteRenderer = DisplayTexture(mainTexture, mainSprite, mainSpriteRenderer, 1);
+
+        // introduce double loop patterns
+        
+
+
+
+
     }
 }
