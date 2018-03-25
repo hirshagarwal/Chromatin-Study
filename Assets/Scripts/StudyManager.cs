@@ -98,7 +98,7 @@ Please, call the instructor.";
 
     public void RecordResults(string rawAnswer)
     {
-        string correct = "null";
+        string correct = "False";
         UnityEngine.Debug.Log("RAW ANSWER=" + rawAnswer);
         if (currentTrial.Task == Tasks.PointDistance)
         {
@@ -141,13 +141,9 @@ Please, call the instructor.";
             {
                 correct = "True";
             }
-            else
             if (rawAnswer.Contains("AnswerButton_Blue") && ((TouchingPointsTrial)currentTrial.TrialDetails).correctPair == "blue")
             {
                 correct = "True";
-            }
-            else {
-                correct = "False";
             }
 
             //for (int i = 3; i < 7; i++)
@@ -472,8 +468,16 @@ Please, call the instructor.";
         GameObject.Find("AnswerButton_RedTouching").GetComponent<GenericButton>().value = "red";
         GameObject.Find("AnswerButton_BlueTouching").AddComponent<GenericButton>();
         GameObject.Find("AnswerButton_BlueTouching").GetComponent<GenericButton>().value = "blue";
+
+        // UNKOWN BUTTONS
+        GameObject.Find("AnswerButton_UnknownDistance").AddComponent<GenericButton>();
+        GameObject.Find("AnswerButton_UnknownDistance").GetComponent<GenericButton>().value = "unknown";
+        GameObject.Find("AnswerButton_UnknownSegment").AddComponent<GenericButton>();
+        GameObject.Find("AnswerButton_UnknownSegment").GetComponent<GenericButton>().value = "unknown";
         GameObject.Find("AnswerButton_UnknownTouching").AddComponent<GenericButton>();
         GameObject.Find("AnswerButton_UnknownTouching").GetComponent<GenericButton>().value = "unknown";
+        GameObject.Find("AnswerButton_UnknownTad").AddComponent<GenericButton>();
+        GameObject.Find("AnswerButton_UnknownTad").GetComponent<GenericButton>().value = "unknown";
         for (int i = 3; i < 7; i++)
         {
             GameObject.Find("AnswerButton_" + i + "Triple").AddComponent<GenericButton>();
