@@ -136,7 +136,7 @@ namespace Assets.Scripts
         {
             for (int i = 0; i < points.Count; i++)
             {
-                points[i].ColorRGB = Design.GetClosestColor(0.5f,false);
+                points[i].ColorRGB = Design.GetClosestColor(0.2f,false);
             }
             int currentReds = 0;
             splineRes *= 2;
@@ -201,7 +201,7 @@ namespace Assets.Scripts
             go = new GameObject();
             points = ReadInFile(filen);
             Debug.Log("Loaded " + filen);
-            Color color = Design.GetClosestColor(0.5f,false);
+            Color color = Design.GetClosestColor(0.2f,false);
             Vector3 shift = new Vector3(0, 0, 0);
             if (!grayscale && !tad)
             {
@@ -227,7 +227,7 @@ namespace Assets.Scripts
             {
                 for (int i = 1; i < points.Count - 1; i++)
                 {
-                    points[i].ColorRGB = Design.GetClosestColor(0.5f,false);
+                    points[i].ColorRGB = Design.GetClosestColor(0.2f,false);
                 }
                 points[0].ColorRGB = Design.GetClosestColor(0f,true) ;
                 points[points.Count - 1].ColorRGB = Design.GetClosestColor(1f,true);
@@ -236,7 +236,7 @@ namespace Assets.Scripts
             {
                 switch (colorID)
                 {
-                    case 0: color = Design.GetClosestColor(0.5f,false); break;
+                    case 0: color = Design.GetClosestColor(0.2f,false); break;
                     case 1: color = Design.GetClosestColor(0f,true); shift = new Vector3(-1.5f, 0, 0); break;
                     case 2: color = Design.GetClosestColor(1f,true); shift = new Vector3(1.5f, 0, 0); break;
                 }
@@ -513,7 +513,7 @@ namespace Assets.Scripts
             GameObject cylinder = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
             cylinder.GetComponent<Collider>().enabled = false;
             cylinder.GetComponent<MeshRenderer>().material.color = connector.InterpolatedColor;
-            Vector3 pos = Vector3.Lerp(connector.StartPoint, connector.EndPoint, 0.5f);
+            Vector3 pos = Vector3.Lerp(connector.StartPoint, connector.EndPoint, 0.2f);
             //if (fastdraw)
             //  pos = pos + new Vector3 (0, 0, 7);
             cylinder.transform.position = pos;
