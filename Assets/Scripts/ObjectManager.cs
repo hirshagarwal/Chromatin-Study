@@ -4,8 +4,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using Assets.Scripts;
-using HoloToolkit.Unity;
-using HoloToolkit.Unity.InputModule;
+
 
 
 public class ObjectManager : MonoBehaviour {
