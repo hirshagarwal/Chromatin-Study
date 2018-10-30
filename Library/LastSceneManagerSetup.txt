@@ -1,4 +1,4 @@
 sceneSetups:
-- path: C:/Users/vishub/projects/alex2/Assets/mixedreality.unity
+- path: Assets/study-windows.unity
   isLoaded: 1
   isActive: 1
