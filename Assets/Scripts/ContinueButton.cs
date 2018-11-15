@@ -12,4 +12,12 @@ public class ContinueButton : MonoBehaviour
             () => GameObject.Find("ObjectManager").GetComponent<StudyManager>().StartTrial()
       );
     }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            GameObject.Find("ObjectManager").GetComponent<StudyManager>().StartTrial();
+        }
+    }
 }

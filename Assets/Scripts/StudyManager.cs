@@ -456,6 +456,7 @@ Please, call the instructor.";
         GameObject.Find("ContinueButton").AddComponent<ContinueButton>();
         GameObject.Find("FeedbackContinueButton").AddComponent<FeedbackButton>();
         GameObject.Find("StartButton").AddComponent<StartButton>();
+        /*
         GameObject.Find("AnswerButton_RedDistance").AddComponent<GenericButton>();
         GameObject.Find("AnswerButton_RedDistance").GetComponent<GenericButton>().value = "red";
         GameObject.Find("AnswerButton_BlueDistance").AddComponent<GenericButton>();
@@ -499,7 +500,7 @@ Please, call the instructor.";
             GameObject.Find("AnswerButton_" + i + "Triple").AddComponent<GenericButton>();
             GameObject.Find("AnswerButton_" + i + "Triple").GetComponent<GenericButton>().value = i.ToString();
         }
-
+        */
         panel = GameObject.Find("Panel");
         panelCanvas = GameObject.Find("PanelCanvas");
         infoPanel = GameObject.Find("InfoPanel");
@@ -514,7 +515,7 @@ Please, call the instructor.";
 
         choicePanelClusters = GameObject.Find("ChoicePanelClusters");
         choicePanelClusters.SetActive(false);
-
+        /*
         choicePanelSegment = GameObject.Find("ChoicePanelSegment");
         choicePanelSegment.SetActive(false);
 
@@ -532,7 +533,7 @@ Please, call the instructor.";
 
         choicePanelUnderstanding = GameObject.Find("ChoicePanelUnderstanding");
         choicePanelUnderstanding.SetActive(false);
-
+        */
         infoPanel.SetActive(false);
         feedbackPanel.SetActive(false);
         //PopulateParticipantSelectionDialog(numberOfParticipants);
@@ -542,6 +543,7 @@ Please, call the instructor.";
             panel.SetActive(false);
             objectManager.LoadNextFile("");
         }
+        ParseSubjectIDAndInitialiseStudy();
     }
 
     // Use this for initialization
@@ -590,12 +592,14 @@ Please, call the instructor.";
 
     private void Update()
     {
+        /*
         if (Input.GetKeyDown(KeyCode.Space))
         {
             if (Formats.Projection == studyFormat)
                 orbitScript.Menu = true;
             RecordTimeAndCollectUserAnswer();
         }
+        */
     }
     int last_interim = 0;
     private void WriteToFile(string answer)
