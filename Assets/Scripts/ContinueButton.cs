@@ -17,6 +17,7 @@ public class ContinueButton : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.A))
         {
+            Debug.Log("Continue");
             GameObject.Find("ObjectManager").GetComponent<StudyManager>().StartTrial();
         }
     }

@@ -12,4 +12,13 @@ public class StartButton : MonoBehaviour
             () => GameObject.Find("ObjectManager").GetComponent<StudyManager>().ParseSubjectIDAndInitialiseStudy()
       );
     }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            Debug.Log("Start");
+            GameObject.Find("ObjectManager").GetComponent<StudyManager>().ParseSubjectIDAndInitialiseStudy();
+        }
+    }
 }

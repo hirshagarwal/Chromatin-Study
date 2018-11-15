@@ -543,6 +543,7 @@ Please, call the instructor.";
             panel.SetActive(false);
             objectManager.LoadNextFile("");
         }
+        print("Starting study");
         ParseSubjectIDAndInitialiseStudy();
     }
 
@@ -592,14 +593,14 @@ Please, call the instructor.";
 
     private void Update()
     {
-        /*
+        
         if (Input.GetKeyDown(KeyCode.Space))
         {
             if (Formats.Projection == studyFormat)
                 orbitScript.Menu = true;
             RecordTimeAndCollectUserAnswer();
         }
-        */
+        
     }
     int last_interim = 0;
     private void WriteToFile(string answer)
