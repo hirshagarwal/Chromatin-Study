@@ -336,12 +336,34 @@ namespace Assets.Scripts
                     }
                 }
                 Point lastPoint = splinePoints[0];
-                for (int i = 0; i < splinePoints.Length; i++)
+                int pointsToRun = splinePoints.Length;
+                for (int i = 0; i < pointsToRun; i++)
                 {
-                    int delta = 5; // Bezier interpolation constant
-                    int controlSize = 2; // How far the control point is
-                    for (int j = 0; j < delta; j++) {
-                        interpolatePoint();
+                    int numPointsScale = 400; // Bezier interpolation constant
+                    float controlSize = 2; // How far the control point is
+                    int numPoints = 5;
+                    if (i + 1 <= splinePoints.Length)
+                    {
+                        numPoints = (int)(numPointsScale * Vector3.Distance(splinePoints[i].Position, splinePoints[i + 1].Position));
+                        Debug.Log("Dynamic Num Points: " + numPoints);
+                    } else
+                    {
+                        Debug.Log("Warning: Skipped Dynamic Length");
+                    }
+                    
+                    for (int j = 0; j < numPoints; j++) {
+                        if (i+3 <= splinePoints.Length) {                            
+                            float percent = (float) (j+1) / numPoints;
+                            Debug.Log("Num Points: " + numPoints);
+                            Debug.Log("Adding Point: " + percent);
+                            Point p1 = splinePoints[i].Displaced(displacement) / scale;
+                            Point p2 = splinePoints[i + 1].Displaced(displacement) / scale;
+                            Point p3 = splinePoints[i + 2].Displaced(displacement) / scale;
+                            spheres.Add(interpolatePoints(p1, p2, p3, controlSize, percent));
+                        } else
+                        {
+                            Debug.Log("Warning: Skipped Point");
+                        }
                         connectors.Add(
                             new Connector(lastPoint.Displaced(displacement) / scale,
                             splinePoints[i].Displaced(displacement) / scale)
@@ -349,15 +371,58 @@ namespace Assets.Scripts
                     }
                     
                     //cylinders.Add(BuildConnector(connectors[connectors.Count - 1]));
-                    spheres.Add(BuildSphere(connectors[connectors.Count - 1]));
+                    //spheres.Add(BuildSphere(connectors[connectors.Count - 1]));
+                    //spheres.Add(BuildSphere((splinePoints[i].Displaced(displacement) / scale).Position, Color.magenta));
                     lastPoint = splinePoints[i];
                 }
             }
         }
-
-        private Connector interpolatePoints(Vector3 p1, Vector2 p2, int controlSize, float delta)
+        
+        private GameObject interpolatePoints(Point p1, Point p2, Point p3, float t, float percent)
         {
-            
+            Vector3 mainVector = p3.Position - p2.Position;
+            Vector3 c1 = p1.Position + t * mainVector;
+            Vector3 c2 = p1.Position + (-1 * t * mainVector);
+            Vector3 finalPosition = computeBezier(p1.Position, p2.Position, c1, c2, percent);
+            return BuildSphere(finalPosition, p1.ColorRGB);
+        }
+
+        private Vector3 computeBezier(Vector3 p1, Vector3 p2, Vector3 c1, Vector3 c2, float percent)
+        {
+            decimal decimalPercent = System.Convert.ToDecimal(percent);
+            double doublePercent = System.Convert.ToDouble(decimalPercent);
+            float inverseP = 1 - percent;
+            Vector3 t1 = p1 * inverseP * inverseP * inverseP;
+            Vector3 t2 = 3 * inverseP * inverseP * percent * c1;
+            Vector3 t3 = 3 * inverseP * percent * percent * c2;
+            Vector3 t4 = percent * percent * percent * p2;
+            return t1 + t2 + t3 + t4;
+        }
+
+        private GameObject BuildSphere(Vector3 position, Color color)
+        {
+            GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            sphere.GetComponent<Collider>().enabled = false;
+            sphere.GetComponent<MeshRenderer>().material.color = Color.green;
+            sphere.transform.parent = GameObject.Find("ObjectManager").transform;
+            sphere.transform.position = position;
+            Vector3 scale = new Vector3(.005f, .005f, .005f);
+            sphere.transform.localScale = scale;
+            return sphere;
+        }
+
+        private GameObject BuildSphere(Connector connector)
+        {
+            GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            sphere.GetComponent<Collider>().enabled = false;
+            sphere.GetComponent<MeshRenderer>().material.color = connector.InterpolatedColor;
+            sphere.transform.parent = GameObject.Find("ObjectManager").transform;
+            // Vector3 pos = Vector3.Lerp(connector.StartPoint, connector.EndPoint, 0.002f);
+            Vector3 pos = connector.StartPoint;
+            sphere.transform.position = pos;
+            Vector3 scale = new Vector3(.005f, .005f, .005f);
+            sphere.transform.localScale = scale;
+            return sphere;
         }
 
         ~Curve()
@@ -569,19 +634,6 @@ namespace Assets.Scripts
             return cylinder;
         }
 
-        private GameObject BuildSphere(Connector connector)
-        {
-            GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            sphere.GetComponent<Collider>().enabled = false;
-            sphere.GetComponent<MeshRenderer>().material.color = connector.InterpolatedColor;
-            sphere.transform.parent = GameObject.Find("ObjectManager").transform;
-            Vector3 pos = Vector3.Lerp(connector.StartPoint, connector.EndPoint, 0.002f);
-            Debug.Log(pos);
-            sphere.transform.position = pos;
-            Vector3 scale = new Vector3(.005f, .005f, .005f);
-            sphere.transform.localScale = scale;
-            return sphere;
-        }
 
         private int ClampPos(int i, int l)
         {
