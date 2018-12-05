@@ -114,6 +114,7 @@ public class OrbitScript : MonoBehaviour
             transform.position = new Vector3(0, 0, 1);
             shift = new Vector3(0, 0, 0);
         }
+        /*
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             if (shift == new Vector3(0, 0, 0))
@@ -140,6 +141,7 @@ public class OrbitScript : MonoBehaviour
                 shift = new Vector3(0, 0, 0);
             }
         }
+        */
     }
 
     public static float ClampAngle(float angle, float min, float max)

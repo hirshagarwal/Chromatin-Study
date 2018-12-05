@@ -205,11 +205,11 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
             GameObject go = new GameObject("SpectrumRenderer" + c);
             try
             {
-                go.transform.parent = GameObject.Find("Main Camera").transform;
+                go.transform.parent = GameObject.Find("MetaCameraRig").transform;
             }
             catch
             {
-                go.transform.parent = GameObject.Find("MixedRealityCamera").transform;
+                go.transform.parent = GameObject.Find("VirtualWebcam").transform;
             }
             LineRenderer spectrumRenderer = go.AddComponent<LineRenderer>();
             spectrumRenderer.material = new Material(Shader.Find("Particles/Alpha Blended Premultiply"));

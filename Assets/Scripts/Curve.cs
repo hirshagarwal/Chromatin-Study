@@ -18,6 +18,7 @@ namespace Assets.Scripts
         private Material baseMaterial;
         private string chrtype = "sen";
         private List<GameObject> cylinders = new List<GameObject>();
+        private List<GameObject> spheres = new List<GameObject>();
         private float cylinderWidth = 0.0017f;
         private string fileName;
         private string[] files = { "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "X" };
@@ -29,6 +30,7 @@ namespace Assets.Scripts
             go = new GameObject();
             List<Point> allPoints = ReadInFile(filen);
             points = new List<Point>();
+            Debug.Log("Num Points: " + allPoints.Count);
             Color color = Design.GetClosestColor(0.2f,false);
             List<float> colorsIn = new List<float>();
             float maxColor = 0.0f;
@@ -72,7 +74,8 @@ namespace Assets.Scripts
                     new Connector(lastPoint.Displaced(displacement) / scale,
                     splinePoints[i].Displaced(displacement) / scale)
                     );
-                cylinders.Add(BuildConnector(connectors[connectors.Count - 1]));
+                //cylinders.Add(BuildConnector(connectors[connectors.Count - 1]));
+                //cylinders.Add(BuildSphere(connectors[connectors.Count - 1]));
                 lastPoint = splinePoints[i];
             }
         }
@@ -217,6 +220,7 @@ namespace Assets.Scripts
             go = new GameObject();
             points = ReadInFile(filen);
             Debug.Log("Loaded " + filen);
+            Debug.Log("Num Points: " + points.Count);
             Color color = Design.GetClosestColor(0.2f,false);
             Vector3 shift = new Vector3(0, 0, 0);
             if (!grayscale && !tad)
@@ -229,6 +233,8 @@ namespace Assets.Scripts
                     if (point.Color > maxColor)
                         maxColor = point.Color;
                 }
+                Debug.Log("Colors In");
+                Debug.Log(colorsIn.Count);
                 colorSpace = BuildColorMap(colorsIn);
                 colorWidth = BuildColorCurve(colorsIn);
 
@@ -236,7 +242,14 @@ namespace Assets.Scripts
                 for (int i = 0; i < points.Count; i++)
                 {
                     int idx = (int)Math.Floor((points[i].Color / maxColor) * (colorSpace.Count - 1));
-                    points[i].ColorRGB = colorSpace[idx];
+                    if (idx < colorSpace.Count)
+                    {
+                        points[i].ColorRGB = colorSpace[idx];
+                    } else
+                    {
+                        points[i].ColorRGB = colorSpace[colorSpace.Count - 1];
+                    }
+                    
                 }
             }
             else if (tad)
@@ -262,6 +275,7 @@ namespace Assets.Scripts
 
             if (fast)
             {
+                Debug.Log("Fast Mode");
                 LineRenderer lineRenderer = go.AddComponent<LineRenderer>();
                 lineRenderer.material = new Material(Shader.Find("Particles/Alpha Blended Premultiply"));
 
@@ -310,7 +324,9 @@ namespace Assets.Scripts
             }
             else
             {
+                Debug.Log("Slow mode");
                 cylinders = new List<GameObject>();
+                spheres = new List<GameObject>();
                 Point[] splinePoints = MakeSplines(points.ToArray());
                 if (grayscale)
                 {
@@ -322,14 +338,26 @@ namespace Assets.Scripts
                 Point lastPoint = splinePoints[0];
                 for (int i = 0; i < splinePoints.Length; i++)
                 {
-                    connectors.Add(
-                        new Connector(lastPoint.Displaced(displacement) / scale,
-                        splinePoints[i].Displaced(displacement) / scale)
-                        );
-                    cylinders.Add(BuildConnector(connectors[connectors.Count - 1]));
+                    int delta = 5; // Bezier interpolation constant
+                    int controlSize = 2; // How far the control point is
+                    for (int j = 0; j < delta; j++) {
+                        interpolatePoint();
+                        connectors.Add(
+                            new Connector(lastPoint.Displaced(displacement) / scale,
+                            splinePoints[i].Displaced(displacement) / scale)
+                            );
+                    }
+                    
+                    //cylinders.Add(BuildConnector(connectors[connectors.Count - 1]));
+                    spheres.Add(BuildSphere(connectors[connectors.Count - 1]));
                     lastPoint = splinePoints[i];
                 }
             }
+        }
+
+        private Connector interpolatePoints(Vector3 p1, Vector2 p2, int controlSize, float delta)
+        {
+            
         }
 
         ~Curve()
@@ -512,7 +540,7 @@ namespace Assets.Scripts
             }
             int next = 0;
             var outSpace = new List<Color>();
-            for (int i = 0; i < buckets.Count; i++)
+            for (int i = 0; i < colorSpace.Count; i++)
             {
                 for (int k = next; k < next + buckets[i] * 10000; k++)
                 {
@@ -539,6 +567,20 @@ namespace Assets.Scripts
             Vector3 scale = new Vector3(cylinderWidth, offset.magnitude / 2f, cylinderWidth);
             cylinder.transform.localScale = scale;
             return cylinder;
+        }
+
+        private GameObject BuildSphere(Connector connector)
+        {
+            GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            sphere.GetComponent<Collider>().enabled = false;
+            sphere.GetComponent<MeshRenderer>().material.color = connector.InterpolatedColor;
+            sphere.transform.parent = GameObject.Find("ObjectManager").transform;
+            Vector3 pos = Vector3.Lerp(connector.StartPoint, connector.EndPoint, 0.002f);
+            Debug.Log(pos);
+            sphere.transform.position = pos;
+            Vector3 scale = new Vector3(.005f, .005f, .005f);
+            sphere.transform.localScale = scale;
+            return sphere;
         }
 
         private int ClampPos(int i, int l)
