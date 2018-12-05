@@ -339,10 +339,10 @@ namespace Assets.Scripts
                 int pointsToRun = splinePoints.Length;
                 for (int i = 0; i < pointsToRun; i++)
                 {
-                    int numPointsScale = 400; // Bezier interpolation constant
-                    float controlSize = 2; // How far the control point is
-                    int numPoints = 5;
-                    if (i + 1 <= splinePoints.Length)
+                    int numPointsScale = 150; // Bezier interpolation constant
+                    float controlSize = .75f; // How far the control point is
+                    int numPoints = 3;
+                    if (i + 1 < splinePoints.Length)
                     {
                         numPoints = (int)(numPointsScale * Vector3.Distance(splinePoints[i].Position, splinePoints[i + 1].Position));
                         Debug.Log("Dynamic Num Points: " + numPoints);
@@ -351,15 +351,15 @@ namespace Assets.Scripts
                         Debug.Log("Warning: Skipped Dynamic Length");
                     }
                     
-                    for (int j = 0; j < numPoints; j++) {
-                        if (i+3 <= splinePoints.Length) {                            
-                            float percent = (float) (j+1) / numPoints;
-                            Debug.Log("Num Points: " + numPoints);
+                    for (int j = 1; j < numPoints; j++) {
+                        if (i+4 <= splinePoints.Length) {                            
+                            float percent = (float) (j) / numPoints;
                             Debug.Log("Adding Point: " + percent);
                             Point p1 = splinePoints[i].Displaced(displacement) / scale;
                             Point p2 = splinePoints[i + 1].Displaced(displacement) / scale;
                             Point p3 = splinePoints[i + 2].Displaced(displacement) / scale;
-                            spheres.Add(interpolatePoints(p1, p2, p3, controlSize, percent));
+                            Point p4 = splinePoints[i + 3].Displaced(displacement) / scale;
+                            spheres.Add(interpolatePoints(p1, p2, p3, p4, controlSize, percent));
                         } else
                         {
                             Debug.Log("Warning: Skipped Point");
@@ -371,20 +371,35 @@ namespace Assets.Scripts
                     }
                     
                     //cylinders.Add(BuildConnector(connectors[connectors.Count - 1]));
-                    //spheres.Add(BuildSphere(connectors[connectors.Count - 1]));
+                    spheres.Add(BuildSphere(connectors[connectors.Count - 1]));
                     //spheres.Add(BuildSphere((splinePoints[i].Displaced(displacement) / scale).Position, Color.magenta));
                     lastPoint = splinePoints[i];
                 }
             }
         }
         
-        private GameObject interpolatePoints(Point p1, Point p2, Point p3, float t, float percent)
+        private GameObject interpolatePoints(Point p1, Point p2, Point p3, Point p4, float t, float percent)
         {
-            Vector3 mainVector = p3.Position - p2.Position;
-            Vector3 c1 = p1.Position + t * mainVector;
-            Vector3 c2 = p1.Position + (-1 * t * mainVector);
+            Vector3 c1 = calculateControlPoint(p1.Position, p2.Position, p3.Position, t, false);
+            Vector3 c2 = calculateControlPoint(p2.Position, p3.Position, p4.Position, t, true);
+
+            // Calculate Second Control Point
+
             Vector3 finalPosition = computeBezier(p1.Position, p2.Position, c1, c2, percent);
             return BuildSphere(finalPosition, p1.ColorRGB);
+        }
+
+        private Vector3 calculateControlPoint(Vector3 p1, Vector3 p2, Vector3 p3, float t, Boolean takeFarther)
+        {
+            Vector3 mainVector = p3 - p2;
+            Vector3 c1plus = p1 + t * mainVector;
+            Vector3 c1minus = p1 + (-1 * t * mainVector);
+            Vector3 c1 = c1plus;
+            if (Vector3.Distance(c1minus, p2) < Vector3.Distance(c1plus, p2) || takeFarther)
+            {
+                c1 = c1minus;
+            }
+            return c1;
         }
 
         private Vector3 computeBezier(Vector3 p1, Vector3 p2, Vector3 c1, Vector3 c2, float percent)
@@ -406,7 +421,7 @@ namespace Assets.Scripts
             sphere.GetComponent<MeshRenderer>().material.color = Color.green;
             sphere.transform.parent = GameObject.Find("ObjectManager").transform;
             sphere.transform.position = position;
-            Vector3 scale = new Vector3(.005f, .005f, .005f);
+            Vector3 scale = new Vector3(.0035f, .0035f, .0035f);
             sphere.transform.localScale = scale;
             return sphere;
         }
