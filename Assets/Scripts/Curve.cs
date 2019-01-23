@@ -339,30 +339,27 @@ namespace Assets.Scripts
                 int pointsToRun = splinePoints.Length;
                 for (int i = 0; i < pointsToRun; i++)
                 {
-                    int numPointsScale = 150; // Bezier interpolation constant
-                    float controlSize = .75f; // How far the control point is
+                    int numPointsScale = 10; // Bezier interpolation constant (how many points are interpolated in between)
+                    float controlSize = .5f; // How far the control point is
                     int numPoints = 3;
                     if (i + 1 < splinePoints.Length)
                     {
-                        numPoints = (int)(numPointsScale * Vector3.Distance(splinePoints[i].Position, splinePoints[i + 1].Position));
-                        Debug.Log("Dynamic Num Points: " + numPoints);
+                        numPoints = (int) (Math.Pow(numPointsScale, 2) * Vector3.Distance(splinePoints[i].Position, splinePoints[i + 1].Position));
+                        // Debug.Log("Dynamic Num Points: " + numPoints);
                     } else
                     {
-                        Debug.Log("Warning: Skipped Dynamic Length");
+                        // Debug.Log("Warning: Skipped Dynamic Length");
                     }
                     
                     for (int j = 1; j < numPoints; j++) {
                         if (i+4 <= splinePoints.Length) {                            
                             float percent = (float) (j) / numPoints;
-                            Debug.Log("Adding Point: " + percent);
+                            // Debug.Log("Adding Point: " + percent);
                             Point p1 = splinePoints[i].Displaced(displacement) / scale;
                             Point p2 = splinePoints[i + 1].Displaced(displacement) / scale;
                             Point p3 = splinePoints[i + 2].Displaced(displacement) / scale;
                             Point p4 = splinePoints[i + 3].Displaced(displacement) / scale;
                             spheres.Add(interpolatePoints(p1, p2, p3, p4, controlSize, percent));
-                        } else
-                        {
-                            Debug.Log("Warning: Skipped Point");
                         }
                         connectors.Add(
                             new Connector(lastPoint.Displaced(displacement) / scale,
@@ -386,7 +383,7 @@ namespace Assets.Scripts
             // Calculate Second Control Point
 
             Vector3 finalPosition = computeBezier(p1.Position, p2.Position, c1, c2, percent);
-            return BuildSphere(finalPosition, p1.ColorRGB);
+            return BuildSphere(finalPosition, p1.ColorRGB, 0.75f);
         }
 
         private Vector3 calculateControlPoint(Vector3 p1, Vector3 p2, Vector3 p3, float t, Boolean takeFarther)
@@ -395,8 +392,7 @@ namespace Assets.Scripts
             Vector3 c1plus = p1 + t * mainVector;
             Vector3 c1minus = p1 + (-1 * t * mainVector);
             Vector3 c1 = c1plus;
-            if (Vector3.Distance(c1minus, p2) < Vector3.Distance(c1plus, p2) || takeFarther)
-            {
+            if (Vector3.Distance(c1minus, p2) < Vector3.Distance(c1plus, p2) ^ takeFarther) {
                 c1 = c1minus;
             }
             return c1;
@@ -414,14 +410,14 @@ namespace Assets.Scripts
             return t1 + t2 + t3 + t4;
         }
 
-        private GameObject BuildSphere(Vector3 position, Color color)
+        private GameObject BuildSphere(Vector3 position, Color color, float scaleOffset)
         {
             GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             sphere.GetComponent<Collider>().enabled = false;
             sphere.GetComponent<MeshRenderer>().material.color = Color.green;
             sphere.transform.parent = GameObject.Find("ObjectManager").transform;
             sphere.transform.position = position;
-            Vector3 scale = new Vector3(.0035f, .0035f, .0035f);
+            Vector3 scale = new Vector3(.0035f, .0035f, .0035f) * scaleOffset;
             sphere.transform.localScale = scale;
             return sphere;
         }

@@ -246,6 +246,7 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
         UpdateScale();
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            Debug.Log("Space Registered");
             UpdateScale(true);
             Destroy(gameObject.GetComponent<LineRenderer>());
             Destroy(redObject);

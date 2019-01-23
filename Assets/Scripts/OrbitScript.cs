@@ -140,8 +140,10 @@ public class OrbitScript : MonoBehaviour
                 transform.position = transform.position - shift;
                 shift = new Vector3(0, 0, 0);
             }
+         
         }
         */
+        
     }
 
     public static float ClampAngle(float angle, float min, float max)
