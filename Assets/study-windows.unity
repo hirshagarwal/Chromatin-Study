@@ -3151,10 +3151,10 @@ MonoBehaviour:
   objectManager3D: {fileID: 1600011796}
   orbitScript: {fileID: 1200713934}
   participantNumber: 0
-  startingTrial: 8
+  startingTrial: 2
   studyFormat: 1
   totalTrials: 208
-  twodim: 1
+  twodim: 0
 --- !u!114 &1600011799
 MonoBehaviour:
   m_ObjectHideFlags: 0
