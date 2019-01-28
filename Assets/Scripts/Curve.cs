@@ -339,12 +339,13 @@ namespace Assets.Scripts
                 int pointsToRun = splinePoints.Length;
                 for (int i = 0; i < pointsToRun; i++)
                 {
-                    int numPointsScale = 10; // Bezier interpolation constant (how many points are interpolated in between)
+                    int numPointsScale = 40; // Bezier interpolation constant (how many points are interpolated in between)
                     float controlSize = .5f; // How far the control point is
+                    float scaleExponent = 1.2f;
                     int numPoints = 3;
                     if (i + 1 < splinePoints.Length)
                     {
-                        numPoints = (int) (Math.Pow(numPointsScale, 2) * Vector3.Distance(splinePoints[i].Position, splinePoints[i + 1].Position));
+                        numPoints = (int) (Math.Pow(Vector3.Distance(splinePoints[i].Position, splinePoints[i + 1].Position) * numPointsScale, scaleExponent));
                         // Debug.Log("Dynamic Num Points: " + numPoints);
                     } else
                     {
