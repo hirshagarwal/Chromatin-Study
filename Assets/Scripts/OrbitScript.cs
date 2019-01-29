@@ -104,7 +104,6 @@ public class OrbitScript : MonoBehaviour
                 transform.RotateAround(objectManager.transform.position, transform.up, Input.GetAxis("Mouse X") * _sensitivity);
                 // store mouse
                 //transform.rotation = _mouseOffset;
-                Debug.Log("Rotation: " + _mouseOffset);
                 _mouseReference = Input.mousePosition;
 
                 var mx = Input.mousePosition.x - Screen.width / 2;// Input.GetAxis("Mouse X") ;
