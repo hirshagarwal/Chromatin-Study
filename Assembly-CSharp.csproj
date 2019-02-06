@@ -500,6 +500,7 @@
     <None Include="Assets\Resources\chr10_sen.cpoints.txt" />
     <None Include="Assets\Resources\PointDistance.txt" />
     <None Include="Assets\Resources\chr12_pro.cpoints.txt" />
+    <None Include="Assets\MetaSDK\Meta\EventSystem\Materials\SphereShader.shader" />
     <None Include="Assets\MetaSDK\Meta\Mouse\Shaders\AdditiveParticleNoAlphaShader.shader" />
     <None Include="Assets\MetaSDK\MetaExamples\Assets\Audio\CameraShutterClick.txt" />
     <None Include="Assets\MetaSDK\MetaExamples\Assets\Audio\RelaxingMusicCredits.txt" />

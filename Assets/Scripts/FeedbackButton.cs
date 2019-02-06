@@ -12,4 +12,13 @@ public class FeedbackButton : MonoBehaviour
             () => GameObject.Find("ObjectManager").GetComponent<StudyManager>().FinishTrial()
       );
     }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            Debug.Log("Continue");
+            GameObject.Find("ObjectManager").GetComponent<StudyManager>().FinishTrial();
+        }
+    }
 }

@@ -340,7 +340,7 @@ namespace Assets.Scripts
                 Vector3 c1 = new Vector3(.1f, .1f, .1f);
                 for (int i = 0; i < numSplinePoints - 2; i++)
                 {
-                    int numPointsScale = 75; // Bezier interpolation constant (how many points are interpolated in between)
+                    int numPointsScale = 50; // Bezier interpolation constant (how many points are interpolated in between)
                     float controlSize = .25f; // How far the control point is
 
                     // Select Points
@@ -356,7 +356,7 @@ namespace Assets.Scripts
                     
                     // Calculate Bezier Length
                     float bezierLength = 0;
-                    int lengthResolution = 10;
+                    int lengthResolution = 20;
                     Vector3 previousPoint = p1.Position;
                     for (int j = 1; j <= lengthResolution; j++)
                     {
@@ -364,9 +364,9 @@ namespace Assets.Scripts
                         bezierLength += Vector3.Distance(currentPosition, previousPoint);
                     }
 
-                    Debug.Log(bezierLength);
+                    // Debug.Log(bezierLength);
                     int numPoints = (int) (bezierLength * numPointsScale);
-                    Debug.Log(numPoints);
+                    // Debug.Log(numPoints);
                     for (int j = 1; j < numPoints; j++) {
                         if (i+4 <= splinePoints.Length) {                            
                             float percent = (float)j / numPoints;
@@ -443,6 +443,7 @@ namespace Assets.Scripts
         private GameObject BuildSphere(Vector3 position, Color color, float scaleOffset)
         {
             GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            
             sphere.GetComponent<Collider>().enabled = false;
             sphere.GetComponent<MeshRenderer>().material.color = Color.green;
             sphere.transform.parent = GameObject.Find("ObjectManager").transform;

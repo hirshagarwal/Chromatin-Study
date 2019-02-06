@@ -15,9 +15,10 @@ public class ContinueButton : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKeyDown(KeyCode.C))
         {
             Debug.Log("Continue");
+            myselfButton.GetComponentInChildren<Text>().text = "Loading...";
             GameObject.Find("ObjectManager").GetComponent<StudyManager>().StartTrial();
         }
     }

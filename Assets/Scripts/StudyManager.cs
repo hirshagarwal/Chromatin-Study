@@ -189,19 +189,21 @@ Please, call the instructor.";
         // remove answer screen and load next trial
         choicePanelClusters.SetActive(false);
         choicePanelDistance.SetActive(false);
+        /*
         choicePanelSegment.SetActive(false);
         choicePanelCurve.SetActive(false);
         choicePanelTouching.SetActive(false);
         choicePanelUnderstanding.SetActive(false);
         choicePanelTad.SetActive(false);
         choicePanelTriple.SetActive(false);
+        */
         infoPanel.SetActive(false);
         feedbackPanel.SetActive(true);
         panelCanvas.SetActive(true);
         if (correct == true.ToString())
-            feedbackText.text = "Correct! :)";
+            feedbackText.text = "Correct! :) - Press C";
         else
-            feedbackText.text = "That was wrong :(";
+            feedbackText.text = "That was wrong :( - Press C";
     }
 
     public void RecordTimeAndCollectUserAnswer()
@@ -456,11 +458,12 @@ Please, call the instructor.";
         GameObject.Find("ContinueButton").AddComponent<ContinueButton>();
         GameObject.Find("FeedbackContinueButton").AddComponent<FeedbackButton>();
         GameObject.Find("StartButton").AddComponent<StartButton>();
+        
+        GameObject.Find("AnswerButton_Red").AddComponent<GenericButton>();
+        GameObject.Find("AnswerButton_Red").GetComponent<GenericButton>().value = "red";
+        GameObject.Find("AnswerButton_Blue").AddComponent<GenericButton>();
+        GameObject.Find("AnswerButton_Blue").GetComponent<GenericButton>().value = "blue";
         /*
-        GameObject.Find("AnswerButton_RedDistance").AddComponent<GenericButton>();
-        GameObject.Find("AnswerButton_RedDistance").GetComponent<GenericButton>().value = "red";
-        GameObject.Find("AnswerButton_BlueDistance").AddComponent<GenericButton>();
-        GameObject.Find("AnswerButton_BlueDistance").GetComponent<GenericButton>().value = "blue";
         GameObject.Find("AnswerButton_RedSegment").AddComponent<GenericButton>();
         GameObject.Find("AnswerButton_RedSegment").GetComponent<GenericButton>().value = "red";
         GameObject.Find("AnswerButton_BlueSegment").AddComponent<GenericButton>();
@@ -515,6 +518,7 @@ Please, call the instructor.";
 
         choicePanelClusters = GameObject.Find("ChoicePanelClusters");
         choicePanelClusters.SetActive(false);
+        
         /*
         choicePanelSegment = GameObject.Find("ChoicePanelSegment");
         choicePanelSegment.SetActive(false);
