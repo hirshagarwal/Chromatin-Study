@@ -30,6 +30,7 @@ public class OrbitScript2D : MonoBehaviour
         {
             if (Input.GetMouseButton(0))
             {
+                Debug.Log("Mouse Button");
                 x += Input.GetAxis("Mouse X") * 0.2f;// * xSpeed * 0.02f;
                 y += Input.GetAxis("Mouse Y") * 0.2f;// * ySpeed * 0.02f;
             }else if (Input.GetKeyDown(KeyCode.Space))

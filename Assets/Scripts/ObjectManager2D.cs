@@ -268,6 +268,8 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
             
         tex.Apply();
         sortedRanges = uniqueRanges;
+        Vector3 correctPosition = new Vector3(-0.54f, 0.377f, -3f);
+        Camera.main.transform.SetPositionAndRotation(correctPosition, Camera.main.transform.rotation);
         return tex;
     }
 
@@ -505,10 +507,16 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
         return spriteRenderer;
     }
 
+    private Vector3 dragOrigin;
+    private int dragSpeed = 5;
+    private Boolean middleMouse = false;
+
     private void Update()
     {
+
         if (Input.GetMouseButton(1))
         {
+            Debug.Log("Log");
             Camera c = Camera.main;
             Vector3 mousePos = new Vector3();
             mousePos = Input.mousePosition;

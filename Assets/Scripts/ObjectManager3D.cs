@@ -335,7 +335,7 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
             Destroy(redObject);
             Destroy(blueObject);
             mainCurve.DestroyEverything();
-            for (int c = 0; c < 7; c++)
+            for (int c = 0; c < 7; c++) 
             {
                 Destroy(GameObject.Find("SpectrumRenderer" + c));
             }

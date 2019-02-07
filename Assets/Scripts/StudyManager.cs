@@ -305,8 +305,6 @@ Please, call the instructor.";
         choicePanelClusters.SetActive(false);
         GUI.FocusControl(null);
 
-  
-
         if (trial == 0)
         {//First time introduction
             currentTrial = nextTrial;

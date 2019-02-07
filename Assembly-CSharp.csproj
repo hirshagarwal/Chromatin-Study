@@ -443,6 +443,7 @@
     <None Include="Assets\Resources\chrX_sen.cpoints.txt" />
     <None Include="Assets\Resources\14_formatted.bed.pro.txt" />
     <None Include="Assets\Resources\chr16_sen.cpoints.txt" />
+    <None Include="Assets\MetaSDK\Meta\EventSystem\Materials\Distort.cginc" />
     <None Include="Assets\Resources\chr13_sen.cpoints.txt" />
     <None Include="Assets\Resources\18_formatted.bed.sen.txt" />
     <None Include="Assets\Resources\16_formatted.bed.sen.txt" />
