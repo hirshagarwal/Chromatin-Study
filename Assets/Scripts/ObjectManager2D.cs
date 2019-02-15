@@ -510,12 +510,14 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
     private Vector3 dragOrigin;
     private int dragSpeed = 5;
     private Boolean middleMouse = false;
-
+    
     private void Update()
     {
-
-        if (Input.GetMouseButton(1))
+        GameObject objectManager = GameObject.Find("ObjectManager");
+        StudyManager studyManager = objectManager.GetComponent<StudyManager>();
+        if (Input.GetMouseButton(1) && studyManager.twodim)
         {
+
             Debug.Log("Log");
             Camera c = Camera.main;
             Vector3 mousePos = new Vector3();

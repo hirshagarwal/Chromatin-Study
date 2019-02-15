@@ -71,17 +71,19 @@ public class OrbitScript : MonoBehaviour
     }
 
     private bool moving = false;
+    
 
     private void LateUpdate()
     {
-
         if (!Menu && target)
         {
             GameObject objectManager = GameObject.Find("ObjectManager");
-            StudyManager studyManager = objectManager.GetComponent<StudyManager>();
 
+            StudyManager studyManager = objectManager.GetComponent<StudyManager>();
             if (Input.GetMouseButton(0) && !studyManager.twodim)
             {
+                Debug.Log("Mouse Input");
+
                 // offset
                 _mouseOffset = (Input.mousePosition - _mouseReference);
                 // apply rotation

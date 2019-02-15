@@ -286,7 +286,7 @@ Please, call the instructor.";
 
         if (studyFormat == Formats.HoloLens)
         {
-            GameObject hologramContainer = GameObject.Find("HologramContainer");
+            GameObject hologramContainer = GameObject.Find("MetaCameraRig");
             hologramContainer.transform.position = new Vector3(0f, 0f, .5f);
         }
 
