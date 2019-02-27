@@ -7,3 +7,21 @@ SUBJECT,TRIAL,TECHNIQUE,TASK,TRAINING,DATA, ANSWER, ERROR, TIME, TRACKING_MAIN, 
 2, PointDistance, False,15_formatted.bed.sen, chr15-27600000-27700000, chr15-49300000-49400000, chr15-28600000-28700000, chr15-42700000-42800000, False, Projection, True, 26208.3731
 
 3, PointDistance, False,22_formatted.bed.pro, chr22-16900000-17000000, chr22-24600000-24700000, chr22-23600000-23700000, chr22-30900000-31000000, True, Projection, True, 8853.8494
+SUBJECT,TRIAL,TECHNIQUE,TASK,TRAINING,DATA, ANSWER, ERROR, TIME, TRACKING_MAIN, TRACKING_CURSOR, TRACKING_PLANE 
+
+2, PointDistance, False,15_formatted.bed.sen, chr15-27600000-27700000, chr15-49300000-49400000, chr15-28600000-28700000, chr15-42700000-42800000, False, Projection, False, 3641.1372
+
+3, PointDistance, False,22_formatted.bed.pro, chr22-16900000-17000000, chr22-24600000-24700000, chr22-23600000-23700000, chr22-30900000-31000000, True, Projection, True, 22057.8144
+
+4, PointDistance, False,12_formatted.bed.sen, chr12-33800000-33900000, chr12-61200000-61300000, chr12-9600000-9700000, chr12-31200000-31300000, False, Projection, True, 12037.8333
+
+5, PointDistance, False,17_formatted.bed.sen, chr17-50400000-50500000, chr17-80300000-80400000, chr17-26300000-26400000, chr17-44500000-44600000, False, Projection, False, 50601.3489
+SUBJECT,TRIAL,TECHNIQUE,TASK,TRAINING,DATA, ANSWER, ERROR, TIME, TRACKING_MAIN, TRACKING_CURSOR, TRACKING_PLANE 
+
+0, LargerTad, True,11_formatted.bed.sen, 1, Projection, True, 3136.0715
+
+1, LargerTad, True,16_formatted.bed.sen, 1, Projection, True, 3472.4224
+
+2, LargerTad, False,17_formatted.bed.sen, 1, Projection, False, 10406.0742
+
+3, LargerTad, False,16_formatted.bed.pro, 1, Projection, False, 12272.2028

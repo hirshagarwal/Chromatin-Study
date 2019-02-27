@@ -429,6 +429,7 @@
     <None Include="Assets\Resources\19_formatted.bed.sen.txt" />
     <None Include="Assets\Resources\designfile.txt" />
     <None Include="Assets\Resources\chr15_pro.cpoints.txt" />
+    <None Include="Assets\Shaders\Distort.cginc" />
     <None Include="Assets\Resources\chr11_pro.cpoints.txt" />
     <None Include="Assets\Resources\16_formatted.bed.pro.txt" />
     <None Include="Assets\Resources\22_formatted.bed.pro.txt" />
@@ -506,6 +507,7 @@
     <None Include="Assets\MetaSDK\MetaExamples\Assets\Audio\CameraShutterClick.txt" />
     <None Include="Assets\MetaSDK\MetaExamples\Assets\Audio\RelaxingMusicCredits.txt" />
     <None Include="Assets\Resources\17_formatted.bed.sen.txt" />
+    <None Include="Assets\Shaders\SphereShader.shader" />
     <None Include="Assets\MetaSDK\Meta\Reconstruction\Shaders\OcclusionMesh.shader" />
     <None Include="Assets\MetaSDK\Meta\LocalizationEngine\Calibration UI\SLAM_UI\Materials\OverlayUI.shader" />
     <Reference Include="UnityEditor.StandardEvents">

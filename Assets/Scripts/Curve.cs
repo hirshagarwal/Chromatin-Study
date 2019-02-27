@@ -433,6 +433,8 @@ namespace Assets.Scripts
             sphere.name = name;
             sphere.GetComponent<Collider>().enabled = false;
             sphere.GetComponent<MeshRenderer>().material.color = color;
+            //Material newMat = Resources.Load("SphereMaterial", typeof(Material)) as Material;
+            //sphere.GetComponent<Renderer>().material = newMat;
             sphere.transform.parent = GameObject.Find("ObjectManager").transform;
             sphere.transform.position = position;
             Vector3 scale = new Vector3(.0035f, .0035f, .0035f) * scaleOffset;
@@ -446,6 +448,8 @@ namespace Assets.Scripts
             
             sphere.GetComponent<Collider>().enabled = false;
             sphere.GetComponent<MeshRenderer>().material.color = Color.green;
+            //Material newMat = Resources.Load("Materials/SphereMaterial", typeof(Material)) as Material;
+            //sphere.GetComponent<Renderer>().material = newMat;
             sphere.transform.parent = GameObject.Find("ObjectManager").transform;
             sphere.transform.position = position;
             Vector3 scale = new Vector3(.0035f, .0035f, .0035f) * scaleOffset;

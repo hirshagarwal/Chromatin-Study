@@ -189,12 +189,13 @@ Please, call the instructor.";
         // remove answer screen and load next trial
         choicePanelClusters.SetActive(false);
         choicePanelDistance.SetActive(false);
+        choicePanelTad.SetActive(false);
         /*
         choicePanelSegment.SetActive(false);
         choicePanelCurve.SetActive(false);
         choicePanelTouching.SetActive(false);
         choicePanelUnderstanding.SetActive(false);
-        choicePanelTad.SetActive(false);
+        
         choicePanelTriple.SetActive(false);
         */
         infoPanel.SetActive(false);
@@ -516,7 +517,10 @@ Please, call the instructor.";
 
         choicePanelClusters = GameObject.Find("ChoicePanelClusters");
         choicePanelClusters.SetActive(false);
-        
+
+        choicePanelTad = GameObject.Find("ChoicePanelTad");
+        choicePanelTad.SetActive(false);
+
         /*
         choicePanelSegment = GameObject.Find("ChoicePanelSegment");
         choicePanelSegment.SetActive(false);
@@ -525,10 +529,7 @@ Please, call the instructor.";
         choicePanelCurve.SetActive(false);
 
         choicePanelTouching = GameObject.Find("ChoicePanelTouching");
-        choicePanelTouching.SetActive(false);
-
-        choicePanelTad = GameObject.Find("ChoicePanelTad");
-        choicePanelTad.SetActive(false);
+        choicePanelTouching.SetActive(false
 
         choicePanelTriple = GameObject.Find("ChoicePanelTriple");
         choicePanelTriple.SetActive(false);
