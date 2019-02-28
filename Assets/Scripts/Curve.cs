@@ -340,7 +340,7 @@ namespace Assets.Scripts
                 Vector3 c1 = new Vector3(.1f, .1f, .1f);
                 for (int i = 0; i < numSplinePoints - 2; i++)
                 {
-                    int numPointsScale = 50; // Bezier interpolation constant (how many points are interpolated in between)
+                    int numPointsScale = 20; // Bezier interpolation constant (how many points are interpolated in between)
                     float controlSize = .25f; // How far the control point is
 
                     // Select Points

@@ -23,3 +23,13 @@ SUBJECT,TRIAL,TECHNIQUE,TASK,TRAINING,DATA, ANSWER, ERROR, TIME, TRACKING_MAIN, 
 0, LargerTad, True,11_formatted.bed.sen, 1, Projection, True, 3136.0715
 
 1, LargerTad, True,16_formatted.bed.sen, 1, Projection, True, 3472.4224
+SUBJECT,TRIAL,TECHNIQUE,TASK,TRAINING,DATA, ANSWER, ERROR, TIME, TRACKING_MAIN, TRACKING_CURSOR, TRACKING_PLANE 
+
+0, LargerTad, True,11_formatted.bed.sen, 1, Projection, True, 12247.9053
+
+1, LargerTad, True,16_formatted.bed.sen, 1, Projection, True, 16113.0169
+SUBJECT,TRIAL,TECHNIQUE,TASK,TRAINING,DATA, ANSWER, ERROR, TIME, TRACKING_MAIN, TRACKING_CURSOR, TRACKING_PLANE 
+
+0, LargerTad, True,11_formatted.bed.sen, 1, Projection, True, 8460.2074
+
+1, LargerTad, True,16_formatted.bed.sen, 1, Projection, True, 10843.6107

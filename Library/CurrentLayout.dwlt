@@ -20,7 +20,7 @@ MonoBehaviour:
   m_ShowMode: 4
   m_Title: 
   m_RootView: {fileID: 2}
-  m_MinSize: {x: 950, y: 300}
+  m_MinSize: {x: 950, y: 392}
   m_MaxSize: {x: 10000, y: 10000}
 --- !u!114 &2
 MonoBehaviour:
@@ -106,8 +106,8 @@ MonoBehaviour:
     y: 30
     width: 1920
     height: 1067
-  m_MinSize: {x: 681, y: 492}
-  m_MaxSize: {x: 14004, y: 14042}
+  m_MinSize: {x: 681, y: 342}
+  m_MaxSize: {x: 12006, y: 8042}
   vertical: 0
   controlID: 9
 --- !u!114 &6
@@ -130,8 +130,8 @@ MonoBehaviour:
     y: 0
     width: 1539
     height: 1067
-  m_MinSize: {x: 404, y: 492}
-  m_MaxSize: {x: 10002, y: 14042}
+  m_MinSize: {x: 404, y: 342}
+  m_MaxSize: {x: 8004, y: 8042}
   vertical: 1
   controlID: 10
 --- !u!114 &7
@@ -228,14 +228,14 @@ MonoBehaviour:
     y: 780
     width: 1539
     height: 287
-  m_MinSize: {x: 232, y: 271}
-  m_MaxSize: {x: 10002, y: 10021}
-  m_ActualView: {fileID: 16}
+  m_MinSize: {x: 100, y: 100}
+  m_MaxSize: {x: 4000, y: 4000}
+  m_ActualView: {fileID: 17}
   m_Panes:
   - {fileID: 16}
   - {fileID: 17}
-  m_Selected: 0
-  m_LastSelected: 1
+  m_Selected: 1
+  m_LastSelected: 0
 --- !u!114 &11
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -370,7 +370,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 54fbffff00000000
+    m_ExpandedIDs: 78c9a5ff7ac9a5ff7cc9a5ff4e5bb2ff54fbffff00000000b0390000e2390000763a0000c83a0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -420,14 +420,14 @@ MonoBehaviour:
     height: 759
   m_PersistentViewDataDictionary: {fileID: 0}
   m_SceneLighting: 1
-  lastFramingTime: 2158.9429375524155
+  lastFramingTime: 1993.137718867108
   m_2DMode: 1
   m_isRotationLocked: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: -0.0038296226, y: 0.0066764355, z: 1.6860352}
+    m_Target: {x: 0, y: 0.083000004, z: 2}
     speed: 2
-    m_Value: {x: -0.0038296226, y: 0.0066764355, z: 1.6860352}
+    m_Value: {x: 0, y: 0.083000004, z: 2}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -459,9 +459,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 1.3054305
+    m_Target: 0.8653083
     speed: 2
-    m_Value: 1.3054305
+    m_Value: 0.8653083
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -535,20 +535,20 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Resources/Materials
+    - Assets/Scripts
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Resources/Materials
+  - Assets/Scripts
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Users\vishub\Documents\AR_Projects\Chromatin_hirsh\chromatin_study
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: d0430000
-    m_LastClickedID: 17360
-    m_ExpandedIDs: 00000000882f00009e2f0000da2f0000f43200007e330000b43500001e36000000ca9a3b
+    m_SelectedIDs: 16360000
+    m_LastClickedID: 13846
+    m_ExpandedIDs: 00000000882f00009e2f0000da2f0000f43200007e330000b63500002036000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -576,7 +576,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000882f00009e2f0000da2f0000f4320000b4350000143600001e360000a6360000
+    m_ExpandedIDs: 00000000882f00009e2f0000da2f0000f43200007e330000b635000020360000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -628,7 +628,7 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
     m_NewAssetIndexInList: -1
-    m_ScrollPosition: {x: 0, y: 0}
+    m_ScrollPosition: {x: 0, y: 71}
     m_GridSize: 64
   m_DirectoriesAreaWidth: 317
 --- !u!114 &17

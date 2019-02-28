@@ -244,7 +244,7 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
     private void Update()
     {
         UpdateScale();
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && redObject != null)
         {
             Debug.Log("Space Registered");
             UpdateScale(true);

@@ -599,9 +599,14 @@ Please, call the instructor.";
         
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (Formats.Projection == studyFormat)
-                orbitScript.Menu = true;
-            RecordTimeAndCollectUserAnswer();
+            if (!infoPanel.activeSelf)
+            {
+                Debug.Log("Space Registered");
+                if (Formats.Projection == studyFormat)
+                    orbitScript.Menu = true;
+                RecordTimeAndCollectUserAnswer();
+            }
+            
         }
         
     }
