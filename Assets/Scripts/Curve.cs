@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using IATK;
 
 namespace Assets.Scripts
 {
@@ -338,6 +339,11 @@ namespace Assets.Scripts
                 Point lastPoint = splinePoints[0];
                 int numSplinePoints = splinePoints.Length;
                 Vector3 c1 = new Vector3(.1f, .1f, .1f);
+                List<Vector3> sphereCenters = new List<Vector3>();
+                List<int> indices = new List<int>();
+                List<Vector3> normals = new List<Vector3>();
+                List<Color> colors = new List<Color>();
+                List<Vector3> uvs = new List<Vector3>();
                 for (int i = 0; i < numSplinePoints - 2; i++)
                 {
                     int numPointsScale = 20; // Bezier interpolation constant (how many points are interpolated in between)
@@ -367,17 +373,31 @@ namespace Assets.Scripts
                     // Debug.Log(bezierLength);
                     int numPoints = (int) (bezierLength * numPointsScale);
                     // Debug.Log(numPoints);
+                    //Vector3[] sphereCenters = new Vector3[numPoints];
+                    //int[] indices = new int[numPoints];
+                    //Color[] colors = new Color[numPoints];
+                    //Vector3[] normals = new Vector3[numPoints];
+                    //Vector3[] uvs = new Vector3[numPoints];
+                    
+                    MeshTopology m = new MeshTopology();
                     for (int j = 1; j < numPoints; j++) {
                         if (i+4 <= splinePoints.Length) {                            
                             float percent = (float)j / numPoints;
                             Vector3 intermediatePoint = computeBezier(p1.Position, p2.Position, c1, c2, percent);
-                            spheres.Add(BuildSphere(intermediatePoint, p1.ColorRGB, 0.75f));
+                            sphereCenters.Add(intermediatePoint);
+                            indices.Add(sphereCenters.Count - 1);
+                            normals.Add(new Vector3(0, 0, 0));
+                            colors.Add(Color.blue);
+                            uvs.Add(new Vector3(0.03f, 0.03f, 0.03f));
+                            // spheres.Add(BuildSphere(intermediatePoint, p1.ColorRGB, 0.75f));
                         }
                         connectors.Add(
                             new Connector(lastPoint.Displaced(displacement) / scale,
                             splinePoints[i].Displaced(displacement) / scale)
                             );
                     }
+
+                    createMesh(sphereCenters.ToArray(), indices.ToArray(), colors.ToArray(), normals.ToArray(), uvs.ToArray(), m, IATKUtil.GetMaterialFromTopology(AbstractVisualisation.GeometryType.Spheres));
 
                     c1 = controlPointCache;
                     //cylinders.Add(BuildConnector(connectors[connectors.Count - 1]));
@@ -469,6 +489,39 @@ namespace Assets.Scripts
             Vector3 scale = new Vector3(.005f, .005f, .005f);
             sphere.transform.localScale = scale;
             return sphere;
+        }
+
+        private static GameObject createMesh(Vector3[] vertices, int[] indices, Color[] colours, Vector3[] normals, Vector3[] uvs, MeshTopology meshTopology, Material material)
+        {
+            GameObject meshObject = new GameObject();
+
+            MeshTopology mtp = meshTopology;
+            // if (mtp == MeshTopology.Lines) mtp = MeshTopology.LineStrip;
+            // Create the mesh
+            Mesh mesh = new Mesh();
+
+            mesh.vertices = vertices;
+            mesh.SetIndices(indices, mtp, 0);
+            mesh.normals = normals;
+            mesh.colors = colours;
+            mesh.SetUVs(0, uvs.ToList());
+
+            mesh.RecalculateBounds();
+
+            if (normals == null || normals.Length == 0)
+            {
+                mesh.RecalculateNormals();
+            }
+
+            // Assign to GameObject
+            MeshFilter meshFilter = meshObject.AddComponent<MeshFilter>();
+            MeshRenderer meshRenderer = meshObject.AddComponent<MeshRenderer>();
+
+            meshFilter.mesh = mesh;
+            meshRenderer.material = material;
+            mesh.RecalculateBounds();
+
+            return meshObject;
         }
 
         ~Curve()

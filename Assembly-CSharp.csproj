@@ -60,6 +60,47 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\IATK\Scripts\Controller\AbstractVisualisation.cs" />
+    <Compile Include="Assets\IATK\Scripts\Controller\Animation.cs" />
+    <Compile Include="Assets\IATK\Scripts\Controller\AttributeAnimation.cs" />
+    <Compile Include="Assets\IATK\Scripts\Controller\BrushingAndLinking.cs" />
+    <Compile Include="Assets\IATK\Scripts\Controller\InspectorChangeListener.cs" />
+    <Compile Include="Assets\IATK\Scripts\Controller\LinkingVisualisations.cs" />
+    <Compile Include="Assets\IATK\Scripts\Controller\ViewBuilder.cs" />
+    <Compile Include="Assets\IATK\Scripts\Controller\Visualisation Util Classes\CreationConfiguration.cs" />
+    <Compile Include="Assets\IATK\Scripts\Controller\Visualisation Util Classes\DimensionFilter.cs" />
+    <Compile Include="Assets\IATK\Scripts\Controller\Visualisation.cs" />
+    <Compile Include="Assets\IATK\Scripts\Controller\Visualisations\ParallelCoordinatesVisualisation.cs" />
+    <Compile Include="Assets\IATK\Scripts\Controller\Visualisations\ScatterplotMatrixVisualisation.cs" />
+    <Compile Include="Assets\IATK\Scripts\Controller\Visualisations\ScatterplotVisualisation.cs" />
+    <Compile Include="Assets\IATK\Scripts\Controller\VRMenuInteractor.cs" />
+    <Compile Include="Assets\IATK\Scripts\Entities\Axis.cs" />
+    <Compile Include="Assets\IATK\Scripts\Entities\AxisAnchor.cs" />
+    <Compile Include="Assets\IATK\Scripts\Entities\AxisRangeWidget.cs" />
+    <Compile Include="Assets\IATK\Scripts\Entities\Key.cs" />
+    <Compile Include="Assets\IATK\Scripts\Entities\NormalisationAxis.cs" />
+    <Compile Include="Assets\IATK\Scripts\Entities\NormaliserHandle.cs" />
+    <Compile Include="Assets\IATK\Scripts\GPUCommunication\InputBrush.cs" />
+    <Compile Include="Assets\IATK\Scripts\Model\CSVDataSource.cs" />
+    <Compile Include="Assets\IATK\Scripts\Model\DataMetadata.cs" />
+    <Compile Include="Assets\IATK\Scripts\Model\DataSource.cs" />
+    <Compile Include="Assets\IATK\Scripts\Model\DataSourceManager.cs" />
+    <Compile Include="Assets\IATK\Scripts\Model\DataTypes.cs" />
+    <Compile Include="Assets\IATK\Scripts\Util\CustomBinSize.cs" />
+    <Compile Include="Assets\IATK\Scripts\Util\DiscreteBinner.cs" />
+    <Compile Include="Assets\IATK\Scripts\Util\GUIEvents.cs" />
+    <Compile Include="Assets\IATK\Scripts\Util\HelperUtils.cs" />
+    <Compile Include="Assets\IATK\Scripts\Util\IATKUtil.cs" />
+    <Compile Include="Assets\IATK\Scripts\Util\LinqExtensions.cs" />
+    <Compile Include="Assets\IATK\Scripts\Util\Parallel.cs" />
+    <Compile Include="Assets\IATK\Scripts\Util\Tuple.cs" />
+    <Compile Include="Assets\IATK\Scripts\Util\Tuple2.cs" />
+    <Compile Include="Assets\IATK\Scripts\Util\Tuple3.cs" />
+    <Compile Include="Assets\IATK\Scripts\Util\Tuple4.cs" />
+    <Compile Include="Assets\IATK\Scripts\Util\UtilMath.cs" />
+    <Compile Include="Assets\IATK\Scripts\View\BigMesh.cs" />
+    <Compile Include="Assets\IATK\Scripts\View\View.cs" />
+    <Compile Include="Assets\IATK\Tests\TestVisu.cs" />
     <Compile Include="Assets\MetaSDK\Meta\Binding\Api\ButtonApi.cs" />
     <Compile Include="Assets\MetaSDK\Meta\Binding\Api\CameraApi.cs" />
     <Compile Include="Assets\MetaSDK\Meta\Binding\Api\CompositorApi.cs" />
@@ -425,60 +466,82 @@
     <None Include="Assets\Resources\chr19_pro.cpoints.txt" />
     <None Include="Assets\Resources\14_formatted.bed.sen.txt" />
     <None Include="Assets\Resources\chr14_sen.cpoints.txt" />
+    <None Include="Assets\IATK\Scripts\GPUCommunication\StructurerBufferShader.shader" />
     <None Include="Assets\Resources\10_formatted.bed.sen.txt" />
     <None Include="Assets\Resources\19_formatted.bed.sen.txt" />
+    <None Include="Assets\IATK\Shaders\Distort.cginc" />
     <None Include="Assets\Resources\designfile.txt" />
     <None Include="Assets\Resources\chr15_pro.cpoints.txt" />
-    <None Include="Assets\Shaders\Distort.cginc" />
     <None Include="Assets\Resources\chr11_pro.cpoints.txt" />
+    <None Include="Assets\Shaders\Distort.cginc" />
+    <None Include="Assets\IATK\Shaders\GSBillboard.shader" />
     <None Include="Assets\Resources\16_formatted.bed.pro.txt" />
+    <None Include="Assets\Shaders\GSBillboard.shader" />
     <None Include="Assets\Resources\22_formatted.bed.pro.txt" />
     <None Include="Assets\Resources\chr17_pro.cpoints.txt" />
     <None Include="Assets\Resources\chr19_sen.cpoints.txt" />
     <None Include="Assets\Resources\chr16_sen_ac.txt" />
+    <None Include="Assets\IATK\Shaders\LineAndDots.shader" />
     <None Include="Assets\Resources\TouchingSegments.txt" />
     <None Include="Assets\Resources\chr20_pro.cpoints.txt" />
     <None Include="Assets\MetaSDK\Meta\Hands\HandInput\Shaders\MetaTransparent.shader" />
     <None Include="Assets\Resources\X_formatted.bed.sen.txt" />
+    <None Include="Assets\IATK\Shaders\DistortLinked.cginc" />
     <None Include="Assets\Resources\21_formatted.bed.sen.txt" />
     <None Include="Assets\Resources\chrX_sen.cpoints.txt" />
     <None Include="Assets\Resources\14_formatted.bed.pro.txt" />
+    <None Include="Assets\Shaders\SphereShader.shader" />
     <None Include="Assets\Resources\chr16_sen.cpoints.txt" />
     <None Include="Assets\MetaSDK\Meta\EventSystem\Materials\Distort.cginc" />
     <None Include="Assets\Resources\chr13_sen.cpoints.txt" />
     <None Include="Assets\Resources\18_formatted.bed.sen.txt" />
     <None Include="Assets\Resources\16_formatted.bed.sen.txt" />
+    <None Include="Assets\IATK\Shaders\LineShader.shader" />
     <None Include="Assets\Resources\chr18_sen.cpoints.txt" />
+    <None Include="Assets\IATK\Shaders\LinkedVisualisation.shader" />
     <None Include="Assets\Resources\22_formatted.bed.sen.txt" />
     <None Include="Assets\Resources\19_formatted.bed.pro.txt" />
     <None Include="Assets\Resources\chr10_pro.cpoints.txt" />
+    <None Include="Assets\IATK\Shaders\Linkedviews-Distortion.shader" />
+    <None Include="Assets\Shaders\LinkedVisualisation.shader" />
     <None Include="Assets\Resources\chr22_pro.cpoints.txt" />
     <None Include="Assets\Resources\chr12_sen.cpoints.txt" />
     <None Include="Assets\Resources\17_formatted.bed.pro.txt" />
+    <None Include="Assets\IATK\Scripts\GPUCommunication\MyComputeShader.compute" />
+    <None Include="Assets\IATK\Shaders\PCPShader.shader" />
+    <None Include="Assets\IATK\Shaders\CubeShader.shader" />
     <None Include="Assets\Resources\2.txt" />
     <None Include="Assets\Resources\13_formatted.bed.pro.txt" />
     <None Include="Assets\Resources\12_formatted.bed.sen.txt" />
     <None Include="Assets\MetaSDK\Meta\SDK2Version.txt" />
+    <None Include="Assets\IATK\Shaders\SphereShader.shader" />
     <None Include="Assets\MetaSDK\MetaExamples\Assets\Shaders\PointCloud.shader" />
     <None Include="Assets\Resources\chrX_pro.cpoints.txt" />
     <None Include="Assets\Resources\21_formatted.bed.pro.txt" />
+    <None Include="Assets\Shaders\Helper.cginc" />
     <None Include="Assets\MetaSDK\MetaExamples\Assets\Shaders\3DTextOneSided.shader" />
     <None Include="Assets\Resources\chr13_pro.cpoints.txt" />
     <None Include="Assets\Resources\11_formatted.bed.sen.txt" />
     <None Include="Assets\Resources\18_formatted.bed.pro.txt" />
     <None Include="Assets\Resources\11_formatted.bed.pro.txt" />
+    <None Include="Assets\Shaders\DistortLinked.cginc" />
     <None Include="Assets\Resources\chr21_sen.cpoints.txt" />
+    <None Include="Assets\Shaders\Quad.shader" />
     <None Include="Assets\Resources\chr16_pro.cpoints.txt" />
     <None Include="Assets\MetaSDK\Meta\Hands\HandInput\Shaders\WriteDepthShaderBlendAlpha.shader" />
     <None Include="Assets\MetaSDK\Meta\Hands\Resources\SpriteAlwaysOnTopShader.shader" />
     <None Include="Assets\MetaSDK\Meta\EventSystem\Shaders\UnlitTransparentTexture.shader" />
+    <None Include="Assets\IATK\Shaders\Helper.cginc" />
     <None Include="Assets\Resources\13_formatted.bed.sen.txt" />
     <None Include="Assets\Resources\20_formatted.bed.pro.txt" />
+    <None Include="Assets\IATK\Shaders\Quad.shader" />
     <None Include="Assets\MetaSDK\Meta\LocalizationEngine\Calibration UI\UnlitTransparentColorDoublesided.shader" />
     <None Include="Assets\MetaSDK\Meta\Resources\MetaOutlineResources\Shaders\UnlitOutlineOnlyTestShader.shader" />
+    <None Include="Assets\Shaders\BarShader.shader" />
     <None Include="Assets\Resources\1_formatted.bed.pro.txt" />
     <None Include="Assets\Resources\15_formatted.bed.pro.txt" />
     <None Include="Assets\Resources\15_formatted.bed.sen.txt" />
+    <None Include="Assets\IATK\Scripts\GPUCommunication\Textured.shader" />
     <None Include="Assets\Resources\1.txt" />
     <None Include="Assets\MetaSDK\Meta\Reconstruction\Shaders\Wireframe.shader" />
     <None Include="Assets\Resources\Y_formatted.bed.pro.txt" />
@@ -487,10 +550,13 @@
     <None Include="Assets\Resources\X_formatted.bed.pro.txt" />
     <None Include="Assets\Resources\LargerTad.txt" />
     <None Include="Assets\Resources\1_formatted.bed.sen.txt" />
+    <None Include="Assets\Shaders\LineShader.shader" />
+    <None Include="Assets\Shaders\CubeShader.shader" />
     <None Include="Assets\Resources\chr11_sen.cpoints.txt" />
     <None Include="Assets\Resources\12_formatted.bed.pro.txt" />
     <None Include="Assets\Resources\20_formatted.bed.sen.txt" />
     <None Include="Assets\Resources\chr17_sen.cpoints.txt" />
+    <None Include="Assets\IATK\Shaders\BarShader.shader" />
     <None Include="Assets\Resources\10_formatted.bed.pro.txt" />
     <None Include="Assets\Resources\chr21_pro.cpoints.txt" />
     <None Include="Assets\Resources\chr20_sen.cpoints.txt" />
@@ -499,6 +565,8 @@
     <None Include="Assets\Resources\chr14_pro.cpoints.txt" />
     <None Include="Assets\Resources\chr15_sen.cpoints.txt" />
     <None Include="Assets\Resources\chr22_sen.cpoints.txt" />
+    <None Include="Assets\Shaders\LineAndDots.shader" />
+    <None Include="Assets\Shaders\PCPShader.shader" />
     <None Include="Assets\Resources\chr10_sen.cpoints.txt" />
     <None Include="Assets\Resources\PointDistance.txt" />
     <None Include="Assets\Resources\chr12_pro.cpoints.txt" />
@@ -507,9 +575,9 @@
     <None Include="Assets\MetaSDK\MetaExamples\Assets\Audio\CameraShutterClick.txt" />
     <None Include="Assets\MetaSDK\MetaExamples\Assets\Audio\RelaxingMusicCredits.txt" />
     <None Include="Assets\Resources\17_formatted.bed.sen.txt" />
-    <None Include="Assets\Shaders\SphereShader.shader" />
     <None Include="Assets\MetaSDK\Meta\Reconstruction\Shaders\OcclusionMesh.shader" />
     <None Include="Assets\MetaSDK\Meta\LocalizationEngine\Calibration UI\SLAM_UI\Materials\OverlayUI.shader" />
+    <None Include="Assets\Shaders\Linkedviews-Distortion.shader" />
     <Reference Include="UnityEditor.StandardEvents">
       <HintPath>C:/Users/vishub/Documents/AR_Projects/Chromatin_hirsh/chromatin_study/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
     </Reference>
@@ -743,6 +811,18 @@
     </Reference>
     <Reference Include="ColorMine">
       <HintPath>C:/Users/vishub/Documents/AR_Projects/Chromatin_hirsh/chromatin_study/Assets/packages/ColorMine.1.2.0/lib/net45/ColorMine.dll</HintPath>
+    </Reference>
+    <Reference Include="DOTween">
+      <HintPath>C:/Users/vishub/Documents/AR_Projects/Chromatin_hirsh/chromatin_study/Assets/Plugins/Demigiant/DOTween/DOTween.dll</HintPath>
+    </Reference>
+    <Reference Include="DOTween43">
+      <HintPath>C:/Users/vishub/Documents/AR_Projects/Chromatin_hirsh/chromatin_study/Assets/Plugins/Demigiant/DOTween/DOTween43.dll</HintPath>
+    </Reference>
+    <Reference Include="DOTween46">
+      <HintPath>C:/Users/vishub/Documents/AR_Projects/Chromatin_hirsh/chromatin_study/Assets/Plugins/Demigiant/DOTween/DOTween46.dll</HintPath>
+    </Reference>
+    <Reference Include="DOTween50">
+      <HintPath>C:/Users/vishub/Documents/AR_Projects/Chromatin_hirsh/chromatin_study/Assets/Plugins/Demigiant/DOTween/DOTween50.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.Analytics">
       <HintPath>C:/Users/vishub/AppData/Local/Unity/cache/packages/packages.unity.com/com.unity.analytics@2.0.16/UnityEngine.Analytics.dll</HintPath>
@@ -1095,6 +1175,12 @@
     <Reference Include="Boo.Lang">
       <HintPath>C:/Programs/Unity/Editor/Data/MonoBleedingEdge/lib/mono/unityscript/Boo.Lang.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
+      <Project>{9496F64B-3C52-52A5-96DE-589D0BABB7AF}</Project>
+      <Name>Assembly-CSharp-firstpass</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
