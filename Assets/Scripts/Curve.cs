@@ -343,9 +343,9 @@ namespace Assets.Scripts
                 List<int> indices = new List<int>();
                 List<Vector3> normals = new List<Vector3>();
                 List<Color> colors = new List<Color>();
-                List<Vector3> uvs = new List<Vector3>();
+                List<Vector4> uvs = new List<Vector4>();
                 MeshTopology m = new MeshTopology();
-                numSplinePoints = 50;
+                //numSplinePoints = 50;
                 for (int i = 0; i < numSplinePoints - 2; i++)
                 {
                     int numPointsScale = 20; // Bezier interpolation constant (how many points are interpolated in between)
@@ -389,12 +389,10 @@ namespace Assets.Scripts
                             Vector3 intermediatePoint = computeBezier(p1.Position, p2.Position, c1, c2, percent);
                             sphereCenters.Add(intermediatePoint);
                             indices.Add(sphereCenters.Count - 1);
-                            indices.Add(sphereCenters.Count - 1);
-                            indices.Add(sphereCenters.Count - 1);
                             normals.Add(new Vector3(1, 0, 0));
-                            colors.Add(Color.blue);
-                            uvs.Add(new Vector3(0.3f, 0.3f, 0.3f));
-                            // spheres.Add(BuildSphere(intermediatePoint, p1.ColorRGB, 0.75f));
+                            colors.Add(Color.magenta);
+                            uvs.Add(new Vector4(sphereCenters.Count - 1, 0.000005f, 0, 0.000005f));
+                            //spheres.Add(BuildSphere(intermediatePoint, p1.ColorRGB, 0.75f));
                         }
                         connectors.Add(
                             new Connector(lastPoint.Displaced(displacement) / scale,
@@ -412,7 +410,8 @@ namespace Assets.Scripts
                     //spheres.Add(BuildSphere((splinePoints[i].Displaced(displacement) / scale).Position, Color.magenta));
                     lastPoint = splinePoints[i];
                 }
-                createMesh(sphereCenters.ToArray(), indices.ToArray(), colors.ToArray(), normals.ToArray(), uvs.ToArray(), m, IATKUtil.GetMaterialFromTopology(AbstractVisualisation.GeometryType.Spheres));
+                createMesh(sphereCenters.ToArray(), indices.ToArray(), colors.ToArray(), normals.ToArray(), uvs.ToArray(), MeshTopology.Points, IATKUtil.GetMaterialFromTopology(AbstractVisualisation.GeometryType.Spheres));
+                //createMesh(sphereCenters.ToArray(), indices.ToArray(), colors.ToArray(), normals.ToArray(), uvs.ToArray(), MeshTopology.Points, );
 
             }
         }
@@ -496,7 +495,7 @@ namespace Assets.Scripts
             return sphere;
         }
 
-        private static GameObject createMesh(Vector3[] vertices, int[] indices, Color[] colours, Vector3[] normals, Vector3[] uvs, MeshTopology meshTopology, Material material)
+        private static GameObject createMesh(Vector3[] vertices, int[] indices, Color[] colours, Vector3[] normals, Vector4[] uvs, MeshTopology meshTopology, Material material)
         {
             GameObject meshObject = new GameObject();
 

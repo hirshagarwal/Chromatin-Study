@@ -455,6 +455,7 @@
     <Compile Include="Assets\Scripts\PointDistanceTrial.cs" />
     <Compile Include="Assets\Scripts\Range.cs" />
     <Compile Include="Assets\Scripts\SegmentDistanceTrial.cs" />
+    <Compile Include="Assets\Scripts\SphereTest.cs" />
     <Compile Include="Assets\Scripts\Square.cs" />
     <Compile Include="Assets\Scripts\StartButton.cs" />
     <Compile Include="Assets\Scripts\StudyManager.cs" />
