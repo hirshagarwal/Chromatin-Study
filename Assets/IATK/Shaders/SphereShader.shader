@@ -7,9 +7,9 @@ Shader "IATK/SphereShader"
 	Properties
 	{
 		_MainTex("Base (RGB)", 2D) = "White" {}
-	_Size("Size", Range(0, 1)) = 0.5
+	_Size("Size", Range(0, 1)) = 0.03
 		_MinSize("Min Size", Range(0, 1)) = 0.01
-		_MaxSize("Max Size", Range(0, 1)) = 1.0
+		_MaxSize("Max Size", Range(0, 1)) = .10
 		_BrushSize("BrushSize",Float) = 0.05
 		_MinX("_MinX",Range(0, 1)) = 0
 		_MaxX("_MaxX",Range(0, 1)) = 1.0

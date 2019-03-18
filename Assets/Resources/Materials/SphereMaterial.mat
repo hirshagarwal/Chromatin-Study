@@ -63,11 +63,11 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _MaxNormX: 1
+    - _MaxNormX: 0.098
     - _MaxNormY: 1
     - _MaxNormZ: 1
-    - _MaxSize: 1
-    - _MaxX: 1
+    - _MaxSize: 0
+    - _MaxX: 0.399
     - _MaxY: 1
     - _MaxZ: 1
     - _Metallic: 0

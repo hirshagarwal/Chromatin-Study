@@ -357,6 +357,7 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
 
     public void UpdateScale(bool reset = false)
     {
+        /*
         if (!reset)
             scale = Mathf.Clamp(scale - Input.GetAxis("Mouse ScrollWheel") * 5, scaleMin, scaleMax);
         else
@@ -364,6 +365,7 @@ public class ObjectManager3D : MonoBehaviour, IObjectManager
         Vector3 old_scale = transform.localScale;
         old_scale.Set(scale, scale, scale);
         transform.localScale = old_scale;
+        */
     }
 
     public void SetupTouchingSegments(TouchingPointsTrial tst)

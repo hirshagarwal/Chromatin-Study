@@ -82,7 +82,6 @@ public class OrbitScript : MonoBehaviour
             StudyManager studyManager = objectManager.GetComponent<StudyManager>();
             if (Input.GetMouseButton(0) && !studyManager.twodim)
             {
-                Debug.Log("Mouse Input");
 
                 // offset
                 _mouseOffset = (Input.mousePosition - _mouseReference);

@@ -10,7 +10,7 @@ namespace Assets.Scripts
     {
         private const int randomness = 5;
         public static int currentFile = 13;
-        public static Vector3 displacement = new Vector3(0, 0, 2);
+        public static Vector3 displacement = new Vector3(1, 1, 1);
         public static float scale = 4f;
         public List<Color> colorSpace;
         public AnimationCurve colorWidth;
@@ -345,16 +345,19 @@ namespace Assets.Scripts
                 List<Color> colors = new List<Color>();
                 List<Vector4> uvs = new List<Vector4>();
                 MeshTopology m = new MeshTopology();
+                Material mat = IATKUtil.GetMaterialFromTopology(AbstractVisualisation.GeometryType.Spheres);
+                //mat.ma
                 //numSplinePoints = 50;
                 for (int i = 0; i < numSplinePoints - 2; i++)
                 {
-                    int numPointsScale = 20; // Bezier interpolation constant (how many points are interpolated in between)
+                    int numPointsScale = 50; // Bezier interpolation constant (how many points are interpolated in between)
                     float controlSize = .25f; // How far the control point is
 
                     // Select Points
                     Point p1 = splinePoints[i].Displaced(displacement) / scale;
                     Point p2 = splinePoints[i + 1].Displaced(displacement) / scale;
                     Point p3 = splinePoints[i + 2].Displaced(displacement) / scale;
+
                     if (i == 0)
                     {
                         c1 += p1.Position;
@@ -380,18 +383,20 @@ namespace Assets.Scripts
                     //Color[] colors = new Color[numPoints];
                     //Vector3[] normals = new Vector3[numPoints];
                     //Vector3[] uvs = new Vector3[numPoints];
-
-                    Debug.Log("Entering Loop");
+                    
+                    //Debug.Log("Outer Point");
                     for (int j = 1; j < numPoints; j++) {
                         if (i+4 <= splinePoints.Length) {                            
                             float percent = (float)j / numPoints;
-                            Debug.Log("Percent: " + percent);
+                            //Debug.Log("Percent: " + percent);
                             Vector3 intermediatePoint = computeBezier(p1.Position, p2.Position, c1, c2, percent);
                             sphereCenters.Add(intermediatePoint);
                             indices.Add(sphereCenters.Count - 1);
                             normals.Add(new Vector3(1, 0, 0));
+                            //Debug.Log("Interpolated Color: " + ((100 * percent) % 50) / 100);
+                            //colors.Add(new Color(0, ((percent - .5f) * (percent - .5f)) * 7, 0));
                             colors.Add(Color.magenta);
-                            uvs.Add(new Vector4(sphereCenters.Count - 1, 0.000005f, 0, 0.000005f));
+                            uvs.Add(new Vector4(j, 0.1f, 0, 0.1f));
                             //spheres.Add(BuildSphere(intermediatePoint, p1.ColorRGB, 0.75f));
                         }
                         connectors.Add(
@@ -410,9 +415,9 @@ namespace Assets.Scripts
                     //spheres.Add(BuildSphere((splinePoints[i].Displaced(displacement) / scale).Position, Color.magenta));
                     lastPoint = splinePoints[i];
                 }
-                createMesh(sphereCenters.ToArray(), indices.ToArray(), colors.ToArray(), normals.ToArray(), uvs.ToArray(), MeshTopology.Points, IATKUtil.GetMaterialFromTopology(AbstractVisualisation.GeometryType.Spheres));
+                createMesh(sphereCenters.ToArray(), indices.ToArray(), colors.ToArray(), normals.ToArray(), uvs.ToArray(), MeshTopology.Points, mat);
+                //Debug.Log("Num Rendered Points: " + sphereCenters.ToArray().Length);
                 //createMesh(sphereCenters.ToArray(), indices.ToArray(), colors.ToArray(), normals.ToArray(), uvs.ToArray(), MeshTopology.Points, );
-
             }
         }
         

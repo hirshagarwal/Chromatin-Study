@@ -554,6 +554,7 @@ public class ObjectManager2D : MonoBehaviour, IObjectManager
             mousePosition = new Vector2(Screen.width + 10, Screen.height + 10);
         }
         scale = Mathf.Clamp(scale - Input.GetAxis("Mouse ScrollWheel") * 5, scaleMin, scaleMax);
+
         Vector3 old_scale = transform.localScale;
 
         old_scale.Set(scale, scale, scale);
