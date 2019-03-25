@@ -288,10 +288,12 @@ Please, call the instructor.";
         if (studyFormat == Formats.HoloLens)
         {
             GameObject hologramContainer = GameObject.Find("MetaCameraRig");
-            hologramContainer.transform.position = new Vector3(0f, 0f, .5f);
+            hologramContainer.transform.position = new Vector3(1f, 1f, 1.5f);
+        } else
+        {
+            GameObject webcamContainer = GameObject.Find("VirtualWebcam");
+            webcamContainer.transform.position = new Vector3(.5f, .5f, -0.5f);
         }
-
-
         //start measuring time
         dateStart = DateTime.Now;
     }

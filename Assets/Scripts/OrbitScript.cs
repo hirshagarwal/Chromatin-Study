@@ -89,9 +89,9 @@ public class OrbitScript : MonoBehaviour
                 _rotation.y = -(_mouseOffset.x) * _sensitivity;
                 _rotation.x = (_mouseOffset.y) * _sensitivity;
                 // rotate
-
-                transform.RotateAround(objectManager.transform.position, transform.right, -Input.GetAxis("Mouse Y") * _sensitivity);
-                transform.RotateAround(objectManager.transform.position, transform.up, Input.GetAxis("Mouse X") * _sensitivity);
+                Vector3 rotatePoint = new Vector3(.5f, .5f, 0.5f);
+                transform.RotateAround(rotatePoint, transform.right, -Input.GetAxis("Mouse Y") * _sensitivity);
+                transform.RotateAround(rotatePoint, transform.up, Input.GetAxis("Mouse X") * _sensitivity);
                 // store mouse
                 _mouseReference = Input.mousePosition;
 

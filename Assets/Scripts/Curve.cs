@@ -10,7 +10,7 @@ namespace Assets.Scripts
     {
         private const int randomness = 5;
         public static int currentFile = 13;
-        public static Vector3 displacement = new Vector3(1, 1, 1);
+        public static Vector3 displacement = new Vector3(2f, 2f, 2f);
         public static float scale = 4f;
         public List<Color> colorSpace;
         public AnimationCurve colorWidth;
@@ -350,7 +350,7 @@ namespace Assets.Scripts
                 //numSplinePoints = 50;
                 for (int i = 0; i < numSplinePoints - 2; i++)
                 {
-                    int numPointsScale = 50; // Bezier interpolation constant (how many points are interpolated in between)
+                    int numPointsScale = 100; // Bezier interpolation constant (how many points are interpolated in between)
                     float controlSize = .25f; // How far the control point is
 
                     // Select Points
