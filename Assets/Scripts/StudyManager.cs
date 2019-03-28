@@ -210,6 +210,8 @@ Please, call the instructor.";
     public void RecordTimeAndCollectUserAnswer()
     {
 
+        GameObject curve = GameObject.Find("Curve");
+        curve.SetActive(false);
 
         feedbackPanel.SetActive(false);
         duration = DateTime.Now - dateStart;
@@ -228,6 +230,10 @@ Please, call the instructor.";
         {
             panelCanvas.SetActive(true);
             choicePanelDistance.SetActive(true);
+            GameObject.Find("AnswerButton_Red").AddComponent<GenericButton>();
+            GameObject.Find("AnswerButton_Red").GetComponent<GenericButton>().value = "red";
+            GameObject.Find("AnswerButton_Blue").AddComponent<GenericButton>();
+            GameObject.Find("AnswerButton_Blue").GetComponent<GenericButton>().value = "blue";
         }
         else if (currentTrial.Task == Tasks.SegmentDistance)
         {
@@ -277,7 +283,7 @@ Please, call the instructor.";
 
         selectedPoints.Clear();
         activePoints.Clear();
-
+        
         // restart this script and load data.
         StartTask();
 
@@ -292,7 +298,7 @@ Please, call the instructor.";
         } else
         {
             GameObject webcamContainer = GameObject.Find("VirtualWebcam");
-            webcamContainer.transform.position = new Vector3(.5f, .5f, -0.5f);
+            webcamContainer.transform.position = new Vector3(.5f, .5f, -0.05f);
         }
         //start measuring time
         dateStart = DateTime.Now;
@@ -459,7 +465,7 @@ Please, call the instructor.";
         GameObject.Find("ContinueButton").AddComponent<ContinueButton>();
         GameObject.Find("FeedbackContinueButton").AddComponent<FeedbackButton>();
         GameObject.Find("StartButton").AddComponent<StartButton>();
-        
+
         GameObject.Find("AnswerButton_Red").AddComponent<GenericButton>();
         GameObject.Find("AnswerButton_Red").GetComponent<GenericButton>().value = "red";
         GameObject.Find("AnswerButton_Blue").AddComponent<GenericButton>();

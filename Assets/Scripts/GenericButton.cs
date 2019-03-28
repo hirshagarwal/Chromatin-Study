@@ -8,6 +8,7 @@ public class GenericButton : MonoBehaviour
 
     private void Start()
     {
+        Debug.Log("Created Generic Button");
         myselfButton = GetComponent<Button>();
         myselfButton.onClick.AddListener(
             () => GameObject.Find("ObjectManager").GetComponent<StudyManager>().RecordResults(gameObject.ToString())
@@ -16,6 +17,7 @@ public class GenericButton : MonoBehaviour
 
     private void Update()
     {
+        Debug.Log("Listening");
         if (Input.GetKeyDown(KeyCode.R))
         {
             Debug.Log("Continue");

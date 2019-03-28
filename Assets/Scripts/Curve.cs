@@ -350,7 +350,7 @@ namespace Assets.Scripts
                 //numSplinePoints = 50;
                 for (int i = 0; i < numSplinePoints - 2; i++)
                 {
-                    int numPointsScale = 100; // Bezier interpolation constant (how many points are interpolated in between)
+                    int numPointsScale = 50; // Bezier interpolation constant (how many points are interpolated in between)
                     float controlSize = .25f; // How far the control point is
 
                     // Select Points
@@ -395,7 +395,7 @@ namespace Assets.Scripts
                             normals.Add(new Vector3(1, 0, 0));
                             //Debug.Log("Interpolated Color: " + ((100 * percent) % 50) / 100);
                             //colors.Add(new Color(0, ((percent - .5f) * (percent - .5f)) * 7, 0));
-                            colors.Add(Color.magenta);
+                            colors.Add(splinePoints[i].ColorRGB);
                             uvs.Add(new Vector4(j, 0.1f, 0, 0.1f));
                             //spheres.Add(BuildSphere(intermediatePoint, p1.ColorRGB, 0.75f));
                         }
@@ -416,7 +416,7 @@ namespace Assets.Scripts
                     lastPoint = splinePoints[i];
                 }
                 createMesh(sphereCenters.ToArray(), indices.ToArray(), colors.ToArray(), normals.ToArray(), uvs.ToArray(), MeshTopology.Points, mat);
-                //Debug.Log("Num Rendered Points: " + sphereCenters.ToArray().Length);
+                Debug.Log("Num Rendered Points: " + sphereCenters.ToArray().Length);
                 //createMesh(sphereCenters.ToArray(), indices.ToArray(), colors.ToArray(), normals.ToArray(), uvs.ToArray(), MeshTopology.Points, );
             }
         }
@@ -502,7 +502,7 @@ namespace Assets.Scripts
 
         private static GameObject createMesh(Vector3[] vertices, int[] indices, Color[] colours, Vector3[] normals, Vector4[] uvs, MeshTopology meshTopology, Material material)
         {
-            GameObject meshObject = new GameObject();
+            GameObject meshObject = new GameObject("Curve");
 
             MeshTopology mtp = meshTopology;
             // if (mtp == MeshTopology.Lines) mtp = MeshTopology.LineStrip;
